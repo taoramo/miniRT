@@ -3,7 +3,8 @@
 
 #include "MLX42.h"
 #include "vec3.h"
-#include "ray.h"
+// TODO: remove this header
+#include <stdio.h>
 #define WWIDTH 1280
 #define WHEIGHT 720
 
@@ -25,7 +26,15 @@ typedef struct	s_camera
 	t_vec3	pixel00_loc;
 } t_camera;
 
-int	cast_ray(int x, int y, t_master *m);
+typedef struct s_ray
+{
+	t_vec3	origin;
+	t_vec3	direction;
+} t_ray;
+
+t_ray	init_ray(t_vec3 origin, t_vec3 direction);
+unsigned int	color_to_rgba(t_color c);
+t_color	ray_color(t_master *m, t_ray r);
 t_vec3	ray_at(t_ray r, double t);
 
 #endif

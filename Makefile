@@ -8,7 +8,7 @@ MLX = $(LIBMLX)/build/libmlx42.a -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/gl
 
 LIBS = $(LIBFT) $(MLX)
 
-INCLUDES = -I ./inc/ -I $(LIBMLX)/include/MLX42
+INCLUDES = -I ./inc/ -I $(LIBMLX)/include/MLX42 -I ./libft/
 
 SRCS = $(addprefix srcs/, main.c ray.c vec3a.c vec3b.c)
 

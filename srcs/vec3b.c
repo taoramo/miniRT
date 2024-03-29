@@ -32,5 +32,5 @@ t_vec3	init_vec3(double x, double y, double z)
 	ret.x = x;
 	ret.y = y;
 	ret.z = z;
-	return (unit_vector(ret));
+	return (ret);
 }
