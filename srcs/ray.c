@@ -1,0 +1,31 @@
+#include "ray.h"
+
+t_vec3	ray_at(t_ray r, double t)
+{
+	return (vec3_plus_vec3(r.origin, vec3_times_d(r.direction, t)));
+}	
+
+t_ray	init_ray(t_vec3 origin, t_vec3 direction)
+{
+	t_ray	ret;
+
+	ret.origin = origin;
+	ret.direction = direction;
+	return (ret);
+}
+
+int	color_to_rgba(t_color c)
+{
+	return ((int) (c.x * 255) << 24 | (int) (c.y * 255) << 16 | (int) (c.z * 255) << 8 | 255);
+}
+
+t_color ray_color(t_ray r)
+{
+	t_vec3	unit_direction;
+	double	a;
+	t_color	ret;
+
+	unit_direction = unit_vector(r.direction);
+	a = 0.5 * (unit_direction.y + 1.0);
+	ret = vec3_plus_vec3(vec3_times_d(init_vec3(1.0, 1.0, 1.0), 1.0 - a), vec3_times_d(init_vec3(0.5, 0.7, 1.0), a));
+}
