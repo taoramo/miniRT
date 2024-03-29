@@ -8,7 +8,7 @@ MLX = $(LIBMLX)/build/libmlx42.a -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/gl
 
 LIBS = $(LIBFT) $(MLX)
 
-INCLUDES = -I ./inc/ -I $(LIBMLX)/include
+INCLUDES = -I ./inc/ -I $(LIBMLX)/include/MLX42
 
 SRCS = $(addprefix srcs/, main.c ray.c vec3a.c vec3b.c)
 
@@ -16,7 +16,7 @@ OBJS = $(SRCS:.c=.o)
 
 CFLAGS = -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -o3 $(INCLUDES)
 
-all: $(NAME)
+all: libmlx $(NAME)
 
 libmlx:
 	cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4

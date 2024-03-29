@@ -1,20 +1,16 @@
 #ifndef MINIRT_H
 #define MINIRT_H
 
-#include "MLX42/include/MLX42/MLX42.h"
+#include "MLX42.h"
 #include "vec3.h"
+#include "ray.h"
 #define WWIDTH 1280
 #define WHEIGHT 720
 
 typedef struct s_master
 {
+	int	x;
 } t_master;
-
-typedef struct s_ray
-{
-	t_vec3	origin;
-	t_vec3	direction;
-} t_ray;
 
 typedef struct	s_camera
 {
@@ -29,7 +25,7 @@ typedef struct	s_camera
 	t_vec3	pixel00_loc;
 } t_camera;
 
-int	cast_ray(int x, int y, t_master m);
+int	cast_ray(int x, int y, t_master *m);
 t_vec3	ray_at(t_ray r, double t);
 
 #endif

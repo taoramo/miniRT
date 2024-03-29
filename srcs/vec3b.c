@@ -22,8 +22,6 @@ t_vec3	vec3_div_d(t_vec3 u, double t)
 
 t_vec3	unit_vector(t_vec3 v)
 {
-	t_vec3	ret;
-
 	return (vec3_div_d(v, vec3length(v)));
 }
 
