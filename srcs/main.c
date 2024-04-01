@@ -5,24 +5,31 @@ int	ft_error(void)
 {
 	return (1);
 }
+// TODO: calculate focal_length from FOV angle
 
-void	calculate_camera(t_camera *c, double focal_length, double viewport_height)
+void	calculate_camera(t_camera *c,
+			double focal_length, double viewport_height)
 {
-	double viewport_width;
-	t_vec3 viewport_upper_left;
+	double	viewport_width;
+	t_vec3	viewport_upper_left;
 
-	focal_length = 2.0;
+	focal_length = 1.0;
 	viewport_height = 2.0;
-	viewport_width = viewport_height * WWIDTH * 1.0 / WHEIGHT * 1.0;
+	viewport_width = viewport_height * (WWIDTH * 1.0) / (WHEIGHT * 1.0);
 	c->camera_center = init_vec3(0, 0, 0);
 	c->viewport_u = init_vec3(viewport_width, 0, 0);
 	c->viewport_v = init_vec3(0, viewport_height * -1.0, 0);
 	c->pixel_delta_u = vec3_div_d(c->viewport_u, WWIDTH * 1.0);
 	c->pixel_delta_v = vec3_div_d(c->viewport_v, WHEIGHT * 1.0);
-	viewport_upper_left = vec3_minus_vec3(c->camera_center, init_vec3(0, 0, focal_length));
-	viewport_upper_left = vec3_minus_vec3(viewport_upper_left, vec3_times_d(c->viewport_v, 0.5));
-	viewport_upper_left = vec3_minus_vec3(viewport_upper_left, vec3_times_d(c->viewport_u, 0.5));
-	c->pixel00_loc = vec3_plus_vec3(viewport_upper_left, vec3_times_d(vec3_plus_vec3(c->pixel_delta_v, c->pixel_delta_u), 0.5));
+	viewport_upper_left = vec3_minus_vec3(c->camera_center,
+			init_vec3(0, 0, focal_length));
+	viewport_upper_left = vec3_minus_vec3(viewport_upper_left,
+			vec3_times_d(c->viewport_v, 0.5));
+	viewport_upper_left = vec3_minus_vec3(viewport_upper_left,
+			vec3_times_d(c->viewport_u, 0.5));
+	c->pixel00_loc = vec3_plus_vec3(viewport_upper_left,
+			vec3_times_d(vec3_plus_vec3(c->pixel_delta_v,
+					c->pixel_delta_u), 0.5));
 }
 
 void	make_image(t_master *m, mlx_image_t *img)
@@ -33,7 +40,6 @@ void	make_image(t_master *m, mlx_image_t *img)
 	int			i;
 	int			j;
 
-	
 	calculate_camera(&c, 1.0, 2.0);
 	i = 0;
 	j = 0;
@@ -55,8 +61,8 @@ void	make_image(t_master *m, mlx_image_t *img)
 
 int	render(t_master *m)
 {
-	mlx_t*			mlx;
-	mlx_image_t*	img;
+	mlx_t		*mlx;
+	mlx_image_t	*img;
 
 	mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);
 	if (!mlx)

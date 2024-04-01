@@ -3,7 +3,7 @@
 t_vec3	vec3_plus_vec3(t_vec3 u, t_vec3 v)
 {
 	t_vec3	ret;
-	
+
 	ret.x = u.x + v.x;
 	ret.y = u.y + v.y;
 	ret.z = u.z + v.z;
@@ -13,7 +13,7 @@ t_vec3	vec3_plus_vec3(t_vec3 u, t_vec3 v)
 t_vec3	vec3_minus_vec3(t_vec3 u, t_vec3 v)
 {
 	t_vec3	ret;
-	
+
 	ret.x = u.x - v.x;
 	ret.y = u.y - v.y;
 	ret.z = u.z - v.z;
@@ -23,7 +23,7 @@ t_vec3	vec3_minus_vec3(t_vec3 u, t_vec3 v)
 t_vec3	vec3_times_vec3(t_vec3 u, t_vec3 v)
 {
 	t_vec3	ret;
-	
+
 	ret.x = u.x * v.x;
 	ret.y = u.y * v.y;
 	ret.z = u.z * v.z;
@@ -33,7 +33,7 @@ t_vec3	vec3_times_vec3(t_vec3 u, t_vec3 v)
 t_vec3	vec3_times_d(t_vec3 u, double t)
 {
 	t_vec3	ret;
-	
+
 	ret.x = u.x * t;
 	ret.y = u.y * t;
 	ret.z = u.z * t;
