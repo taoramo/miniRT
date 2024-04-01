@@ -4,6 +4,8 @@
 # include "MLX42.h"
 # include "vec3.h"
 # include <math.h>
+# include <stdlib.h>
+# include <unistd.h>
 // TODO: remove this header
 # include <stdio.h>
 # define WWIDTH 1280
@@ -70,13 +72,18 @@ typedef struct s_cone
 
 typedef struct s_master
 {
-	t_camera	camera;
-	t_ambient	ambient;
-	t_light		*lights;
-	t_sphere	*spheres;
-	t_plane		*planes;
-	t_cone		*cones;
-	t_cylinder	*cylinders;
+	t_camera		camera;
+	t_ambient		ambient;
+	t_light			*lights;
+	unsigned int	n_lights;
+	t_sphere		*spheres;
+	unsigned int	n_spheres;
+	t_plane			*planes;
+	unsigned int	n_planes;
+	t_cone			*cones;
+	unsigned int	n_cones;
+	t_cylinder		*cylinders;
+	unsigned int	n_cylinders;
 }	t_master;
 
 typedef struct s_ray
@@ -85,11 +92,21 @@ typedef struct s_ray
 	t_vec3	direction;
 }	t_ray;
 
+typedef struct s_hit_record
+{
+	t_vec3	point;
+	t_vec3	normal;
+	double	t;
+	int		front_face;
+}	t_hit_record;
+
 t_ray			init_ray(t_vec3 origin, t_vec3 direction);
 unsigned int	color_to_rgba(t_color c);
 t_color			ray_color(t_master *m, t_ray r);
 t_vec3			ray_at(t_ray r, double t);
 
-double			hit_sphere(t_vec3 center, double radius, t_ray ray);
-
+int				hit_sphere(t_ray ray, double ray_tmin,
+		double ray_tmax, t_hit_record rec, t_sphere sphere);
+void			set_face_normal(t_hit_record *rec, const t_ray r,
+					const t_sphere sphere);
 #endif

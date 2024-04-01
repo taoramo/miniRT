@@ -4,13 +4,13 @@ LIBFT = ./libft/libft.a
 
 LIBMLX = ./MLX42
 
-MLX = $(LIBMLX)/build/libmlx42.a -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/" -L/usr/loca/Cellar/glfw/lib/
+MLX = $(LIBMLX)/build/libmlx42.a -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/" -L/usr/local/Cellar/glfw/lib/
 
 LIBS = $(LIBFT) $(MLX)
 
 INCLUDES = -I ./inc/ -I $(LIBMLX)/include/MLX42 -I ./libft/
 
-SRCS = $(addprefix srcs/, main.c ray.c vec3a.c vec3b.c vec3c.c sphere.c)
+SRCS = $(addprefix srcs/, main.c ray.c vec3a.c vec3b.c vec3c.c sphere.c hit_record.c)
 
 OBJS = $(SRCS:.c=.o)
 

@@ -20,23 +20,39 @@ unsigned int	color_to_rgba(t_color c)
 		| lround(c.z * 255) << 8 | 255);
 }
 
+int	hit(t_master *m, t_ray r, double ray_tmin, double ray_tmax, t_hit_record *rec)
+{
+	t_hit_record	temp_rec;
+	int				hit_anything;
+	double			closest_so_far;
+	unsigned int	i;
+
+	i = 0;
+	hit_anything = 0;
+	closest_so_far = ray_tmax;
+	while (i < m->n_spheres)
+	{
+		if (hit_sphere(r, ray_tmin, closest_so_far, temp_rec, m->spheres[i]))
+		{
+			hit_anything = 1;
+			closest_so_far = temp_rec.t;
+			*rec = temp_rec;
+		}
+		i++;
+	}
+	return (hit_anything);
+}
+
 t_color	ray_color(t_master *m, t_ray r)
 {
-	t_vec3	unit_direction;
-	double	a;
-	t_color	ret;
-	double	t;
-	t_vec3	normal;
+	t_vec3			unit_direction;
+	double			a;
+	t_color			ret;
+	t_hit_record	rec;
 
-	t = hit_sphere(init_vec3(0, 0, -1), 0.5, r);
-	if (t > 0.0)
-	{
-		normal = unit_vector(vec3_minus_vec3(ray_at(r, t),
-					init_vec3(0, 0, -1)));
-		return (vec3_times_d(init_vec3(normal.x
-					+ 1, normal.y + 1, normal.z + 1), 0.5));
-	}
-	(void)m;
+	if (hit(m, r, 0, INFINITY, &rec))
+		return (vec3_times_d(vec3_plus_vec3(rec.normal,
+					init_vec3(1.0, 1.0, 1.0)), 0.5));
 	unit_direction = unit_vector(r.direction);
 	a = 0.5 * (unit_direction.y + 1.0);
 	ret = vec3_plus_vec3(vec3_times_d(init_vec3(1.0, 1.0, 1.0), 1.0 - a),

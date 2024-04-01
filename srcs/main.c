@@ -47,7 +47,9 @@ void	make_image(t_master *m, mlx_image_t *img)
 	{
 		while (j < WWIDTH)
 		{
-			pixel_center = vec3_plus_vec3(c.pixel00_loc, vec3_plus_vec3(vec3_times_d(c.pixel_delta_u, j * 1.0), vec3_times_d(c.pixel_delta_v, i * 1.0)));
+			pixel_center = vec3_plus_vec3(c.pixel00_loc,
+					vec3_plus_vec3(vec3_times_d(c.pixel_delta_u, j * 1.0),
+						vec3_times_d(c.pixel_delta_v, i * 1.0)));
 			r.origin = c.camera_center;
 			r.direction = vec3_minus_vec3(pixel_center, c.camera_center);
 			mlx_put_pixel(img, j, i, color_to_rgba(ray_color(m, r)));
@@ -82,6 +84,12 @@ int	main(void)
 {
 	t_master	m;
 
+	m.spheres = malloc(sizeof(t_sphere) * 2);
+	m.spheres[0].origin = init_vec3(0, 0, -1);
+	m.spheres[0].radius = 0.5;
+	m.spheres[1].origin = init_vec3(0, -100.5, -1);
+	m.spheres[1].radius = 100;
+	m.n_spheres = 2;
 	render(&m);
 	return (0);
 }
