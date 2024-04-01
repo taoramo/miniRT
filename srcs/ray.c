@@ -25,9 +25,17 @@ t_color	ray_color(t_master *m, t_ray r)
 	t_vec3	unit_direction;
 	double	a;
 	t_color	ret;
+	double	t;
+	t_vec3	normal;
 
-	if (hit_sphere(init_vec3(0, 0, -1), 0.5, r))
-		return (init_vec3(1.0, 0, 0));
+	t = hit_sphere(init_vec3(0, 0, -1), 0.5, r);
+	if (t > 0.0)
+	{
+		normal = unit_vector(vec3_minus_vec3(ray_at(r, t),
+					init_vec3(0, 0, -1)));
+		return (vec3_times_d(init_vec3(normal.x
+					+ 1, normal.y + 1, normal.z + 1), 0.5));
+	}
 	(void)m;
 	unit_direction = unit_vector(r.direction);
 	a = 0.5 * (unit_direction.y + 1.0);

@@ -90,6 +90,6 @@ unsigned int	color_to_rgba(t_color c);
 t_color			ray_color(t_master *m, t_ray r);
 t_vec3			ray_at(t_ray r, double t);
 
-bool			hit_sphere(t_vec3 center, double radius, t_ray ray);
+double			hit_sphere(t_vec3 center, double radius, t_ray ray);
 
 #endif
