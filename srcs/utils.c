@@ -7,7 +7,7 @@ double	degrees_to_radians(double degrees)
 
 double	random_double(void)
 {
-	return (rand() * 1.0 / RAND_MAX + 1.0);
+	return (rand() * 1.0 / (RAND_MAX + 1.0));
 }
 
 double	random_double_between(double min, double max)

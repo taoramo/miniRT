@@ -50,17 +50,21 @@ int	hit(t_master *m, t_ray r, t_interval t_minmax, t_hit_record *rec)
 	return (hit_anything);
 }
 
-t_color	ray_color(t_master *m, t_ray r)
+t_color	ray_color(t_master *m, t_ray r, int depth)
 {
 	t_vec3			unit_direction;
 	double			a;
 	t_color			ret;
 	t_hit_record	rec;
+	t_vec3			direction;
 
-	if (hit(m, r, init_interval(0, INFINITY), &rec))
+	if (depth <= 0)
+		return (init_vec3(0, 0, 0));
+	if (hit(m, r, init_interval(0.001, INFINITY), &rec))
 	{
-		return (vec3_times_d(vec3_plus_vec3(rec.normal,
-					init_vec3(1.0, 1.0, 1.0)), 0.5));
+		direction = vec3_plus_vec3(rec.normal, random_unit_vector());
+		return (vec3_times_d(ray_color(m, init_ray(rec.point,
+						direction), depth - 1), 0.5));
 	}
 	unit_direction = unit_vector(r.direction);
 	a = 0.5 * (unit_direction.y + 1.0);

@@ -1,5 +1,4 @@
 #include "miniRT.h"
-#include "vec3.h"
 
 int	ft_error(void)
 {
@@ -34,29 +33,33 @@ void	calculate_camera(t_camera *c,
 
 void	make_image(t_master *m, mlx_image_t *img)
 {
-	t_camera	c;
-	t_vec3		pixel_center;
-	t_ray		r;
+	t_vec3		color;
 	int			i;
 	int			j;
+	int			sample;
 
-	calculate_camera(&c, 1.0, 2.0);
-	i = 0;
+	calculate_camera(m->camera, 1.0, 2.0);
 	j = 0;
 	while (j < WHEIGHT)
 	{
+		i = 0;
 		while (i < WWIDTH)
 		{
-			pixel_center = vec3_plus_vec3(c.pixel00_loc,
-					vec3_plus_vec3(vec3_times_d(c.pixel_delta_u, i * 1.0),
-						vec3_times_d(c.pixel_delta_v, j * 1.0)));
-			r.origin = c.camera_center;
-			r.direction = vec3_minus_vec3(pixel_center, c.camera_center);
-			mlx_put_pixel(img, i, j, color_to_rgba(ray_color(m, r)));
-			j++;
+			sample = 0;
+			color = init_vec3(0, 0, 0);
+			while (sample < m->samples_per_pixel)
+			{
+				color = vec3_plus_vec3(color,
+						ray_color(m, get_ray(m->camera, i, j), m->max_depth));
+				sample++;
+			}
+			mlx_put_pixel(img, i, j, colorsum_to_rgba(color,
+					m->samples_per_pixel));
+			i++;
 		}
-		i++;
-		j = 0;
+		j++;
+		if (j % 100 == 0)
+			write(1, "x", 1);
 	}
 	return ;
 }
@@ -83,7 +86,11 @@ int	render(t_master *m)
 int	main(void)
 {
 	t_master	m;
+	t_camera	camera;
 
+	m.camera = &camera;
+	m.samples_per_pixel = 10;
+	m.max_depth = 10;
 	m.spheres = malloc(sizeof(t_sphere) * 2);
 	m.spheres[0].origin = init_vec3(0, 0, -1);
 	m.spheres[0].radius = 0.5;

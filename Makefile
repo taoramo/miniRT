@@ -10,11 +10,11 @@ LIBS = $(LIBFT) $(MLX)
 
 INCLUDES = -I ./inc/ -I $(LIBMLX)/include/MLX42 -I ./libft/
 
-SRCS = $(addprefix srcs/, main.c ray.c vec3a.c vec3b.c vec3c.c sphere.c hit_record.c interval.c utils.c ray2.c)
+SRCS = $(addprefix srcs/, main.c ray.c vec3a.c vec3b.c vec3c.c sphere.c hit_record.c interval.c utils.c ray2.c vec3d.c)
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS = -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -o3 $(INCLUDES)
+CFLAGS = -g -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -o3 $(INCLUDES)
 
 all: libmlx $(NAME)
 
@@ -24,7 +24,7 @@ libmlx:
 $(OBJS): $(SRCS)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(OBJS) $(LIBS) -o $(NAME)
+	$(CC) $(OBJS) $(LIBS) $(CFLAGS) -o $(NAME)
 
 $(LIBFT):
 	make -C ./libft/

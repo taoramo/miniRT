@@ -78,7 +78,9 @@ typedef struct s_interval
 
 typedef struct s_master
 {
-	t_camera		camera;
+	t_camera		*camera;
+	int				samples_per_pixel;
+	int				max_depth;
 	t_ambient		ambient;
 	t_light			*lights;
 	unsigned int	n_lights;
@@ -107,8 +109,8 @@ typedef struct s_hit_record
 }	t_hit_record;
 
 t_ray			init_ray(t_vec3 origin, t_vec3 direction);
-unsigned int	color_to_rgba(t_color c);
-t_color			ray_color(t_master *m, t_ray r);
+unsigned int	colorsum_to_rgba(t_color c, int samples_per_pixel);
+t_color			ray_color(t_master *m, t_ray r, int max_depth);
 t_vec3			ray_at(t_ray r, double t);
 
 int				hit_sphere(t_ray ray, t_interval t_minmax,
@@ -121,5 +123,11 @@ int				surrounds(t_interval i, double x);
 double			clamp(t_interval i, double x);
 double			degreest_to_radians(double degrees);
 double			random_double(void);
-double			random_double_between(void);
+double			random_double_between(double min, double max);
+t_ray			get_ray(t_camera *c, int i, int j);
+t_vec3			pixel_sample_square(t_camera *c);
+t_vec3			random_vec3(void);
+t_vec3			random_vec3_between(double min, double max);
+t_vec3			random_unit_vector(void);
+t_vec3			random_on_hemisphere(t_vec3 normal);
 #endif
