@@ -37,6 +37,7 @@ void	make_image(t_master *m, mlx_image_t *img)
 	int			i;
 	int			j;
 	int			sample;
+	t_ray		ray;
 
 	calculate_camera(m->camera, 1.0, 2.0);
 	j = 0;
@@ -49,8 +50,9 @@ void	make_image(t_master *m, mlx_image_t *img)
 			color = init_vec3(0, 0, 0);
 			while (sample < m->samples_per_pixel)
 			{
+				ray = get_ray(m->camera, i, j);
 				color = vec3_plus_vec3(color,
-						ray_color(m, get_ray(m->camera, i, j), m->max_depth));
+						ray_color(m, &ray, m->max_depth));
 				sample++;
 			}
 			mlx_put_pixel(img, i, j, colorsum_to_rgba(color,
@@ -89,13 +91,17 @@ int	main(void)
 	t_camera	camera;
 
 	m.camera = &camera;
-	m.samples_per_pixel = 10;
-	m.max_depth = 10;
+	m.samples_per_pixel = 100;
+	m.max_depth = 50;
 	m.spheres = malloc(sizeof(t_sphere) * 2);
 	m.spheres[0].origin = init_vec3(0, 0, -1);
 	m.spheres[0].radius = 0.5;
+	m.spheres[0].material = metal;
+	m.spheres[0].albedo = init_vec3(0.8, 0.3, 0.3);
 	m.spheres[1].origin = init_vec3(0, -100.5, -1);
 	m.spheres[1].radius = 100;
+	m.spheres[1].material = lambertian;
+	m.spheres[1].albedo = init_vec3(0.8, 0.8, 0.8);
 	m.n_spheres = 2;
 	render(&m);
 	return (0);

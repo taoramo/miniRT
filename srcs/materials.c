@@ -1,12 +1,30 @@
 #include "miniRT.h"
 
-int	lambertian_scatter(t_hit_record rec, t_ray *scattered)
+int	lambertian_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered)
 {
 	t_vec3	scatter_direction;
 
-	scatter_direction = vec3_plus_vec3(rec.normal, random_unit_vector());
+	(void) r_in;
+	scatter_direction = vec3_plus_vec3(rec->normal, random_unit_vector());
 	if (near_zero(scatter_direction))
-		scatter_direction = rec.normal;
-	*scattered = init_ray(rec.point, scatter_direction);
+		scatter_direction = rec->normal;
+	*scattered = init_ray(rec->point, scatter_direction);
+	return (1);
+}
+
+int	metal_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered)
+{
+	t_vec3	reflected;
+
+	reflected = reflect(unit_vector(r_in->direction), rec->normal);
+	*scattered = init_ray(rec->point, reflected);
+	return (1);
+}
+
+int	matte_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered)
+{
+	(void) r_in;
+	(void) rec;
+	(void) scattered;
 	return (1);
 }

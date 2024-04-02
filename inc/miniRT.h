@@ -10,6 +10,7 @@
 # include <stdio.h>
 # define WWIDTH 1280
 # define WHEIGHT 720
+# define N_MATERIALS 3
 
 typedef struct s_camera
 {
@@ -41,23 +42,16 @@ typedef struct s_light
 typedef enum e_type
 {
 	lambertian,
-	matte,
-	metal
+	metal,
+	matte
 }	t_type;
-
-typedef struct s_material
-{
-	t_type	type;
-	t_vec3	albedo;
-}	t_material;
 
 typedef struct s_sphere
 {
-	unsigned int	object_index;
 	t_vec3			origin;
 	double			radius;
-	t_vec3			color;
-	t_material		material;
+	t_type			material;
+	t_vec3			albedo;
 }	t_sphere;
 
 typedef struct s_plane
@@ -65,7 +59,8 @@ typedef struct s_plane
 	t_vec3		point;
 	t_vec3		normal;
 	t_vec3		color;
-	t_material	material;
+	t_type		material;
+	t_vec3		albedo;
 }	t_plane;
 
 typedef struct s_cylinder
@@ -75,7 +70,8 @@ typedef struct s_cylinder
 	double		radius;
 	double		height;
 	t_vec3		color;
-	t_material	material;
+	t_type		material;
+	t_vec3		albedo;
 }	t_cylinder;
 
 typedef struct s_cone
@@ -84,7 +80,8 @@ typedef struct s_cone
 	double		height;
 	t_vec3		tip;
 	t_vec3		axis;
-	t_material	material;
+	t_type		material;
+	t_vec3		albedo;
 }	t_cone;
 
 typedef struct s_interval
@@ -123,18 +120,21 @@ typedef struct s_hit_record
 	t_vec3		normal;
 	double		t;
 	int			front_face;
-	t_material	mat;
+	t_type		material;
+	t_vec3		albedo;
 }	t_hit_record;
+
+typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered);
 
 t_ray			init_ray(t_vec3 origin, t_vec3 direction);
 unsigned int	colorsum_to_rgba(t_color c, int samples_per_pixel);
-t_color			ray_color(t_master *m, t_ray r, int max_depth);
+t_color			ray_color(t_master *m, t_ray *r, int max_depth);
 t_vec3			ray_at(t_ray r, double t);
 
-int				hit_sphere(t_ray ray, t_interval t_minmax,
+int				hit_sphere(t_ray *ray, t_interval t_minmax,
 					t_hit_record *rec, t_sphere sphere);
-void			set_face_normal(t_hit_record *rec, const t_ray r,
-					const t_sphere sphere);
+void			set_face_normal(t_hit_record *rec, t_ray *r,
+					t_sphere sphere);
 t_interval		init_interval(double min, double max);
 int				contains(t_interval i, double x);
 int				surrounds(t_interval i, double x);
@@ -149,6 +149,10 @@ t_vec3			random_vec3_between(double min, double max);
 t_vec3			random_unit_vector(void);
 t_vec3			random_on_hemisphere(t_vec3 normal);
 double			linear_to_gamma(double linear);
-int				lambertian_scatter(t_hit_record rec, t_ray *scattered);
+int				lambertian_scatter(t_ray *r_in, t_hit_record *rec,
+					t_ray *scattered);
 int				near_zero(t_vec3 vec);
+t_vec3			reflect(t_vec3 v, t_vec3 n);
+int				metal_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered);
+int				matte_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered);
 #endif

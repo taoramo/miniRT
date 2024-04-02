@@ -25,3 +25,17 @@ t_ray	get_ray(t_camera *c, int i, int j)
 	ret.direction = vec3_minus_vec3(pixel_sample, ret.origin);
 	return (ret);
 }
+
+t_vec3	ray_at(t_ray r, double t)
+{
+	return (vec3_plus_vec3(r.origin, vec3_times_d(r.direction, t)));
+}
+
+t_ray	init_ray(t_vec3 origin, t_vec3 direction)
+{
+	t_ray	ret;
+
+	ret.origin = origin;
+	ret.direction = direction;
+	return (ret);
+}
