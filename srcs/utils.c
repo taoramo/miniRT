@@ -14,3 +14,8 @@ double	random_double_between(double min, double max)
 {
 	return (min + (max - min) * random_double());
 }
+
+double	linear_to_gamma(double linear)
+{
+	return (sqrt(linear));
+}

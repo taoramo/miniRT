@@ -22,6 +22,9 @@ unsigned int	colorsum_to_rgba(t_color c, int samples_per_pixel)
 	c.x *= scale;
 	c.y *= scale;
 	c.z *= scale;
+	c.x = linear_to_gamma(c.x);
+	c.y = linear_to_gamma(c.y);
+	c.z = linear_to_gamma(c.z);
 	return (lround(c.x * 255) << 24 | lround(c.y * 255) << 16
 		| lround(c.z * 255) << 8 | 255);
 }
@@ -62,6 +65,7 @@ t_color	ray_color(t_master *m, t_ray r, int depth)
 		return (init_vec3(0, 0, 0));
 	if (hit(m, r, init_interval(0.001, INFINITY), &rec))
 	{
+		// direction =  random_on_hemisphere(rec.normal);
 		direction = vec3_plus_vec3(rec.normal, random_unit_vector());
 		return (vec3_times_d(ray_color(m, init_ray(rec.point,
 						direction), depth - 1), 0.5));

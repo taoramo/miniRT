@@ -38,36 +38,53 @@ typedef struct s_light
 	t_vec3	brightness;
 }	t_light;
 
+typedef enum e_type
+{
+	lambertian,
+	matte,
+	metal
+}	t_type;
+
+typedef struct s_material
+{
+	t_type	type;
+	t_vec3	albedo;
+}	t_material;
+
 typedef struct s_sphere
 {
 	unsigned int	object_index;
 	t_vec3			origin;
 	double			radius;
 	t_vec3			color;
+	t_material		material;
 }	t_sphere;
 
 typedef struct s_plane
 {
-	t_vec3	point;
-	t_vec3	normal;
-	t_vec3	color;
+	t_vec3		point;
+	t_vec3		normal;
+	t_vec3		color;
+	t_material	material;
 }	t_plane;
 
 typedef struct s_cylinder
 {
-	t_vec3	center;
-	t_vec3	axisnormal;
-	double	radius;
-	double	height;
-	t_vec3	color;
+	t_vec3		center;
+	t_vec3		axisnormal;
+	double		radius;
+	double		height;
+	t_vec3		color;
+	t_material	material;
 }	t_cylinder;
 
 typedef struct s_cone
 {
-	double	angle;
-	double	height;
-	t_vec3	tip;
-	t_vec3	axis;
+	double		angle;
+	double		height;
+	t_vec3		tip;
+	t_vec3		axis;
+	t_material	material;
 }	t_cone;
 
 typedef struct s_interval
@@ -102,10 +119,11 @@ typedef struct s_ray
 
 typedef struct s_hit_record
 {
-	t_vec3	point;
-	t_vec3	normal;
-	double	t;
-	int		front_face;
+	t_vec3		point;
+	t_vec3		normal;
+	double		t;
+	int			front_face;
+	t_material	mat;
 }	t_hit_record;
 
 t_ray			init_ray(t_vec3 origin, t_vec3 direction);
@@ -130,4 +148,7 @@ t_vec3			random_vec3(void);
 t_vec3			random_vec3_between(double min, double max);
 t_vec3			random_unit_vector(void);
 t_vec3			random_on_hemisphere(t_vec3 normal);
+double			linear_to_gamma(double linear);
+int				lambertian_scatter(t_hit_record rec, t_ray *scattered);
+int				near_zero(t_vec3 vec);
 #endif

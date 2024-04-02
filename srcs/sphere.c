@@ -25,6 +25,7 @@ int	hit_sphere(t_ray ray, t_interval t_minmax,
 	}
 	rec->t = root;
 	rec->point = ray_at(ray, root);
+	rec->mat = sphere.material;
 	set_face_normal(rec, ray, sphere);
 	return (1);
 }
