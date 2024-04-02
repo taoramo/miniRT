@@ -118,4 +118,8 @@ void			set_face_normal(t_hit_record *rec, const t_ray r,
 t_interval		init_interval(double min, double max);
 int				contains(t_interval i, double x);
 int				surrounds(t_interval i, double x);
+double			clamp(t_interval i, double x);
+double			degreest_to_radians(double degrees);
+double			random_double(void);
+double			random_double_between(void);
 #endif

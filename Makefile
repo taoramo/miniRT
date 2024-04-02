@@ -10,7 +10,7 @@ LIBS = $(LIBFT) $(MLX)
 
 INCLUDES = -I ./inc/ -I $(LIBMLX)/include/MLX42 -I ./libft/
 
-SRCS = $(addprefix srcs/, main.c ray.c vec3a.c vec3b.c vec3c.c sphere.c hit_record.c interval.c)
+SRCS = $(addprefix srcs/, main.c ray.c vec3a.c vec3b.c vec3c.c sphere.c hit_record.c interval.c utils.c ray2.c)
 
 OBJS = $(SRCS:.c=.o)
 

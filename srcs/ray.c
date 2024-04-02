@@ -14,8 +14,14 @@ t_ray	init_ray(t_vec3 origin, t_vec3 direction)
 	return (ret);
 }
 
-unsigned int	color_to_rgba(t_color c)
+unsigned int	colorsum_to_rgba(t_color c, int samples_per_pixel)
 {
+	double	scale;
+
+	scale = 1.0 / samples_per_pixel;
+	c.x *= scale;
+	c.y *= scale;
+	c.z *= scale;
 	return (lround(c.x * 255) << 24 | lround(c.y * 255) << 16
 		| lround(c.z * 255) << 8 | 255);
 }

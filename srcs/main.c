@@ -43,16 +43,16 @@ void	make_image(t_master *m, mlx_image_t *img)
 	calculate_camera(&c, 1.0, 2.0);
 	i = 0;
 	j = 0;
-	while (i < WHEIGHT)
+	while (j < WHEIGHT)
 	{
-		while (j < WWIDTH)
+		while (i < WWIDTH)
 		{
 			pixel_center = vec3_plus_vec3(c.pixel00_loc,
-					vec3_plus_vec3(vec3_times_d(c.pixel_delta_u, j * 1.0),
-						vec3_times_d(c.pixel_delta_v, i * 1.0)));
+					vec3_plus_vec3(vec3_times_d(c.pixel_delta_u, i * 1.0),
+						vec3_times_d(c.pixel_delta_v, j * 1.0)));
 			r.origin = c.camera_center;
 			r.direction = vec3_minus_vec3(pixel_center, c.camera_center);
-			mlx_put_pixel(img, j, i, color_to_rgba(ray_color(m, r)));
+			mlx_put_pixel(img, i, j, color_to_rgba(ray_color(m, r)));
 			j++;
 		}
 		i++;
