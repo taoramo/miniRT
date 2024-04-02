@@ -70,6 +70,12 @@ typedef struct s_cone
 	t_vec3	axis;
 }	t_cone;
 
+typedef struct s_interval
+{
+	double	min;
+	double	max;
+}	t_interval;
+
 typedef struct s_master
 {
 	t_camera		camera;
@@ -105,8 +111,11 @@ unsigned int	color_to_rgba(t_color c);
 t_color			ray_color(t_master *m, t_ray r);
 t_vec3			ray_at(t_ray r, double t);
 
-int				hit_sphere(t_ray ray, double ray_tmin,
-		double ray_tmax, t_hit_record rec, t_sphere sphere);
+int				hit_sphere(t_ray ray, t_interval t_minmax,
+					t_hit_record *rec, t_sphere sphere);
 void			set_face_normal(t_hit_record *rec, const t_ray r,
 					const t_sphere sphere);
+t_interval		init_interval(double min, double max);
+int				contains(t_interval i, double x);
+int				surrounds(t_interval i, double x);
 #endif
