@@ -67,7 +67,7 @@ typedef struct s_sphere
 	t_vec3			checker_color;
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
-	mlx_texture_t	*texture;
+	mlx_image_t		*texture;
 }	t_sphere;
 
 typedef struct s_plane
@@ -82,7 +82,7 @@ typedef struct s_plane
 	t_vec3			checker_color;
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
-	mlx_texture_t	*texture;
+	mlx_image_t		*texture;
 }	t_plane;
 
 typedef struct s_cylinder
@@ -184,6 +184,6 @@ int				metal_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered);
 int				matte_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered);
 t_vec3			get_checkered_color(t_vec3 point, double coeff,
 					t_vec3 color1, t_vec3 color2);
-t_vec3			get_bump_map_color(mlx_texture_t *texture, double u, double v);
-t_vec3			get_texture_color(mlx_texture_t *texture, double u, double v);
+t_vec3			get_bump_map_color(mlx_image_t *texture, double u, double v);
+t_vec3			get_texture_color(mlx_image_t *texture, double u, double v);
 #endif

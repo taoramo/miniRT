@@ -43,7 +43,6 @@ static void	get_albedo(t_sphere *sphere, t_hit_record *rec)
 	if (sphere->texture_type == texture)
 	{
 		rec->albedo = get_texture_color(sphere->texture, rec->u, rec->v);
-		printf("R %f G %f B %f", rec->albedo.x, rec->albedo.y, rec->albedo.z);
 		return ;
 	}
 	if (sphere->texture_type == bump_map)

@@ -109,7 +109,7 @@ int	main(void)
 	m.spheres[0].material = lambertian;
 	m.spheres[0].material1 = 0;
 	m.spheres[0].texture_type = texture;
-	m.spheres[0].texture = mlx_load_png("./earthmap.png");
+	m.spheres[0].texture = mlx_texture_to_image(mlx, mlx_load_png("./earthmap.png"));
 	m.spheres[0].albedo = init_vec3(0.8, 0.3, 0.3);
 	m.spheres[0].checkered = 1;
 	m.spheres[0].checker_color = init_vec3(1, 0, 0);
