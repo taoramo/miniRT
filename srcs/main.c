@@ -1,3 +1,4 @@
+#include "MLX42.h"
 #include "miniRT.h"
 #include "vec3.h"
 
@@ -70,14 +71,10 @@ void	make_image(t_master *m, mlx_image_t *img)
 	return ;
 }
 
-int	render(t_master *m)
+int	render(t_master *m, mlx_t *mlx)
 {
-	mlx_t		*mlx;
 	mlx_image_t	*img;
 
-	mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);
-	if (!mlx)
-		return (ft_error());
 	img = mlx_new_image(mlx, WWIDTH, WHEIGHT);
 	if (!img)
 		return (ft_error());
@@ -93,11 +90,15 @@ int	main(void)
 {
 	t_master	m;
 	t_camera	camera;
+	mlx_t		*mlx;
 
+	mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);
+	if (!mlx)
+		return (ft_error());
 	m.camera = &camera;
 	m.camera->hfov = 100;
 	m.camera->focal_length = 1.0;
-	m.camera->camera_center = init_vec3(0, 0, 20);
+	m.camera->camera_center = init_vec3(0, 0, 1);
 	m.camera->look_at = init_vec3(0, 0, -1);
 	m.samples_per_pixel = 10;
 	m.max_depth = 5;
@@ -105,8 +106,10 @@ int	main(void)
 	m.spheres = malloc(sizeof(t_sphere) * m.n_spheres);
 	m.spheres[0].origin = init_vec3(1, 0, -1);
 	m.spheres[0].radius = 0.5;
-	m.spheres[0].material = metal;
+	m.spheres[0].material = lambertian;
 	m.spheres[0].material1 = 0;
+	m.spheres[0].texture_type = texture;
+	m.spheres[0].texture = mlx_load_png("./earthmap.png");
 	m.spheres[0].albedo = init_vec3(0.8, 0.3, 0.3);
 	m.spheres[0].checkered = 1;
 	m.spheres[0].checker_color = init_vec3(1, 0, 0);
@@ -114,16 +117,18 @@ int	main(void)
 	m.spheres[1].radius = 100;
 	m.spheres[1].material = metal;
 	m.spheres[1].material1 = 0.1;
+	m.spheres[1].texture_type = solid;
 	m.spheres[1].albedo = init_vec3(0.8, 0.8, 0.8);
 	m.spheres[1].checkered = 1;
 	m.spheres[1].checker_color = init_vec3(0, 1, 0);
 	m.spheres[2].origin = init_vec3(-1, 0, -1);
 	m.spheres[2].radius = 0.5;
 	m.spheres[2].material = metal;
+	m.spheres[2].texture_type = solid;
 	m.spheres[2].albedo = init_vec3(1.0, 0, 0);
 	m.spheres[2].material1 = 0.3;
 	m.spheres[2].checkered = 0;
-	render(&m);
+	render(&m, mlx);
 	free(m.spheres);
 	return (0);
 }

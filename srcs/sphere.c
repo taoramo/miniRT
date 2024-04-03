@@ -1,6 +1,6 @@
 #include "miniRT.h"
 
-void	get_sphere_uv(t_vec3 point, double *u, double *v)
+static void	get_sphere_uv(t_vec3 point, double *u, double *v)
 {
 	double	theta;
 	double	phi;
@@ -11,27 +11,49 @@ void	get_sphere_uv(t_vec3 point, double *u, double *v)
 	*v = theta / M_PI;
 }
 
-t_vec3	get_albedo_or_checkered(t_sphere sphere, t_hit_record *rec)
+static void	set_sphere_face_normal(t_hit_record *rec,
+			t_ray *r, t_sphere *sphere)
 {
-	int	x;
-	int	y;
-	int	z;
+	t_vec3	outward_normal;
 
-	if (sphere.checkered)
+	outward_normal = vec3_div_d(vec3_minus_vec3(rec->point,
+				sphere->origin), sphere->radius);
+	get_sphere_uv(outward_normal, &rec->u, &rec->v);
+	rec->front_face = dot(r->direction, outward_normal) < 0;
+	if (rec->front_face != 0)
+		rec->normal = outward_normal;
+	else
+		rec->normal = vec3_times_d(outward_normal, -1.0);
+}
+
+static void	get_albedo(t_sphere *sphere, t_hit_record *rec)
+{
+	if (sphere->texture_type == solid)
 	{
-		x = (int)floor(sphere.checker_size_coeff * rec->point.x);
-		y = (int)floor(sphere.checker_size_coeff * rec->point.y);
-		z = (int)floor(sphere.checker_size_coeff * rec->point.z);
-		if ((x + y + z) % 2)
-			return (sphere.albedo);
-		else
-			return (sphere.checker_color);
+		rec->albedo = sphere->albedo;
+		return ;
 	}
-	return (sphere.albedo);
+	if (sphere->texture_type == checker)
+	{
+		rec->albedo = get_checkered_color(rec->point,
+				sphere->checker_size_coeff,
+				sphere->albedo, sphere->checker_color);
+		return ;
+	}
+	if (sphere->texture_type == texture)
+	{
+		rec->albedo = get_texture_color(sphere->texture, rec->u, rec->v);
+		printf("R %f G %f B %f", rec->albedo.x, rec->albedo.y, rec->albedo.z);
+		return ;
+	}
+	if (sphere->texture_type == bump_map)
+	{
+		rec->albedo = get_bump_map_color(sphere->texture, rec->u, rec->v);
+	}
 }
 
 int	hit_sphere(t_ray *ray, t_interval t_minmax,
-			t_hit_record *rec, t_sphere sphere)
+			t_hit_record *rec, t_sphere *sphere)
 {
 	t_vec3	oc;
 	double	a;
@@ -39,11 +61,11 @@ int	hit_sphere(t_ray *ray, t_interval t_minmax,
 	double	discriminant;
 	double	root;
 
-	oc = vec3_minus_vec3(ray->origin, sphere.origin);
+	oc = vec3_minus_vec3(ray->origin, sphere->origin);
 	a = vec3length_squared(ray->direction);
 	half_b = dot(oc, ray->direction);
 	discriminant = half_b * half_b - a
-		* (vec3length_squared(oc) - sphere.radius * sphere.radius);
+		* (vec3length_squared(oc) - sphere->radius * sphere->radius);
 	if (discriminant < 0)
 		return (0);
 	root = (-1.0 * half_b - sqrt(discriminant)) / a;
@@ -55,24 +77,9 @@ int	hit_sphere(t_ray *ray, t_interval t_minmax,
 	}
 	rec->t = root;
 	rec->point = ray_at(*ray, root);
-	rec->material = sphere.material;
-	rec->material1 = sphere.material1;
-//	printf("%f %f %f \n", sphere.albedo.x, sphere.albedo.y, sphere.albedo.z);
-	set_face_normal(rec, ray, sphere);
-	rec->albedo = get_albedo_or_checkered(sphere, rec);
+	rec->material = sphere->material;
+	rec->material1 = sphere->material1;
+	set_sphere_face_normal(rec, ray, sphere);
+	get_albedo(sphere, rec);
 	return (1);
-}
-
-void	set_face_normal(t_hit_record *rec, t_ray *r, t_sphere sphere)
-{
-	t_vec3	outward_normal;
-
-	outward_normal = vec3_div_d(vec3_minus_vec3(rec->point,
-				sphere.origin), sphere.radius);
-	get_sphere_uv(outward_normal, &rec->u, &rec->v);
-	rec->front_face = dot(r->direction, outward_normal) < 0;
-	if (rec->front_face != 0)
-		rec->normal = outward_normal;
-	else
-		rec->normal = vec3_times_d(outward_normal, -1.0);
 }

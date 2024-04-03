@@ -31,7 +31,7 @@ int	hit(t_master *m, t_ray *r, t_interval t_minmax, t_hit_record *rec)
 	while (i < m->n_spheres)
 	{
 		if (hit_sphere(r, init_interval(t_minmax.min, closest_so_far),
-				&temp, m->spheres[i]))
+				&temp, &m->spheres[i]))
 		{
 			hit_anything = 1;
 			closest_so_far = temp.t;

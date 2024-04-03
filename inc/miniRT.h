@@ -48,6 +48,14 @@ typedef enum e_type
 	phong
 }	t_type;
 
+typedef enum e_texture_type
+{
+	solid,
+	checker,
+	texture,
+	bump_map
+}	t_texture_type;
+
 typedef struct s_sphere
 {
 	t_vec3			origin;
@@ -58,16 +66,23 @@ typedef struct s_sphere
 	int				checkered;
 	t_vec3			checker_color;
 	double			checker_size_coeff;
+	t_texture_type	texture_type;
+	mlx_texture_t	*texture;
 }	t_sphere;
 
 typedef struct s_plane
 {
-	t_vec3		point;
-	t_vec3		normal;
-	t_vec3		color;
-	t_type		material;
-	t_vec3		albedo;
-	double		material1;
+	t_vec3			point;
+	t_vec3			normal;
+	t_vec3			color;
+	t_type			material;
+	t_vec3			albedo;
+	double			material1;
+	int				checkered;
+	t_vec3			checker_color;
+	double			checker_size_coeff;
+	t_texture_type	texture_type;
+	mlx_texture_t	*texture;
 }	t_plane;
 
 typedef struct s_cylinder
@@ -144,9 +159,9 @@ t_color			ray_color(t_master *m, t_ray *r, int max_depth);
 t_vec3			ray_at(t_ray r, double t);
 
 int				hit_sphere(t_ray *ray, t_interval t_minmax,
-					t_hit_record *rec, t_sphere sphere);
+					t_hit_record *rec, t_sphere *sphere);
 void			set_face_normal(t_hit_record *rec, t_ray *r,
-					t_sphere sphere);
+					t_sphere *sphere);
 t_interval		init_interval(double min, double max);
 int				contains(t_interval i, double x);
 int				surrounds(t_interval i, double x);
@@ -167,4 +182,8 @@ int				near_zero(t_vec3 vec);
 t_vec3			reflect(t_vec3 v, t_vec3 n);
 int				metal_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered);
 int				matte_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered);
+t_vec3			get_checkered_color(t_vec3 point, double coeff,
+					t_vec3 color1, t_vec3 color2);
+t_vec3			get_bump_map_color(mlx_texture_t *texture, double u, double v);
+t_vec3			get_texture_color(mlx_texture_t *texture, double u, double v);
 #endif
