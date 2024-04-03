@@ -14,10 +14,12 @@
 
 typedef struct s_camera
 {
+	double	hfov;
 	double	focal_length;
 	double	viewport_height;
 	double	viewport_width;
 	t_vec3	camera_center;
+	t_vec3	look_at;
 	t_vec3	viewport_u;
 	t_vec3	viewport_v;
 	t_vec3	pixel_delta_u;
@@ -43,7 +45,7 @@ typedef enum e_type
 {
 	lambertian,
 	metal,
-	matte
+	phong
 }	t_type;
 
 typedef struct s_sphere
@@ -52,6 +54,10 @@ typedef struct s_sphere
 	double			radius;
 	t_type			material;
 	t_vec3			albedo;
+	double			material1;
+	int				checkered;
+	t_vec3			checker_color;
+	double			checker_size_coeff;
 }	t_sphere;
 
 typedef struct s_plane
@@ -61,6 +67,7 @@ typedef struct s_plane
 	t_vec3		color;
 	t_type		material;
 	t_vec3		albedo;
+	double		material1;
 }	t_plane;
 
 typedef struct s_cylinder
@@ -72,6 +79,7 @@ typedef struct s_cylinder
 	t_vec3		color;
 	t_type		material;
 	t_vec3		albedo;
+	double		material1;
 }	t_cylinder;
 
 typedef struct s_cone
@@ -82,6 +90,7 @@ typedef struct s_cone
 	t_vec3		axis;
 	t_type		material;
 	t_vec3		albedo;
+	double		material1;
 }	t_cone;
 
 typedef struct s_interval
@@ -122,6 +131,9 @@ typedef struct s_hit_record
 	int			front_face;
 	t_type		material;
 	t_vec3		albedo;
+	double		material1;
+	double		u;
+	double		v;
 }	t_hit_record;
 
 typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered);
@@ -139,7 +151,7 @@ t_interval		init_interval(double min, double max);
 int				contains(t_interval i, double x);
 int				surrounds(t_interval i, double x);
 double			clamp(t_interval i, double x);
-double			degreest_to_radians(double degrees);
+double			degrees_to_radians(double degrees);
 double			random_double(void);
 double			random_double_between(double min, double max);
 t_ray			get_ray(t_camera *c, int i, int j);

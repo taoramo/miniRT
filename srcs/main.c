@@ -1,4 +1,5 @@
 #include "miniRT.h"
+#include "vec3.h"
 
 int	ft_error(void)
 {
@@ -6,26 +7,29 @@ int	ft_error(void)
 }
 // TODO: calculate focal_length from FOV angle
 
-void	calculate_camera(t_camera *c,
-			double focal_length, double viewport_height)
+void	calculate_camera(t_camera *c)
 {
 	double	viewport_width;
+	double	viewport_height;
 	t_vec3	viewport_upper_left;
+	t_vec3	w;
+	t_vec3	u;
 
-	focal_length = 1.0;
-	viewport_height = 2.0;
-	viewport_width = viewport_height * (WWIDTH * 1.0) / (WHEIGHT * 1.0);
-	c->camera_center = init_vec3(0, 0, 0);
-	c->viewport_u = init_vec3(viewport_width, 0, 0);
-	c->viewport_v = init_vec3(0, viewport_height * -1.0, 0);
+	viewport_width = tan(degrees_to_radians(c->hfov / 2))
+		* 2 * c->focal_length;
+	viewport_height = viewport_width * (WHEIGHT * 1.0) / (WWIDTH * 1.0);
+	w = unit_vector(vec3_minus_vec3(c->camera_center, c->look_at));
+	u = unit_vector(cross(init_vec3(0, 1, 0), w));
+	c->viewport_u = vec3_times_d(u, viewport_width);
+	c->viewport_v = vec3_times_d(cross(w, u), viewport_height * -1.0);
 	c->pixel_delta_u = vec3_div_d(c->viewport_u, WWIDTH * 1.0);
 	c->pixel_delta_v = vec3_div_d(c->viewport_v, WHEIGHT * 1.0);
 	viewport_upper_left = vec3_minus_vec3(c->camera_center,
-			init_vec3(0, 0, focal_length));
+			vec3_times_d(w, c->focal_length));
 	viewport_upper_left = vec3_minus_vec3(viewport_upper_left,
-			vec3_times_d(c->viewport_v, 0.5));
+			vec3_div_d(c->viewport_u, 2));
 	viewport_upper_left = vec3_minus_vec3(viewport_upper_left,
-			vec3_times_d(c->viewport_u, 0.5));
+			vec3_div_d(c->viewport_v, 2));
 	c->pixel00_loc = vec3_plus_vec3(viewport_upper_left,
 			vec3_times_d(vec3_plus_vec3(c->pixel_delta_v,
 					c->pixel_delta_u), 0.5));
@@ -39,7 +43,7 @@ void	make_image(t_master *m, mlx_image_t *img)
 	int			sample;
 	t_ray		ray;
 
-	calculate_camera(m->camera, 1.0, 2.0);
+	calculate_camera(m->camera);
 	j = 0;
 	while (j < WHEIGHT)
 	{
@@ -91,18 +95,35 @@ int	main(void)
 	t_camera	camera;
 
 	m.camera = &camera;
-	m.samples_per_pixel = 100;
-	m.max_depth = 50;
-	m.spheres = malloc(sizeof(t_sphere) * 2);
-	m.spheres[0].origin = init_vec3(0, 0, -1);
+	m.camera->hfov = 100;
+	m.camera->focal_length = 1.0;
+	m.camera->camera_center = init_vec3(0, 0, 20);
+	m.camera->look_at = init_vec3(0, 0, -1);
+	m.samples_per_pixel = 10;
+	m.max_depth = 5;
+	m.n_spheres = 3;
+	m.spheres = malloc(sizeof(t_sphere) * m.n_spheres);
+	m.spheres[0].origin = init_vec3(1, 0, -1);
 	m.spheres[0].radius = 0.5;
 	m.spheres[0].material = metal;
+	m.spheres[0].material1 = 0;
 	m.spheres[0].albedo = init_vec3(0.8, 0.3, 0.3);
+	m.spheres[0].checkered = 1;
+	m.spheres[0].checker_color = init_vec3(1, 0, 0);
 	m.spheres[1].origin = init_vec3(0, -100.5, -1);
 	m.spheres[1].radius = 100;
-	m.spheres[1].material = lambertian;
+	m.spheres[1].material = metal;
+	m.spheres[1].material1 = 0.1;
 	m.spheres[1].albedo = init_vec3(0.8, 0.8, 0.8);
-	m.n_spheres = 2;
+	m.spheres[1].checkered = 1;
+	m.spheres[1].checker_color = init_vec3(0, 1, 0);
+	m.spheres[2].origin = init_vec3(-1, 0, -1);
+	m.spheres[2].radius = 0.5;
+	m.spheres[2].material = metal;
+	m.spheres[2].albedo = init_vec3(1.0, 0, 0);
+	m.spheres[2].material1 = 0.3;
+	m.spheres[2].checkered = 0;
 	render(&m);
+	free(m.spheres);
 	return (0);
 }

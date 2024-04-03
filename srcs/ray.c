@@ -42,7 +42,8 @@ int	hit(t_master *m, t_ray *r, t_interval t_minmax, t_hit_record *rec)
 	return (hit_anything);
 }
 
-int	run_scatter(t_ray *r, t_hit_record *rec, t_ray *scattered, t_vec3 *attenuation)
+int	run_scatter(t_ray *r, t_hit_record *rec,
+			t_ray *scattered, t_vec3 *attenuation)
 {
 	const t_f		scatter_functions[3] = {lambertian_scatter,
 		metal_scatter, matte_scatter};

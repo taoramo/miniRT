@@ -1,5 +1,35 @@
 #include "miniRT.h"
 
+void	get_sphere_uv(t_vec3 point, double *u, double *v)
+{
+	double	theta;
+	double	phi;
+
+	theta = acos(-1.0 * point.y);
+	phi = atan2(-1.0 * point.z, point.x) + M_PI;
+	*u = phi / (2 * M_PI);
+	*v = theta / M_PI;
+}
+
+t_vec3	get_albedo_or_checkered(t_sphere sphere, t_hit_record *rec)
+{
+	int	x;
+	int	y;
+	int	z;
+
+	if (sphere.checkered)
+	{
+		x = (int)floor(sphere.checker_size_coeff * rec->point.x);
+		y = (int)floor(sphere.checker_size_coeff * rec->point.y);
+		z = (int)floor(sphere.checker_size_coeff * rec->point.z);
+		if ((x + y + z) % 2)
+			return (sphere.albedo);
+		else
+			return (sphere.checker_color);
+	}
+	return (sphere.albedo);
+}
+
 int	hit_sphere(t_ray *ray, t_interval t_minmax,
 			t_hit_record *rec, t_sphere sphere)
 {
@@ -26,9 +56,10 @@ int	hit_sphere(t_ray *ray, t_interval t_minmax,
 	rec->t = root;
 	rec->point = ray_at(*ray, root);
 	rec->material = sphere.material;
-	rec->albedo = sphere.albedo;
+	rec->material1 = sphere.material1;
 //	printf("%f %f %f \n", sphere.albedo.x, sphere.albedo.y, sphere.albedo.z);
 	set_face_normal(rec, ray, sphere);
+	rec->albedo = get_albedo_or_checkered(sphere, rec);
 	return (1);
 }
 
@@ -38,6 +69,7 @@ void	set_face_normal(t_hit_record *rec, t_ray *r, t_sphere sphere)
 
 	outward_normal = vec3_div_d(vec3_minus_vec3(rec->point,
 				sphere.origin), sphere.radius);
+	get_sphere_uv(outward_normal, &rec->u, &rec->v);
 	rec->front_face = dot(r->direction, outward_normal) < 0;
 	if (rec->front_face != 0)
 		rec->normal = outward_normal;
