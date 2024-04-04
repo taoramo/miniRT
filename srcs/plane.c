@@ -42,6 +42,7 @@ int	hit_plane(t_ray *ray, t_interval t_minmax,
 	double	t;
 
 	denom = dot(plane->normal, ray->direction);
+	// printf("%f %f %f\n", plane->normal.x, plane->normal.y, plane->normal.z);
 	if (fabs(denom) < 0.00000001)
 		return (false);
 	t = (dot(plane->normal, plane->point)
