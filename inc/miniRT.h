@@ -2,15 +2,18 @@
 # define MINIRT_H
 
 # include "MLX42.h"
+# include "libft.h"
 # include "vec3.h"
 # include <math.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
 // TODO: remove this header
 # include <stdio.h>
 # define WWIDTH 1280
 # define WHEIGHT 720
 # define N_MATERIALS 3
+# define N_OBJECT_TYPES 6
 
 typedef struct s_camera
 {
@@ -114,8 +117,19 @@ typedef struct s_interval
 	double	max;
 }	t_interval;
 
+typedef enum s_object_type
+{
+	A,
+	C,
+	L,
+	sp,
+	pl,
+	cy
+}	t_object_type;
+
 typedef struct s_master
 {
+	int				objects_count[N_OBJECT_TYPES];
 	t_camera		*camera;
 	int				samples_per_pixel;
 	int				max_depth;
@@ -152,6 +166,9 @@ typedef struct s_hit_record
 }	t_hit_record;
 
 typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered);
+
+/* Utilities */
+double			ft_atod(const char *str);
 
 t_ray			init_ray(t_vec3 origin, t_vec3 direction);
 unsigned int	colorsum_to_rgba(t_color c, int samples_per_pixel);

@@ -86,49 +86,49 @@ int	render(t_master *m, mlx_t *mlx)
 	return (0);
 }
 
-int	main(void)
-{
-	t_master	m;
-	t_camera	camera;
-	mlx_t		*mlx;
+// int	main(void)
+// {
+// 	t_master	m;
+// 	t_camera	camera;
+// 	mlx_t		*mlx;
 
-	mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);
-	if (!mlx)
-		return (ft_error());
-	m.camera = &camera;
-	m.camera->hfov = 100;
-	m.camera->focal_length = 1.0;
-	m.camera->camera_center = init_vec3(0, 4, 10);
-	m.camera->look_at = init_vec3(0, 0, -1);
-	m.samples_per_pixel = 10;
-	m.max_depth = 5;
-	m.n_spheres = 2;
-	m.spheres = malloc(sizeof(t_sphere) * m.n_spheres);
-	m.spheres[0].origin = init_vec3(1, 0, -1);
-	m.spheres[0].radius = 0.5;
-	m.spheres[0].material = lambertian;
-	m.spheres[0].material1 = 0;
-	m.spheres[0].texture_type = texture;
-	m.spheres[0].texture = mlx_texture_to_image(mlx, mlx_load_png("./earthmap.png"));
-	m.spheres[0].albedo = init_vec3(0.8, 0.3, 0.3);
-	m.spheres[0].checkered = 1;
-	m.spheres[0].checker_color = init_vec3(1, 0, 0);
-	m.spheres[1].origin = init_vec3(-1, 0, -1);
-	m.spheres[1].radius = 0.5;
-	m.spheres[1].material = metal;
-	m.spheres[1].texture_type = solid;
-	m.spheres[1].albedo = init_vec3(1.0, 0, 0);
-	m.spheres[1].material1 = 0.3;
-	m.spheres[1].checkered = 0;
-	m.n_planes = 1;
-	m.planes = malloc(sizeof(t_plane) * m.n_planes);
-	m.planes[0].point = init_vec3(0, 0, 0);
-	m.planes[0].normal = unit_vector(init_vec3(-1, 1, 0));
-	m.planes[0].albedo = init_vec3(1, 0.2, 0.2);
-	m.planes[0].material = lambertian;
-	m.planes[0].texture_type = solid;
-	render(&m, mlx);
-	free(m.spheres);
-	free(m.planes);
-	return (0);
-}
+// 	mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);
+// 	if (!mlx)
+// 		return (ft_error());
+// 	m.camera = &camera;
+// 	m.camera->hfov = 100;
+// 	m.camera->focal_length = 1.0;
+// 	m.camera->camera_center = init_vec3(0, 4, 10);
+// 	m.camera->look_at = init_vec3(0, 0, -1);
+// 	m.samples_per_pixel = 10;
+// 	m.max_depth = 5;
+// 	m.n_spheres = 2;
+// 	m.spheres = malloc(sizeof(t_sphere) * m.n_spheres);
+// 	m.spheres[0].origin = init_vec3(1, 0, -1);
+// 	m.spheres[0].radius = 0.5;
+// 	m.spheres[0].material = lambertian;
+// 	m.spheres[0].material1 = 0;
+// 	m.spheres[0].texture_type = texture;
+// 	m.spheres[0].texture = mlx_texture_to_image(mlx, mlx_load_png("./earthmap.png"));
+// 	m.spheres[0].albedo = init_vec3(0.8, 0.3, 0.3);
+// 	m.spheres[0].checkered = 1;
+// 	m.spheres[0].checker_color = init_vec3(1, 0, 0);
+// 	m.spheres[1].origin = init_vec3(-1, 0, -1);
+// 	m.spheres[1].radius = 0.5;
+// 	m.spheres[1].material = metal;
+// 	m.spheres[1].texture_type = solid;
+// 	m.spheres[1].albedo = init_vec3(1.0, 0, 0);
+// 	m.spheres[1].material1 = 0.3;
+// 	m.spheres[1].checkered = 0;
+// 	m.n_planes = 1;
+// 	m.planes = malloc(sizeof(t_plane) * m.n_planes);
+// 	m.planes[0].point = init_vec3(0, 0, 0);
+// 	m.planes[0].normal = unit_vector(init_vec3(-1, 1, 0));
+// 	m.planes[0].albedo = init_vec3(1, 0.2, 0.2);
+// 	m.planes[0].material = lambertian;
+// 	m.planes[0].texture_type = solid;
+// 	render(&m, mlx);
+// 	free(m.spheres);
+// 	free(m.planes);
+// 	return (0);
+// }
