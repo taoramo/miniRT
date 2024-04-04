@@ -11,8 +11,9 @@ static void	set_plane_face_normal(t_hit_record *rec, t_ray *ray, t_plane *plane)
 		rec->normal = plane->normal;
 }
 
-static void	get_plane_uv(t_plane *plane, t_hit_record *rec, double *u, double *v)
+/* static void	get_plane_uv(t_plane *plane, t_hit_record *rec, double *u, double *v)
 {
+	(void)rec;
 	t_vec3	point_on_plane;
 	t_vec3	a;
 	t_vec3	b;
@@ -28,7 +29,7 @@ static void	get_plane_uv(t_plane *plane, t_hit_record *rec, double *u, double *v
 	}
 	b = unit_vector(cross(plane->normal, a));
 
-}
+} */
 
 static void	get_albedo(t_plane *plane, t_hit_record *rec)
 {
