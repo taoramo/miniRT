@@ -123,7 +123,7 @@ int	main(void)
 	m.n_planes = 1;
 	m.planes = malloc(sizeof(t_plane) * m.n_planes);
 	m.planes[0].point = init_vec3(0, 0, 0);
-	m.planes[0].normal = init_vec3(0, 1, 0);
+	m.planes[0].normal = unit_vector(init_vec3(-1, 1, 0));
 	m.planes[0].albedo = init_vec3(1, 0.2, 0.2);
 	m.planes[0].material = lambertian;
 	m.planes[0].texture_type = solid;
