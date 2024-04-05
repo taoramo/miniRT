@@ -8,6 +8,7 @@
 # include <unistd.h>
 // TODO: remove this header
 # include <stdio.h>
+#include "libft.h"
 # define WWIDTH 1280
 # define WHEIGHT 720
 # define N_MATERIALS 3
@@ -25,6 +26,9 @@ typedef struct s_camera
 	t_vec3	pixel_delta_u;
 	t_vec3	pixel_delta_v;
 	t_vec3	pixel00_loc;
+	t_vec3	background_color;
+	t_vec3	ambient_color;
+	t_vec3	ambient_ratio;
 }	t_camera;
 
 typedef struct s_ambient
@@ -68,6 +72,9 @@ typedef struct s_sphere
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
 	mlx_image_t		*texture;
+	t_vec3			emitted;
+	double			k_d;
+	double			k_s;
 }	t_sphere;
 
 typedef struct s_plane
@@ -82,6 +89,9 @@ typedef struct s_plane
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
 	mlx_image_t		*texture;
+	t_vec3			emitted;
+	double			k_d;
+	double			k_s;
 }	t_plane;
 
 typedef struct s_cylinder
@@ -98,17 +108,28 @@ typedef struct s_cylinder
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
 	mlx_image_t		*texture;
+	t_vec3			emitted;
+	double			k_d;
+	double			k_s;
 }	t_cylinder;
 
 typedef struct s_cone
 {
-	double		angle;
-	double		height;
-	t_vec3		tip;
-	t_vec3		axis;
-	t_type		material;
-	t_vec3		albedo;
-	double		material1;
+	double			angle;
+	double			height;
+	t_vec3			tip;
+	t_vec3			axis;
+	t_type			material;
+	t_vec3			albedo;
+	double			material1;
+	int				checkered;
+	t_vec3			checker_color;
+	double			checker_size_coeff;
+	t_texture_type	texture_type;
+	mlx_image_t		*texture;
+	t_vec3			emitted;
+	double			k_d;
+	double			k_s;
 }	t_cone;
 
 typedef struct s_interval
@@ -152,6 +173,9 @@ typedef struct s_hit_record
 	double		material1;
 	double		u;
 	double		v;
+	t_vec3		emitted;
+	double		k_d;
+	double		k_s;
 }	t_hit_record;
 
 typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered);

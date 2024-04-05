@@ -94,6 +94,9 @@ int	hit_sphere(t_ray *ray, t_interval t_minmax,
 	rec->point = ray_at(*ray, root);
 	rec->material = sphere->material;
 	rec->material1 = sphere->material1;
+	rec->emitted = sphere->emitted;
+	rec->k_s = sphere->k_s;
+	rec->k_d = sphere->k_d;
 	set_sphere_face_normal(rec, ray, sphere);
 	get_albedo(sphere, rec);
 	return (1);

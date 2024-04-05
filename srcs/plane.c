@@ -65,6 +65,9 @@ int	hit_plane(t_ray *ray, t_interval t_minmax,
 	rec->point = ray_at(*ray, t);
 	rec->material = plane->material;
 	rec->material1 = plane->material1;
+	rec->emitted = plane->emitted;
+	rec->k_s = plane->k_s;
+	rec->k_d = plane->k_d;
 	set_plane_face_normal(rec, ray, plane);
 	get_albedo(plane, rec);
 	return (1);

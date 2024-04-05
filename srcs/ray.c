@@ -66,38 +66,32 @@ int	hit(t_master *m, t_ray *r, t_interval t_minmax, t_hit_record *rec)
 	return (hit_anything);
 }
 
-int	run_scatter(t_ray *r, t_hit_record *rec,
-			t_ray *scattered, t_vec3 *attenuation)
+t_vec3	ray_color(t_master *m, t_ray *r, int depth)
 {
-	const t_f		scatter_functions[3] = {lambertian_scatter,
-		metal_scatter, matte_scatter};
-
-	*attenuation = rec->albedo;
-	return (scatter_functions[rec->material](r, rec, scattered));
-}
-
-t_color	ray_color(t_master *m, t_ray *r, int depth)
-{
-	t_vec3			unit_direction;
-	t_color			ret;
 	t_hit_record	rec;
-	t_ray			scattered;
-	t_vec3			attenuation;
+	t_ray			scattered_diffuse;
+	t_ray			scattered_specular;
+	t_vec3			attenuation_diffuse;
+	t_vec3			attenuation_specular;
+	t_vec3			emitted;
 
+	attenuation_diffuse = init_vec3(0, 0, 0);
+	attenuation_specular = init_vec3(0, 0, 0);
+	emitted = init_vec3(0, 0, 0);
+	ft_bzero(&rec, sizeof(rec));
 	if (depth <= 0)
 		return (init_vec3(0, 0, 0));
-	if (hit(m, r, init_interval(0.001, INFINITY), &rec))
+	if (!hit(m, r, init_interval(0.001, INFINITY), &rec))
+		return (m->camera->background_color);
+	if (lambertian_scatter(r, &rec, &scattered_diffuse))
 	{
-		//printf("%f %f %f\n", rec.albedo.x, rec.albedo.y, rec.albedo.z);
-		if (run_scatter(r, &rec, &scattered, &attenuation))
-			return (vec3_times_vec3(attenuation,
-					ray_color(m, &scattered, depth - 1)));
-		return (init_vec3(0, 0, 0));
+		attenuation_diffuse = vec3_times_d(rec.albedo, rec.k_d);
+		emitted = rec.emitted;
 	}
-	unit_direction = unit_vector(r->direction);
-	ret = vec3_plus_vec3(vec3_times_d(init_vec3(1.0, 1.0, 1.0),
-				1.0 - (0.5 * (unit_direction.y + 1.0))),
-			vec3_times_d(init_vec3(0.5, 0.7, 1.0),
-				0.5 * (unit_direction.y + 1.0)));
-	return (ret);
+	if (metal_scatter(r, &rec, &scattered_specular))
+	{
+		attenuation_specular = vec3_times_d(rec.albedo, rec.k_s);
+		emitted = vec3_plus_vec3(emitted, rec.emitted);
+	}
+	return (vec3_plus_vec3(emitted, vec3_plus_vec3(vec3_times_vec3(attenuation_specular, ray_color(m, &scattered_specular, depth - 1)), vec3_times_vec3(attenuation_diffuse, ray_color(m, &scattered_diffuse, depth - 1)))));
 }
