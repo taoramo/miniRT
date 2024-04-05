@@ -51,6 +51,18 @@ int	hit(t_master *m, t_ray *r, t_interval t_minmax, t_hit_record *rec)
 		}
 		i++;
 	}
+	i = 0;
+	while (i < m->n_cylinders)
+	{
+		if (hit_cylinder(r, init_interval(t_minmax.min, closest_so_far),
+				&temp, &m->cylinders[i]))
+		{
+			hit_anything = 1;
+			closest_so_far = temp.t;
+			*rec = temp;
+		}
+		i++;
+	}
 	return (hit_anything);
 }
 
