@@ -13,6 +13,23 @@ static void	set_cylinder_uv(t_hit_record *rec, t_cylinder *cylinder, t_ray *ray)
 	rec->v = m / cylinder->height;
 }
 
+t_vec3	get_cylinder_checkered_color(t_hit_record *rec, t_cylinder *cylinder)
+{
+	double	checker_u;
+	double	checker_v;
+	int		x;
+	int		y;
+
+	checker_u = rec->u * cylinder->checker_size_coeff * 2;
+	checker_v = rec->v * cylinder->checker_size_coeff;
+	x = floor(checker_u);
+	y = floor(checker_v);
+	if ((x + y) % 2)
+		return (cylinder->albedo);
+	else
+		return (cylinder->checker_color);
+}
+
 static void	set_cylinder_face_normal(t_hit_record *rec, t_ray *ray, t_cylinder *cylinder)
 {
 	t_vec3	outward_normal;
@@ -36,9 +53,7 @@ static void	get_albedo(t_cylinder *cylinder, t_hit_record *rec)
 	}
 	if (cylinder->texture_type == checker)
 	{
-		rec->albedo = get_checkered_color(rec->point,
-				cylinder->checker_size_coeff,
-				cylinder->albedo, cylinder->checker_color);
+		rec->albedo = get_cylinder_checkered_color(rec, cylinder);
 		return ;
 	}
 	if (cylinder->texture_type == texture)

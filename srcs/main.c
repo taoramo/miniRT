@@ -124,10 +124,11 @@ int	main(void)
 	m.n_planes = 1;
 	m.planes = malloc(sizeof(t_plane) * m.n_planes);
 	m.planes[0].point = init_vec3(0, -4, 0);
-	m.planes[0].normal = init_vec3(0, 1, 0);
+	m.planes[0].normal = init_vec3(0.5, 1, 0);
 	m.planes[0].material = lambertian;
 	m.planes[0].albedo = init_vec3(0.2, 0.2, 0.2);
-	m.planes[0].texture_type = solid;
+	m.planes[0].texture_type = texture;
+	m.planes[0].texture = mlx_texture_to_image(mlx, mlx_load_png("./earthmap.png"));
 	m.n_cylinders = 1;
 	m.cylinders = malloc(sizeof(t_cylinder) * m.n_cylinders);
 	m.cylinders[0].center = init_vec3(0, 0.5, -1);

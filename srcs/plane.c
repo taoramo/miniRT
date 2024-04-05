@@ -9,8 +9,8 @@ static void	set_plane_uv(t_hit_record *rec)
 	if (!plane_u.x && !plane_u.y && !plane_u.z)
 		plane_u = unit_vector(cross(rec->normal, init_vec3(0, 0, 1)));
 	plane_v = unit_vector(cross(rec->normal, plane_u));
-	rec->u = dot(plane_u, rec->point);
-	rec->v = dot(plane_v, rec->point);
+	rec->u = dot(plane_u, rec->point) - floor(dot(plane_u, rec->point));
+	rec->v = dot(plane_v, rec->point) - floor(dot(plane_v, rec->point));
 }
 
 static void	set_plane_face_normal(t_hit_record *rec, t_ray *ray, t_plane *plane)
