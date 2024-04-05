@@ -192,4 +192,6 @@ t_vec3			get_texture_color(mlx_image_t *texture, double u, double v);
 int				hit_plane(t_ray *ray, t_interval t_minmax,
 					t_hit_record *rec, t_plane *plane);
 int				hit_cylinder(t_ray *ray, t_interval t_minmax, t_hit_record *rec, t_cylinder *cylinder);
+t_vec3			get_solid_checkered_color(t_vec3 point,
+					double coeff, t_vec3 color1, t_vec3 color2);
 #endif

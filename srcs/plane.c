@@ -53,7 +53,7 @@ static void	get_albedo(t_plane *plane, t_hit_record *rec)
 	}
 	if (plane->texture_type == checker)
 	{
-		rec->albedo = get_checkered_color(rec->point,
+		rec->albedo = get_solid_checkered_color(rec->point,
 				plane->checker_size_coeff, plane->albedo, plane->checker_color);
 		return ;
 	}
