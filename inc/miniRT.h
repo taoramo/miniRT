@@ -14,6 +14,7 @@
 # define WHEIGHT 720
 # define N_MATERIALS 3
 # define N_OBJECT_TYPES 6
+# define EPSILON 1e-8
 
 typedef struct s_camera
 {
@@ -168,6 +169,7 @@ typedef struct s_hit_record
 typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered);
 
 /* Utilities */
+typedef int (*t_validate_str)(char *value_param);
 double			ft_atod(const char *str);
 
 t_ray			init_ray(t_vec3 origin, t_vec3 direction);
