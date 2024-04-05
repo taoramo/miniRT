@@ -191,4 +191,5 @@ t_vec3			get_bump_map_color(mlx_image_t *texture, double u, double v);
 t_vec3			get_texture_color(mlx_image_t *texture, double u, double v);
 int				hit_plane(t_ray *ray, t_interval t_minmax,
 					t_hit_record *rec, t_plane *plane);
+int				hit_cylinder(t_ray *ray, t_interval t_minmax, t_hit_record *rec, t_cylinder *cylinder);
 #endif

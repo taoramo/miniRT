@@ -27,6 +27,23 @@ static void	set_sphere_face_normal(t_hit_record *rec,
 	get_sphere_uv(outward_normal, &rec->u, &rec->v);
 }
 
+t_vec3	get_sphere_checkered_color(t_hit_record *rec, t_sphere *sphere)
+{
+	double	checker_u;
+	double	checker_v;
+	int		x;
+	int		y;
+
+	checker_u = rec->u * sphere->checker_size_coeff * 2;
+	checker_v = rec->v * sphere->checker_size_coeff;
+	x = floor(checker_u);
+	y = floor(checker_v);
+	if ((x + y) % 2)
+		return (sphere->albedo);
+	else
+		return (sphere->checker_color);
+}
+
 static void	get_albedo(t_sphere *sphere, t_hit_record *rec)
 {
 	if (sphere->texture_type == solid)
@@ -36,9 +53,7 @@ static void	get_albedo(t_sphere *sphere, t_hit_record *rec)
 	}
 	if (sphere->texture_type == checker)
 	{
-		rec->albedo = get_checkered_color(rec->point,
-				sphere->checker_size_coeff,
-				sphere->albedo, sphere->checker_color);
+		rec->albedo = get_sphere_checkered_color(rec, sphere);
 		return ;
 	}
 	if (sphere->texture_type == texture)

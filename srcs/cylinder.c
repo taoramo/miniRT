@@ -1,29 +1,30 @@
 #include "miniRT.h"
 #include "vec3.h"
 
-static void	set_cylinder_uv(t_ray *ray, t_hit_record *rec, t_cylinder *cylinder)
+static void	set_cylinder_uv(t_hit_record *rec, t_cylinder *cylinder, t_ray *ray)
 {
+	double	m;
+	t_vec3	oc;
+
+	rec->u = 1 - atan2(rec->point.x, rec->point.z) / (2 * M_PI) + 0.5;
+	rec->v = rec->point.y - floor(rec->point.y);
+	oc = vec3_minus_vec3(ray->origin, vec3_minus_vec3(cylinder->center, vec3_times_d(cylinder->axisnormal, cylinder->height / 2)));
+	m = dot(ray->direction, cylinder->axisnormal) * rec->t + dot(oc, cylinder->axisnormal);
+	rec->v = m / cylinder->height;
+}
+
+static void	set_cylinder_face_normal(t_hit_record *rec, t_ray *ray, t_cylinder *cylinder)
+{
+	t_vec3	outward_normal;
 	double	m;
 	t_vec3	oc;
 
 	oc = vec3_minus_vec3(ray->origin, vec3_minus_vec3(cylinder->center, vec3_times_d(cylinder->axisnormal, cylinder->height / 2)));
 	m = dot(ray->direction, cylinder->axisnormal) * rec->t + dot(oc, cylinder->axisnormal);
-	rec->u = dot(vec3_times_d(ray->direction, -1.0), rec->normal);
-	rec->v = m / cylinder->height;
-}
-
-static void	set_cylinder_face_normal(t_hit_record *rec, t_ray *r, t_cylinder *cylinder)
-{
-	int		front_face;
-	t_vec3	outward_normal;
-
-	outward_normal = unit_vector(vec3_minus_vec3(rec->point, cylinder->center));
-	front_face = dot(r->direction, outward_normal) < 0;
-	if (front_face)
-		rec->normal = outward_normal;
-	else
-		rec->normal = vec3_times_d(outward_normal, 1.0);
-	set_cylinder_uv(r, rec, cylinder);
+	outward_normal = vec3_minus_vec3(rec->point, vec3_minus_vec3(cylinder->center, vec3_times_d(cylinder->axisnormal, cylinder->height / 2)));
+	outward_normal = unit_vector(vec3_minus_vec3(outward_normal, vec3_times_d(cylinder->axisnormal, m)));
+	rec->normal = outward_normal;
+	set_cylinder_uv(rec, cylinder, ray);
 }
 
 static void	get_albedo(t_cylinder *cylinder, t_hit_record *rec)
