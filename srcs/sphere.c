@@ -14,16 +14,17 @@ static void	get_sphere_uv(t_vec3 point, double *u, double *v)
 static void	set_sphere_face_normal(t_hit_record *rec,
 			t_ray *r, t_sphere *sphere)
 {
+	int		front_face;
 	t_vec3	outward_normal;
 
 	outward_normal = vec3_div_d(vec3_minus_vec3(rec->point,
 				sphere->origin), sphere->radius);
-	get_sphere_uv(outward_normal, &rec->u, &rec->v);
-	rec->front_face = dot(r->direction, outward_normal) < 0;
-	if (rec->front_face != 0)
+	front_face = dot(r->direction, outward_normal) < 0;
+	if (front_face != 0)
 		rec->normal = outward_normal;
 	else
 		rec->normal = vec3_times_d(outward_normal, -1.0);
+	get_sphere_uv(outward_normal, &rec->u, &rec->v);
 }
 
 static void	get_albedo(t_sphere *sphere, t_hit_record *rec)

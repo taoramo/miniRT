@@ -74,7 +74,6 @@ typedef struct s_plane
 {
 	t_vec3			point;
 	t_vec3			normal;
-	t_vec3			color;
 	t_type			material;
 	t_vec3			albedo;
 	double			material1;
@@ -87,14 +86,18 @@ typedef struct s_plane
 
 typedef struct s_cylinder
 {
-	t_vec3		center;
-	t_vec3		axisnormal;
-	double		radius;
-	double		height;
-	t_vec3		color;
-	t_type		material;
-	t_vec3		albedo;
-	double		material1;
+	t_vec3			center;
+	t_vec3			axisnormal;
+	double			radius;
+	double			height;
+	t_type			material;
+	t_vec3			albedo;
+	double			material1;
+	int				checkered;
+	t_vec3			checker_color;
+	double			checker_size_coeff;
+	t_texture_type	texture_type;
+	mlx_image_t		*texture;
 }	t_cylinder;
 
 typedef struct s_cone
