@@ -151,7 +151,7 @@ int validate_f_range(char *f_str, float min, float max, char *err)
 	return (EXIT_SUCCESS);
 }
 
-int	validate_three_tuple(char *value_param, t_validate_str f, t_interval range, char *err)
+int	validate_param(char *value_param, t_validate_str f, t_interval range, char *err)
 {
 	char	**tuple;
 	char	**temp;
@@ -173,7 +173,7 @@ int	validate_three_tuple(char *value_param, t_validate_str f, t_interval range, 
  */
 int validate_position(char *value_param)
 {
-	if (validate_three_tuple(value_param, validate_f_str, init_interval(-__DBL_MAX__, __DBL_MAX__),
+	if (validate_param(value_param, validate_f_str, init_interval(-__DBL_MAX__, __DBL_MAX__),
 			"Position is out of range."))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
@@ -184,7 +184,7 @@ int validate_position(char *value_param)
  */
 int validate_orientation(char *value_param)
 {
-	if (validate_three_tuple(value_param, validate_f_str, init_interval(-1.0, 1.0),
+	if (validate_param(value_param, validate_f_str, init_interval(-1.0, 1.0),
 			"Orientation is not in [-1, 1]."))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
@@ -195,7 +195,7 @@ int validate_orientation(char *value_param)
  */
 int	validate_size(char *value_param)
 {
-	if (validate_three_tuple(value_param, validate_f_str, init_interval(0.0, __DBL_MAX__),
+	if (validate_param(value_param, validate_f_str, init_interval(0.0, __DBL_MAX__),
 		"Size parameter is out of range."))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
@@ -206,10 +206,24 @@ int	validate_size(char *value_param)
  */
 int	validate_rgb(char *value_param)
 {
-	if (validate_three_tuple(value_param, validate_int_str, init_interval(0, 255),
+	if (validate_param(value_param, validate_int_str, init_interval(0, 255),
 			"RGB color not in [0, 255]."))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
+}
+
+int	validate_texture(char *value_param)
+{
+	size_t str_len;
+
+	str_len = ft_strlen(value_param);
+	if (ft_strncmp(value_param, "solid", str_len + 1) == 0)
+		return (EXIT_SUCCESS);
+	if (ft_strncmp(value_param, "checker", str_len + 1) == 0)
+		return (EXIT_SUCCESS);
+	if (ft_strncmp(value_param + str_len - 4, ".png", 5) == 0)
+		return (EXIT_SUCCESS);
+	return (print_error("Texture not implemented."));
 }
 
 int	validate_ambient_light(char **value_params)
@@ -237,7 +251,7 @@ int	validate_camera(char **value_params)
 	if (validate_orientation(value_params[1]))
 		return (EXIT_FAILURE);
 	// FOV [0, 180]
-	if (validate_three_tuple(value_params[2], validate_int_str, init_interval(0, 180),
+	if (validate_param(value_params[2], validate_int_str, init_interval(0, 180),
 		"Camera FOV is not in [0, 180].")) // NOTE: Validate three tuple can be also used for a number
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
@@ -251,7 +265,7 @@ int	validate_light(char **value_params)
 	if (validate_position(value_params[0]))
 		return (EXIT_FAILURE);
 	// Light brightness ratio [0.0, 1.0]
-	if (validate_three_tuple(value_params[1], validate_f_str, init_interval(0.0, 1.0),
+	if (validate_param(value_params[1], validate_f_str, init_interval(0.0, 1.0),
 			"Light brightness ratio is out of range."))
 		return (EXIT_FAILURE);
 	// RGB Colors range [0, 255]
@@ -262,8 +276,8 @@ int	validate_light(char **value_params)
 
 int	validate_sphere(char **value_params)
 {
-	if (str_array_length(value_params) != 3)
-		return (print_error("Sphere must have 3 parameters."));
+	if (str_array_length(value_params) != 4)
+		return (print_error("Sphere must have 4 parameters."));
 	// Sphere position x,y,z
 	if (validate_position(value_params[0]))
 		return (EXIT_FAILURE);
@@ -273,13 +287,15 @@ int	validate_sphere(char **value_params)
 	// RGB Colors range [0, 255]
 	if (validate_rgb(value_params[2]))
 		return (EXIT_FAILURE);
+	if (validate_texture(value_params[3]))
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
 int	validate_plane(char **value_params)
 {
-	if (str_array_length(value_params) != 3)
-		return (print_error("Plane must have 3 parameters."));
+	if (str_array_length(value_params) != 4)
+		return (print_error("Plane must have 4 parameters."));
 	// Plane position
 	if (validate_position(value_params[0]))
 		return (EXIT_FAILURE);
@@ -289,13 +305,15 @@ int	validate_plane(char **value_params)
 	// RGB Colors range [0, 255]
 	if (validate_rgb(value_params[2]))
 		return (EXIT_FAILURE);
+	if (validate_texture(value_params[3]))
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
 int	validate_cylinder(char **value_params)
 {
-	if (str_array_length(value_params) != 5)
-		return (print_error("Cylinder must have 5 parameters."));
+	if (str_array_length(value_params) != 6)
+		return (print_error("Cylinder must have 6 parameters."));
 	// Plane position
 	if (validate_position(value_params[0]))
 		return (EXIT_FAILURE);
@@ -310,6 +328,8 @@ int	validate_cylinder(char **value_params)
 		return (EXIT_FAILURE);
 	// color
 	if (validate_rgb(value_params[4]))
+		return (EXIT_FAILURE);
+	if (validate_texture(value_params[5]))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -373,7 +393,7 @@ int	validate_line_identifier(char *line, int objects_count[], const char *ids[])
 }
 
 // void	parse(t_master m, int objects_count[], int fd)
-int	parse(int objects_count[], int fd)
+int	validate_scene(int objects_count[], int fd)
 {
 	char	*line;
 	char	*tmp;
@@ -392,8 +412,7 @@ int	parse(int objects_count[], int fd)
 			line = get_next_line(fd);
 			continue ;
 		}
-		printf("%d. ", ++i);
-		printf("%s\n", line);
+		printf("%d. %s\n", ++i, line);
 
 		if (validate_line_identifier(line, objects_count, ids) == EXIT_FAILURE)
 		{
@@ -403,7 +422,7 @@ int	parse(int objects_count[], int fd)
 		free(line);
 		line = get_next_line(fd);
 	}
-	printf("Scene verified.\n");
+	printf("Scene validated.\n");
 	return (EXIT_SUCCESS);
 }
 
@@ -422,9 +441,10 @@ int	main(int argc, char const *argv[])
 		perror("Error");
 		return (1);
 	}
-	if (parse(objects_count, fd) == EXIT_FAILURE)
+	if (validate_scene(objects_count, fd) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	close(argv[1]);
+	close(fd);
+
 	// Test object count
 	// int i = 0;
 	// while (i < N_OBJECT_TYPES)
