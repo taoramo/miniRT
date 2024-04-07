@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:21 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/07 23:41:49 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/08 00:48:51 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,11 @@ int allocate_objects(int objects_count[], t_master *m)
 
 int	main(int argc, char const *argv[])
 {
-	int fd;
+	int			fd;
+	int			objects_count[N_OBJECT_TYPES];
 	t_master	m;
 	// t_camera	camera;
 	// mlx_t		*mlx;
-	int		objects_count[N_OBJECT_TYPES];
 
 	ft_bzero(objects_count, sizeof(int) * N_OBJECT_TYPES);
 	if (argc < 2)
@@ -120,12 +120,15 @@ int	main(int argc, char const *argv[])
 
 	if (allocate_objects(objects_count, &m) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 	{
 		perror("Error");
 		return (1);
 	}
+	// initialize_scene(&m, &camera, mlx);
+	close(fd);
 
 /* 	Test object count
 	int i = 0;
