@@ -29,7 +29,9 @@ int	str_array_length(char **str)
 
 int print_error(char *err)
 {
-	printf("Error:\n%s\n", err);
+	printf("Error:\n");
+	if (err[0])
+		printf("%s\n", err);
 	return (EXIT_FAILURE);
 }
 
@@ -44,6 +46,20 @@ void free_split(char **split)
 		tmp++;
 	}
 	free(split);
+}
+
+int index_of(char **arr, char *str)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i])
+	{
+		if (ft_strncmp(arr[i], str, ft_strlen(arr[i]) + 1) == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
 void	replace_whitespaces(char *line)
@@ -207,7 +223,7 @@ int	validate_size(char *value_param)
 int	validate_rgb(char *value_param)
 {
 	if (validate_param(value_param, validate_int_str, init_interval(0, 255),
-			"RGB color not in [0, 255]."))
+			"RGB color is not in [0, 255]."))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -226,13 +242,45 @@ int	validate_texture(char *value_param)
 	return (print_error("Texture not implemented."));
 }
 
+int checker_shift(char **value_params)
+{
+	int shift;
+
+	shift = 0;
+	if (index_of(value_params, "checker") != -1)
+		shift = 2;
+	return (shift);	
+}
+
+int validate_checker_rgbs(char **value_params)
+{
+	int checker_ind;
+
+	checker_ind = index_of(value_params, "checker");
+	if (index_of(value_params, "checker") != -1)
+	{
+		if (checker_ind != -1 && validate_rgb(value_params[checker_ind + 1]))
+			return (EXIT_FAILURE);
+		if (validate_rgb(value_params[checker_ind + 2]))
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+int validate_0_to_1(char *value_param)
+{
+	if (validate_f_str(value_param) || validate_f_range(value_param, 0, 1,
+			"Value not in [0.0, 1.0]."))
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
+
 int	validate_ambient_light(char **value_params)
 {
 	if (str_array_length(value_params) != 2)
 		return (print_error("Ambient light must have 2 parameters."));
 	// Ambient light ratio [0.0, 1.0]
-	if (validate_f_str(value_params[0]) || validate_f_range(value_params[0], 0, 1,
-			"Ambient light intensity not in [0.0, 1.0]."))
+	if (validate_0_to_1(value_params[0]))
 		return (EXIT_FAILURE);
 	// RGB Colors range [0, 255]
 	if (validate_rgb(value_params[1]))
@@ -274,62 +322,74 @@ int	validate_light(char **value_params)
 	return (EXIT_SUCCESS);
 }
 
+/**
+ * Example:
+ * sp (x,y,z) (diameter) (RGB) (texture) (k_s) (k_d)
+ * sp 0.0,0.0,20.6 12.6 10,0,255 solid 0.5 0.5
+ * 
+ * sp (x,y,z) (diameter) (RGB) checker (RGB) (RGB) (k_s) (k_d)
+ * sp 0.0,0.0,20.6 12.6 10,0,255 checker 255,0,0 0,255,0 0.5 0.5
+*/
 int	validate_sphere(char **value_params)
 {
-	if (str_array_length(value_params) != 4)
-		return (print_error("Sphere must have 4 parameters."));
-	// Sphere position x,y,z
-	if (validate_position(value_params[0]))
+	int	valid_count;
+	int shift;
+
+	valid_count = 6;
+	shift = checker_shift(value_params);
+	if (str_array_length(value_params) != valid_count + shift)
+	{
+		printf("Sphere must have %d parameters.\n", valid_count + shift);
 		return (EXIT_FAILURE);
-	// Sphere diameter [0.0, INFINITY]
-	if (validate_size(value_params[1]))
-		return (EXIT_FAILURE);
-	// RGB Colors range [0, 255]
-	if (validate_rgb(value_params[2]))
-		return (EXIT_FAILURE);
-	if (validate_texture(value_params[3]))
+	}
+	if (validate_position(value_params[0]) || validate_size(value_params[1])
+		|| validate_rgb(value_params[2]) || validate_texture(value_params[3])
+		|| validate_checker_rgbs(value_params)
+		|| validate_0_to_1(value_params[4 + shift])
+		|| validate_0_to_1(value_params[5 + shift]))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
 int	validate_plane(char **value_params)
 {
-	if (str_array_length(value_params) != 4)
-		return (print_error("Plane must have 4 parameters."));
-	// Plane position
-	if (validate_position(value_params[0]))
+	int	valid_count;
+	int shift;
+
+	valid_count = 6;
+	shift = checker_shift(value_params);
+	if (str_array_length(value_params) != valid_count + shift)
+	{
+		printf("Plane must have %d parameters.\n", valid_count + shift);
 		return (EXIT_FAILURE);
-	// Plane orientation [-1.0, 1.0]
-	if (validate_orientation(value_params[1]))
-		return (EXIT_FAILURE);
-	// RGB Colors range [0, 255]
-	if (validate_rgb(value_params[2]))
-		return (EXIT_FAILURE);
-	if (validate_texture(value_params[3]))
+	}
+	if (validate_position(value_params[0])
+	|| validate_orientation(value_params[1]) || validate_rgb(value_params[2])
+	|| validate_texture(value_params[3]) || validate_checker_rgbs(value_params)
+	|| validate_0_to_1(value_params[4 + shift])
+	|| validate_0_to_1(value_params[5 + shift]))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
 int	validate_cylinder(char **value_params)
 {
-	if (str_array_length(value_params) != 6)
-		return (print_error("Cylinder must have 6 parameters."));
-	// Plane position
-	if (validate_position(value_params[0]))
+	int	valid_count;
+	int shift;
+
+	valid_count = 8;
+	shift = checker_shift(value_params);
+	if (str_array_length(value_params) != valid_count + shift)
+	{
+		printf("Cylinder must have %d parameters.\n", valid_count + shift);
 		return (EXIT_FAILURE);
-	// Plane orientation [-1.0, 1.0]
-	if (validate_orientation(value_params[1]))
-		return (EXIT_FAILURE);
-	// diameter
-	if (validate_size(value_params[2]))
-		return (EXIT_FAILURE);
-	// height
-	if (validate_size(value_params[3]))
-		return (EXIT_FAILURE);
-	// color
-	if (validate_rgb(value_params[4]))
-		return (EXIT_FAILURE);
-	if (validate_texture(value_params[5]))
+	}
+	if (validate_position(value_params[0])
+	|| validate_orientation(value_params[1]) || validate_size(value_params[2])
+	|| validate_size(value_params[3]) || validate_rgb(value_params[4])
+	|| validate_texture(value_params[5]) || validate_checker_rgbs(value_params)
+	|| validate_0_to_1(value_params[6])
+	|| validate_0_to_1(value_params[7]))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -392,7 +452,6 @@ int	validate_line_identifier(char *line, int objects_count[], const char *ids[])
 	return (EXIT_SUCCESS);
 }
 
-// void	parse(t_master m, int objects_count[], int fd)
 int	validate_scene(int objects_count[], int fd)
 {
 	char	*line;
