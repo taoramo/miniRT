@@ -88,25 +88,24 @@ int	render(t_master *m, mlx_t *mlx)
 
 int	main(int argc, char const *argv[])
 {
-	int			objects_count[N_OBJECT_TYPES];
 	const char	*ids[N_OBJECT_TYPES] = {"A", "C", "L", "sp", "pl", "cy"};
 	t_master	m;
 	mlx_t		*mlx;
 
+	m.ids = ids;
 	mlx = NULL;
-	ft_bzero(objects_count, sizeof(int) * N_OBJECT_TYPES);
+	ft_bzero(m.objects_count, sizeof(int) * N_OBJECT_TYPES);
 	if (argc < 2)
 	{
 		printf("Usage: %s <filename>\n", argv[0]);
 		return (1);
 	}
-	if (validate(argv, objects_count, ids) == EXIT_FAILURE)
+	if (validate(argv, m.objects_count, ids) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 
-	if (allocate_objects(objects_count, &m) == EXIT_FAILURE)
+	if (allocate_objects(m.objects_count, &m) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 
-	m.ids = ids;
 	initialize(&m, mlx, argv);
 
 
