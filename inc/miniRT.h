@@ -143,10 +143,10 @@ typedef struct s_master
 	unsigned int	n_spheres;
 	t_plane			*planes;
 	unsigned int	n_planes;
-	t_cone			*cones;
-	unsigned int	n_cones;
 	t_cylinder		*cylinders;
 	unsigned int	n_cylinders;
+	t_cone			*cones;
+	unsigned int	n_cones;
 }	t_master;
 
 typedef struct s_ray
