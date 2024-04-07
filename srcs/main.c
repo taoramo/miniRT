@@ -86,30 +86,55 @@ int	render(t_master *m, mlx_t *mlx)
 	return (0);
 }
 
-int	main(void)
+int	main(int argc, char const *argv[])
 {
+	int			objects_count[N_OBJECT_TYPES];
+	const char	*ids[N_OBJECT_TYPES] = {"A", "C", "L", "sp", "pl", "cy"};
 	t_master	m;
 	t_camera	camera;
 	mlx_t		*mlx;
 
-	mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);
-	if (!mlx)
-		return (ft_error());
-	ft_bzero(&m, sizeof(m));
-	ft_bzero(&camera, sizeof(camera));
-	m.camera = &camera;
-	m.camera->hfov = 120;
-	m.camera->focal_length = 1.0;
-	m.camera->camera_center = init_vec3(0, 2, 2);
-	m.camera->look_at = init_vec3(0, 0, -1);
-	m.camera->background_color = init_vec3(0, 0, 0);
-	m.samples_per_pixel = 300;
-	m.max_depth = 4;
-	m.n_spheres = 2;
+	mlx = NULL;
+	ft_bzero(objects_count, sizeof(int) * N_OBJECT_TYPES);
+	if (argc < 2)
+	{
+		printf("Usage: %s <filename>\n", argv[0]);
+		return (1);
+	}
+	if (validate(argv, objects_count, ids) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+
+	if (allocate_objects(objects_count, &m) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+
+	m.ids = ids;
+	initialize(&m, &camera, mlx, argv);
+
+
+	
+
+
+	// mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);
+	// if (!mlx)
+	// 	return (ft_error());
+
+	// ft_bzero(&m, sizeof(m));
+	// ft_bzero(&camera, sizeof(camera));
+	// m.camera = &camera;
+	// m.camera->hfov = 120;
+	// m.camera->focal_length = 1.0;
+	// m.camera->camera_center = init_vec3(0, 2, 2);
+	// m.camera->look_at = init_vec3(0, 0, -1);
+	// m.camera->background_color = init_vec3(0, 0, 0);
+
+	// m.samples_per_pixel = 300;
+	// m.max_depth = 4;
+
+/* 	m.n_spheres = 2;
 	m.spheres = malloc(sizeof(t_sphere) * m.n_spheres);
 	m.spheres[0].origin = init_vec3(0, 0, -1);
 	m.spheres[0].radius = 0.5;
-	m.spheres[0].material = metal;
+	// m.spheres[0].material = metal;
 	m.spheres[0].material1 = 0.3;
 	m.spheres[0].texture_type = solid;
 	m.spheres[0].texture = mlx_texture_to_image(mlx, mlx_load_png("./earthmap.png"));
@@ -119,10 +144,11 @@ int	main(void)
 	m.spheres[0].emitted = init_vec3(0, 0, 0);
 	m.spheres[0].k_d = 0.5;
 	m.spheres[0].k_s = 1;
+
 	m.spheres[1].emitted = init_vec3(10, 10, 10);
 	m.spheres[1].origin = init_vec3(-1, 1, -1);
 	m.spheres[1].radius = 0.25;
-	m.spheres[1].material = lambertian;
+	// m.spheres[1].material = lambertian;
 	m.spheres[1].texture_type = solid;
 	m.spheres[1].albedo = init_vec3(0.5, 0.5, 0.5);
 	m.spheres[1].material1 = 0;
@@ -130,11 +156,12 @@ int	main(void)
 	m.spheres[1].checker_size_coeff = 8;
 	m.spheres[1].k_s = 1;
 	m.spheres[1].k_d = 0.5;
+
 	m.n_planes = 1;
 	m.planes = ft_calloc(sizeof(t_plane), m.n_planes);
 	m.planes[0].point = init_vec3(0, -1, 0);
 	m.planes[0].normal = init_vec3(0, 1, 0);
-	m.planes[0].material = lambertian;
+	// m.planes[0].material = lambertian;
 	m.planes[0].albedo = init_vec3(0.5, 0.5, 0.8);
 	m.planes[0].texture_type = solid;
 	m.planes[0].checker_color = init_vec3(1, 1, 1);
@@ -144,6 +171,7 @@ int	main(void)
 	m.planes[0].k_d = 1;
 	m.planes[0].k_s = 0.5;
 	m.planes[0].material1 = 0;
+
 	m.n_cylinders = 1;
 	m.cylinders = malloc(sizeof(t_cylinder) * m.n_cylinders);
 	m.cylinders[0].center = init_vec3(1, 1, -1);
@@ -151,7 +179,7 @@ int	main(void)
 	m.cylinders[0].height = 1;
 	m.cylinders[0].radius = 0.5;
 	m.cylinders[0].albedo = init_vec3(0.5, 0.3, 0.8);
-	m.cylinders[0].material = metal;
+	// m.cylinders[0].material = metal;
 	m.cylinders[0].material1 = 0.1;
 	m.cylinders[0].texture_type = solid;
 	m.cylinders[0].checker_size_coeff = 2;
@@ -159,9 +187,18 @@ int	main(void)
 	m.cylinders[0].emitted = init_vec3(0, 0, 0);
 	m.cylinders[0].k_s = 0.8;
 	m.cylinders[0].k_d = 0.6;
+
 	render(&m, mlx);
 	free(m.spheres);
 	free(m.planes);
-	free(m.cylinders);
-	return (0);
+	free(m.cylinders); */
+
+/* 	Test object count
+	int i = 0;
+	while (i < N_OBJECT_TYPES)
+	{
+		printf("%d : %d\n", i, objects_count[i]);
+		i++;
+	} */
+	return (EXIT_SUCCESS);
 }

@@ -157,6 +157,7 @@ typedef enum s_object_type
 typedef struct s_master
 {
 	int				objects_count[N_OBJECT_TYPES];
+	const char		**ids;
 	t_camera		*camera;
 	int				samples_per_pixel;
 	int				max_depth;
@@ -238,6 +239,13 @@ int				validate_cylinder(char **value_params);
 
 int				validate_line_identifier(char *line, int objects_count[],
 					const char *ids[]);
+
+int				validate(const char *argv[], int objects_count[], const char *ids[]);
+
+int				allocate_objects(int objects_count[], t_master *m);
+
+/* Initializer */
+int				initialize(t_master *m, t_camera *camera, mlx_t *mlx, const char *argv[]);
 
 /* Ray tracer */
 t_ray			init_ray(t_vec3 origin, t_vec3 direction);

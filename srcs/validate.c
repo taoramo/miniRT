@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:21 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/08 00:48:51 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/08 01:28:58 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,10 @@ int	prepare_line(char **line, int fd)
 	return (EXIT_SUCCESS);
 }
 
-int	validate_scene(int objects_count[], int fd)
+int	validate_scene(int objects_count[], const char *ids[], int fd)
 {
 	char		*line;
 	int			i;
-	const char	*ids[N_OBJECT_TYPES] = {"A", "C", "L", "sp", "pl", "cy"};
 
 	i = 0;
 	line = get_next_line(fd);
@@ -94,32 +93,9 @@ int allocate_objects(int objects_count[], t_master *m)
 	return (EXIT_SUCCESS);
 }
 
-int	main(int argc, char const *argv[])
+int	validate(const char *argv[], int objects_count[], const char *ids[])
 {
 	int			fd;
-	int			objects_count[N_OBJECT_TYPES];
-	t_master	m;
-	// t_camera	camera;
-	// mlx_t		*mlx;
-
-	ft_bzero(objects_count, sizeof(int) * N_OBJECT_TYPES);
-	if (argc < 2)
-	{
-		printf("Usage: %s <filename>\n", argv[0]);
-		return (1);
-	}
-	fd = open(argv[1], O_RDONLY);
-	if (fd < 0)
-	{
-		perror("Error");
-		return (1);
-	}
-	if (validate_scene(objects_count, fd) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	close(fd);
-
-	if (allocate_objects(objects_count, &m) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
 
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
@@ -127,19 +103,59 @@ int	main(int argc, char const *argv[])
 		perror("Error");
 		return (1);
 	}
-	// initialize_scene(&m, &camera, mlx);
+	if (validate_scene(objects_count, ids, fd) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	close(fd);
-
-/* 	Test object count
-	int i = 0;
-	while (i < N_OBJECT_TYPES)
-	{
-		printf("%d : %d\n", i, objects_count[i]);
-		i++;
-	} */
-
-
-
-
 	return (EXIT_SUCCESS);
 }
+
+// int	main(int argc, char const *argv[])
+// {
+// 	int			fd;
+// 	int			objects_count[N_OBJECT_TYPES];
+// 	const char	*ids[N_OBJECT_TYPES] = {"A", "C", "L", "sp", "pl", "cy"};
+// 	t_master	m;
+// 	// t_camera	camera;
+// 	// mlx_t		*mlx;
+
+// 	ft_bzero(objects_count, sizeof(int) * N_OBJECT_TYPES);
+// 	if (argc < 2)
+// 	{
+// 		printf("Usage: %s <filename>\n", argv[0]);
+// 		return (1);
+// 	}
+// 	fd = open(argv[1], O_RDONLY);
+// 	if (fd < 0)
+// 	{
+// 		perror("Error");
+// 		return (1);
+// 	}
+// 	if (validate_scene(objects_count, ids, fd) == EXIT_FAILURE)
+// 		return (EXIT_FAILURE);
+// 	close(fd);
+
+// 	if (allocate_objects(objects_count, &m) == EXIT_FAILURE)
+// 		return (EXIT_FAILURE);
+
+// 	fd = open(argv[1], O_RDONLY);
+// 	if (fd < 0)
+// 	{
+// 		perror("Error");
+// 		return (1);
+// 	}
+// 	// initialize_scene(&m, &camera, mlx);
+// 	close(fd);
+
+// /* 	Test object count
+// 	int i = 0;
+// 	while (i < N_OBJECT_TYPES)
+// 	{
+// 		printf("%d : %d\n", i, objects_count[i]);
+// 		i++;
+// 	} */
+
+
+
+
+// 	return (EXIT_SUCCESS);
+// }
