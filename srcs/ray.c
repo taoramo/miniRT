@@ -82,7 +82,7 @@ t_vec3	ray_color(t_master *m, t_ray *r, int depth)
 	if (depth <= 0)
 		return (init_vec3(0, 0, 0));
 	if (!hit(m, r, init_interval(0.001, INFINITY), &rec))
-		return (m->camera->background_color);
+		return (m->camera.background_color);
 	if (lambertian_scatter(r, &rec, &scattered_diffuse))
 	{
 		attenuation_diffuse = vec3_times_d(rec.albedo, rec.k_d);

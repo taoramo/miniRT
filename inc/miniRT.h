@@ -158,7 +158,7 @@ typedef struct s_master
 {
 	int				objects_count[N_OBJECT_TYPES];
 	const char		**ids;
-	t_camera		*camera;
+	t_camera		camera;
 	int				samples_per_pixel;
 	int				max_depth;
 	t_ambient		ambient;
@@ -245,7 +245,7 @@ int				validate(const char *argv[], int objects_count[], const char *ids[]);
 int				allocate_objects(int objects_count[], t_master *m);
 
 /* Initializer */
-int				initialize(t_master *m, t_camera *camera, mlx_t *mlx, const char *argv[]);
+int				initialize(t_master *m, mlx_t *mlx, const char *argv[]);
 
 /* Ray tracer */
 t_ray			init_ray(t_vec3 origin, t_vec3 direction);

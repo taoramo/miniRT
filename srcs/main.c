@@ -44,7 +44,7 @@ void	make_image(t_master *m, mlx_image_t *img)
 	int			sample;
 	t_ray		ray;
 
-	calculate_camera(m->camera);
+	calculate_camera(&m->camera);
 	j = 0;
 	while (j < WHEIGHT)
 	{
@@ -55,7 +55,7 @@ void	make_image(t_master *m, mlx_image_t *img)
 			color = init_vec3(0, 0, 0);
 			while (sample < m->samples_per_pixel)
 			{
-				ray = get_ray(m->camera, i, j);
+				ray = get_ray(&m->camera, i, j);
 				color = vec3_plus_vec3(color,
 						ray_color(m, &ray, m->max_depth));
 				sample++;
@@ -91,7 +91,6 @@ int	main(int argc, char const *argv[])
 	int			objects_count[N_OBJECT_TYPES];
 	const char	*ids[N_OBJECT_TYPES] = {"A", "C", "L", "sp", "pl", "cy"};
 	t_master	m;
-	t_camera	camera;
 	mlx_t		*mlx;
 
 	mlx = NULL;
@@ -108,7 +107,7 @@ int	main(int argc, char const *argv[])
 		return (EXIT_FAILURE);
 
 	m.ids = ids;
-	initialize(&m, &camera, mlx, argv);
+	initialize(&m, mlx, argv);
 
 
 	

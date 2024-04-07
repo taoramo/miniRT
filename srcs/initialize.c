@@ -6,13 +6,13 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:46:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/08 01:54:52 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/08 02:43:44 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-void initialize_scene(t_master *m, t_camera *camera)
+void initialize_scene(t_master *m)
 {
 	// Init master struct
 	ft_bzero(m, sizeof(*m));
@@ -20,13 +20,12 @@ void initialize_scene(t_master *m, t_camera *camera)
 	m->max_depth = 4;
 
 	// Init camera
-	ft_bzero(camera, sizeof(*camera));
-	m->camera = camera;
-	m->camera->hfov = 120;
-	m->camera->focal_length = 1.0;
-	m->camera->camera_center = init_vec3(0, 2, 2);
-	m->camera->look_at = init_vec3(0, 0, -1);
-	m->camera->background_color = init_vec3(0, 0, 0);
+	ft_bzero(&(m->camera), sizeof(m->camera));
+	m->camera.hfov = 120;
+	m->camera.focal_length = 1.0;
+	m->camera.camera_center = init_vec3(0, 2, 2);
+	m->camera.look_at = init_vec3(0, 0, -1);
+	m->camera.background_color = init_vec3(0, 0, 0);
 
 	// Init spheres
 	
@@ -41,7 +40,7 @@ void initialize_scene(t_master *m, t_camera *camera)
 
 }
 
-int	initialize(t_master *m, t_camera *camera, mlx_t *mlx, const char *argv[])
+int	initialize(t_master *m, mlx_t *mlx, const char *argv[])
 {
 	int fd;
 
@@ -65,7 +64,7 @@ int	initialize(t_master *m, t_camera *camera, mlx_t *mlx, const char *argv[])
 		i++;
 	}
 
-	initialize_scene(m, camera);
+	initialize_scene(m);
 
 
 	close(fd);
