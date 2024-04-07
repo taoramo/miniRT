@@ -2,16 +2,22 @@
 # define MINIRT_H
 
 # include "MLX42.h"
+# include "libft.h"
 # include "vec3.h"
 # include <math.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
 // TODO: remove this header
 # include <stdio.h>
 #include "libft.h"
 # define WWIDTH 1280
 # define WHEIGHT 720
 # define N_MATERIALS 3
+# define N_OBJECT_TYPES 6
+# define EPSILON 1e-8
+
+# define EMPTY_LINE 2
 
 typedef struct s_camera
 {
@@ -138,8 +144,19 @@ typedef struct s_interval
 	double	max;
 }	t_interval;
 
+typedef enum s_object_type
+{
+	A,
+	C,
+	L,
+	sp,
+	pl,
+	cy
+}	t_object_type;
+
 typedef struct s_master
 {
+	int				objects_count[N_OBJECT_TYPES];
 	t_camera		*camera;
 	int				samples_per_pixel;
 	int				max_depth;
@@ -150,10 +167,10 @@ typedef struct s_master
 	unsigned int	n_spheres;
 	t_plane			*planes;
 	unsigned int	n_planes;
-	t_cone			*cones;
-	unsigned int	n_cones;
 	t_cylinder		*cylinders;
 	unsigned int	n_cylinders;
+	t_cone			*cones;
+	unsigned int	n_cones;
 }	t_master;
 
 typedef struct s_ray
@@ -180,6 +197,49 @@ typedef struct s_hit_record
 
 typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered);
 
+typedef int	(*t_val_f) (char *str);
+
+/* Utilities */
+typedef int		(*t_validate_str)(char *value_param);
+double			ft_atod(const char *str);
+bool			is_space(char c);
+bool			is_capital(char c);
+void			free_split(char **split);
+int				index_of(char **arr, char *str);
+int				str_array_length(char **str);
+
+/* Validator */
+void			replace_whitespaces(char *line);
+
+int				validate_int_str(char *int_str);
+int				validate_f_str(char *f_str);
+int				validate_f_range(char *f_str, float min, float max, char *err);
+
+int				print_error(char *err);
+
+int				validate_position(char *value_param);
+int				validate_orientation(char *value_param);
+int				validate_size(char *value_param);
+int				validate_rgb(char *value_param);
+int				validate_texture(char *value_param);
+int				checker_shift(char **value_params);
+int				validate_checker_rgbs(char **value_params);
+int				validate_0_to_1(char *value_param);
+
+int				validate_param(char *value_param, t_val_f f,
+					t_interval range, char *err);
+
+int				validate_ambient_light(char **value_params);
+int				validate_camera(char **value_params);
+int				validate_light(char **value_params);
+int				validate_sphere(char **value_params);
+int				validate_plane(char **value_params);
+int				validate_cylinder(char **value_params);
+
+int				validate_line_identifier(char *line, int objects_count[],
+					const char *ids[]);
+
+/* Ray tracer */
 t_ray			init_ray(t_vec3 origin, t_vec3 direction);
 unsigned int	colorsum_to_rgba(t_color c, int samples_per_pixel);
 t_color			ray_color(t_master *m, t_ray *r, int max_depth);

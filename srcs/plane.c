@@ -25,6 +25,26 @@ static void	set_plane_face_normal(t_hit_record *rec, t_ray *ray, t_plane *plane)
 	set_plane_uv(rec);
 }
 
+/* static void	get_plane_uv(t_plane *plane, t_hit_record *rec, double *u, double *v)
+{
+	(void)rec;
+	t_vec3	point_on_plane;
+	t_vec3	a;
+	t_vec3	b;
+	double	x;
+
+	if (dot(plane->normal, init_vec3(0, 0, 1)) == 0)
+		a = init_vec3(0, 0, 1);
+	else
+	{
+		x = dot(plane->normal, plane->point);
+		point_on_plane = init_vec3(0, 0, x);
+		a = unit_vector(cross(plane->normal, vec3_plus_vec3(point_on_plane, plane->point)));
+	}
+	b = unit_vector(cross(plane->normal, a));
+
+} */
+
 static void	get_albedo(t_plane *plane, t_hit_record *rec)
 {
 	if (plane->texture_type == solid)
