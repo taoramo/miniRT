@@ -22,11 +22,15 @@ SRCS = $(addprefix srcs/, \
 	sphere.c \
 	interval.c \
 	utils.c \
+	utils_general.c \
+	validate_helpers.c \
+	validate_param.c \
+	validate_param_spec.c \
+	validate.c \
 	ray2.c \
 	vec3d.c \
 	materials.c \
 	texture.c \
-	read_file.c \
 	plane.c )
 
 OBJS = $(SRCS:.c=.o)

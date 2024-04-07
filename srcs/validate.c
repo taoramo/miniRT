@@ -1,80 +1,5 @@
 #include "miniRT.h"
 
-bool is_capital(char c)
-{
-	return (c >= 'A' && c <= 'Z');
-}
-
-/**
- * Checks for \t (ht) - tab, \n (nl) - new line, \v (vt) vertical tab, 
- * \f (np) - feed form aka new page, \r (cr) - carriage return
-*/
-bool is_space(char c)
-{
-	return (c == ' ' || (c >= 9 && c <= 13));
-}
-
-int	str_array_length(char **str)
-{
-	int	length;
-
-	length = 0;
-	while (*str)
-	{
-		length++;
-		str++;
-	}
-	return (length);
-}
-
-int print_error(char *err)
-{
-	printf("Error:\n");
-	if (err[0])
-		printf("%s\n", err);
-	return (EXIT_FAILURE);
-}
-
-void free_split(char **split)
-{
-	char **tmp;
-
-	tmp = split;
-	while (*tmp)
-	{
-		free(*tmp);
-		tmp++;
-	}
-	free(split);
-}
-
-int index_of(char **arr, char *str)
-{
-	int	i;
-
-	i = 0;
-	while (arr[i])
-	{
-		if (ft_strncmp(arr[i], str, ft_strlen(arr[i]) + 1) == 0)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-void	replace_whitespaces(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (is_space(line[i]))
-			line[i] = ' ';
-		i++;
-	}
-}
-
 // Identifier
 // A, C, L, sp, pl, cy
 
@@ -84,163 +9,6 @@ void	replace_whitespaces(char *line)
 // sp 0.0,0.0,20.6 12.6 10,0,255
 // pl 0.0,0.0,-10.0 0.0,1.0,0.0 0,0,225
 // cy 50.0,0.0,20.6 0.0,0.0,1.0 14.2 21.42 10,0,255
-
-/**
- * Returns failure on floats like .123, +15.123
-*/
-int	validate_int_str(char *int_str)
-{
-	int		i;
-	char	*minus_pos;
-	int		at_least_one_digit;
-
-	minus_pos = ft_strchr(int_str, '-');
-	// Only one '-' allowed
-	if (minus_pos != ft_strrchr(int_str, '-'))
-		return (print_error("Int string has repeated minus char."));
-	// Minus can be only the first character
-	if (minus_pos != NULL && minus_pos != int_str)
-		return (print_error("Minus is not the first character."));
-	// Only digits and minus allowed
-	i = 0;
-	at_least_one_digit = 0;
-	while (int_str[i])
-	{
-		if (!ft_isdigit(int_str[i]) && int_str[i] != '-')
-			return (print_error("Forbidden char in int string."));
-		else if (ft_isdigit(int_str[i]))
-			at_least_one_digit = 1;
-		i++;
-	}
-	if (!at_least_one_digit)
-		return (print_error("Int string must contain at least one digit."));
-	return (EXIT_SUCCESS);
-}
-
-/**
- * Returns failure on floats like .123, +15.123
-*/
-int	validate_f_str(char *f_str)
-{
-	int		i;
-	char	*dot_pos;
-	char	*minus_pos;
-	int		at_least_one_digit;
-
-	dot_pos = ft_strchr(f_str, '.');
-	minus_pos = ft_strchr(f_str, '-');
-	// Only one '.' and '-' allowed
-	if (dot_pos != ft_strrchr(f_str, '.')
-		|| minus_pos != ft_strrchr(f_str, '-'))
-		return (print_error("Float string has repeated non-digital char."));
-	// Dot can not be in the beginning or end
-	if (dot_pos != NULL && (dot_pos == f_str
-			|| *dot_pos == f_str[ft_strlen(f_str) - 1]))
-		return (print_error("Invalid dot position in float string."));
-	// Digit must be before the dot
-	if (dot_pos != NULL && !ft_isdigit(*(dot_pos - 1)))
-		return (print_error("Digit must be before the dot."));
-	// Minus can be only the first character
-	if (minus_pos != NULL && minus_pos != f_str)
-		return (print_error("Minus is not the first character."));
-	// Only digits, dot and minus allowed
-	i = 0;
-	at_least_one_digit = 0;
-	while (f_str[i])
-	{
-		if (!ft_isdigit(f_str[i])
-			&& f_str[i] != '.' && f_str[i] != '-')
-			return (print_error("Forbidden chars in float string."));
-		else if (ft_isdigit(f_str[i]))
-			at_least_one_digit = 1;
-		i++;
-	}
-	if (!at_least_one_digit)
-		return (print_error("Float string must contain at least one digit."));
-	return (EXIT_SUCCESS);
-}
-
-int validate_f_range(char *f_str, float min, float max, char *err)
-{
-	if (ft_atod(f_str) < min || ft_atod(f_str) - max > EPSILON)
-		return (print_error(err));
-	return (EXIT_SUCCESS);
-}
-
-int	validate_param(char *value_param, t_validate_str f, t_interval range, char *err)
-{
-	char	**tuple;
-	char	**temp;
-
-	tuple = ft_split(value_param, ',');
-	temp = tuple;
-	while (*tuple)
-	{
-		if (f(*tuple) || validate_f_range(*tuple, range.min, range.max, err))
-			return (EXIT_FAILURE);
-		tuple++;
-	}
-	free_split(temp);
-	return (EXIT_SUCCESS);
-}
-
-/**
- * Position
- */
-int validate_position(char *value_param)
-{
-	if (validate_param(value_param, validate_f_str, init_interval(-__DBL_MAX__, __DBL_MAX__),
-			"Position is out of range."))
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
-
-/**
- * Camera orientation [-1.0, 1.0]
- */
-int validate_orientation(char *value_param)
-{
-	if (validate_param(value_param, validate_f_str, init_interval(-1.0, 1.0),
-			"Orientation is not in [-1, 1]."))
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
-
-/**
- * Size [0.0, INFINITY]
- */
-int	validate_size(char *value_param)
-{
-	if (validate_param(value_param, validate_f_str, init_interval(0.0, __DBL_MAX__),
-		"Size parameter is out of range."))
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
-
-/**
- * RGB Colors range [0, 255]
- */
-int	validate_rgb(char *value_param)
-{
-	if (validate_param(value_param, validate_int_str, init_interval(0, 255),
-			"RGB color is not in [0, 255]."))
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
-
-int	validate_texture(char *value_param)
-{
-	size_t str_len;
-
-	str_len = ft_strlen(value_param);
-	if (ft_strncmp(value_param, "solid", str_len + 1) == 0)
-		return (EXIT_SUCCESS);
-	if (ft_strncmp(value_param, "checker", str_len + 1) == 0)
-		return (EXIT_SUCCESS);
-	if (ft_strncmp(value_param + str_len - 4, ".png", 5) == 0)
-		return (EXIT_SUCCESS);
-	return (print_error("Texture not implemented."));
-}
 
 int checker_shift(char **value_params)
 {
@@ -414,6 +182,8 @@ int	validate_line_parameters(char *line, t_object_type id)
 		is_exit_failure = validate_plane(params + 1);
 	else if (id == cy)
 		is_exit_failure = validate_cylinder(params + 1);
+	// else if (id == co)
+	// 	is_exit_failure = validate_cone(params + 1);
 	free_split(params);
 	return (is_exit_failure);
 	// return (is_exit_failure && print_error("Invalid parameters."));
@@ -484,6 +254,24 @@ int	validate_scene(int objects_count[], int fd)
 	printf("Scene validated.\n");
 	return (EXIT_SUCCESS);
 }
+
+/* allocate_objects(int objects_count[])
+{
+	if (objects_count[A])
+		allocate_ambient_light();
+	if (objects_count[C])
+		allocate_camera();
+	if (objects_count[L])
+		allocate_light();
+	if (objects_count[sp])
+		allocate_sphere();
+	if (objects_count[pl])
+		allocate_plane();
+	if (objects_count[cy])
+		allocate_cylinder();
+	// if (objects_count[co])
+	// 	allocate_cone();
+} */
 
 int	main(int argc, char const *argv[])
 {
