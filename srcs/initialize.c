@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:46:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/08 01:35:05 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/08 01:54:52 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void initialize_scene(t_master *m, t_camera *camera)
 
 int	initialize(t_master *m, t_camera *camera, mlx_t *mlx, const char *argv[])
 {
-	(void)camera;
 	int fd;
 
 	fd = open(argv[1], O_RDONLY);
@@ -66,7 +65,7 @@ int	initialize(t_master *m, t_camera *camera, mlx_t *mlx, const char *argv[])
 		i++;
 	}
 
-	// initialize_scene(&m, &camera);
+	initialize_scene(m, camera);
 
 
 	close(fd);
