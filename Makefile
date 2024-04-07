@@ -26,6 +26,9 @@ SRCS = $(addprefix srcs/, \
 	validate_helpers.c \
 	validate_param.c \
 	validate_param_spec.c \
+	validate_param_spec2.c \
+	validate_objects.c \
+	validate_line.c \
 	validate.c \
 	ray2.c \
 	vec3d.c \
