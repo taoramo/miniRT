@@ -29,6 +29,9 @@ int	hit(t_master *m, t_ray *r, t_interval t_minmax, t_hit_record *rec)
 	i = 0;
 	hit_anything = 0;
 	closest_so_far = t_minmax.max;
+	ft_bzero(&temp, sizeof(temp));
+	if (!rec)
+		temp.is_temp = 1;
 	while (i < m->n_spheres)
 	{
 		if (hit_sphere(r, init_interval(t_minmax.min, closest_so_far),
@@ -83,7 +86,7 @@ t_vec3	phong_model(t_hit_record *rec, t_ray *shadow_ray, t_ray *ray, t_light *li
 	halfway_dir = vec3_plus_vec3(light_dir, view_dir);
 	specular = vec3_times_d(light->color, pow(fmax(dot(rec->normal, halfway_dir), 0.0), 1.0 / rec->material1) * rec->k_s);
 	diffuse = vec3_times_vec3(vec3_times_d(light->color, fmax(0.f, dot(rec->normal, light_dir)) * rec->k_d), rec->albedo);
-	// printf("R %f G %f B %f\n", shadow_ray->direction.x, shadow_ray->direction.y, shadow_ray->direction.z);
+//	printf("R %f G %f B %f\n", shadow_ray->direction.x, shadow_ray->direction.y, shadow_ray->direction.z);
 	// printf("%f\n", dot(rec->normal, light_dir));
 	return (vec3_plus_vec3(specular, diffuse));
 }

@@ -122,13 +122,16 @@ int	hit_cylinder(t_ray *ray, t_interval t_minmax, t_hit_record *rec, t_cylinder 
 		rec->t = root2;
 	else
 		return (0);
-	rec->point = ray_at(*ray, rec->t);
-	rec->material = cylinder->material;
-	rec->material1 = cylinder->material1;
-	rec->emitted = cylinder->emitted;
-	rec->k_s = cylinder->k_s;
-	rec->k_d = cylinder->k_d;
-	set_cylinder_face_normal(rec, ray, cylinder);
-	get_albedo(cylinder, rec);
+	if (!rec->is_temp)
+	{
+		rec->point = ray_at(*ray, rec->t);
+		rec->material = cylinder->material;
+		rec->material1 = cylinder->material1;
+		rec->emitted = cylinder->emitted;
+		rec->k_s = cylinder->k_s;
+		rec->k_d = cylinder->k_d;
+		set_cylinder_face_normal(rec, ray, cylinder);
+		get_albedo(cylinder, rec);
+	}
 	return (1);
 }

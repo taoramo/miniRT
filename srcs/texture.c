@@ -33,11 +33,3 @@ t_vec3	get_texture_color(mlx_image_t *texture, double u, double v)
 	ret.z = (*(pixelstart + 2)) / 255.0;
 	return (ret);
 }
-
-t_vec3	get_bump_map_color(mlx_image_t *texture, double u, double v)
-{
-	(void)texture;
-	(void)u;
-	(void)v;
-	return (init_vec3(0, 0, 0));
-}
