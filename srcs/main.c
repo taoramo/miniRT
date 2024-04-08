@@ -88,13 +88,13 @@ int	render(t_master *m, mlx_t *mlx)
 
 int	main(int argc, char const *argv[])
 {
-	const char	*ids[N_OBJECT_TYPES] = {"A", "C", "L", "sp", "pl", "cy"};
+	// const char	*ids[N_OBJECT_TYPES] = {"A", "C", "L", "sp", "pl", "cy"};
 	t_master	m;
 	mlx_t		*mlx;
 
 
 	// Init master struct
-	initialize_master_struct(&m, ids);
+	/* initialize_master_struct(&m, ids);
 	mlx = NULL;
 	// print ids first element
 	printf("first element: %s\n", m.ids[0]);
@@ -110,29 +110,27 @@ int	main(int argc, char const *argv[])
 	if (allocate_objects(m.objects_count, &m) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 
-	initialize(&m, mlx, argv);
+	initialize(&m, mlx, argv); */
 
 
 	
 
 
-	// mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);
-	// if (!mlx)
-	// 	return (ft_error());
+	mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);
+	if (!mlx)
+		return (ft_error());
 
-	// ft_bzero(&m, sizeof(m));
-	// ft_bzero(&camera, sizeof(camera));
-	// m.camera = &camera;
-	// m.camera->hfov = 120;
-	// m.camera->focal_length = 1.0;
-	// m.camera->camera_center = init_vec3(0, 2, 2);
-	// m.camera->look_at = init_vec3(0, 0, -1);
-	// m.camera->background_color = init_vec3(0, 0, 0);
+	ft_bzero(&m, sizeof(m));
+	m.camera.hfov = 120;
+	m.camera.focal_length = 1.0;
+	m.camera.camera_center = init_vec3(0, 2, 2);
+	m.camera.look_at = init_vec3(0, 0, -1);
+	m.camera.background_color = init_vec3(0, 0, 0);
 
-	// m.samples_per_pixel = 300;
-	// m.max_depth = 4;
+	m.samples_per_pixel = 4;
+	m.max_depth = 2;
 
-/* 	m.n_spheres = 2;
+	m.n_spheres = 2;
 	m.spheres = malloc(sizeof(t_sphere) * m.n_spheres);
 	m.spheres[0].origin = init_vec3(0, 0, -1);
 	m.spheres[0].radius = 0.5;
@@ -147,7 +145,7 @@ int	main(int argc, char const *argv[])
 	m.spheres[0].k_d = 0.5;
 	m.spheres[0].k_s = 1;
 
-	m.spheres[1].emitted = init_vec3(10, 10, 10);
+	m.spheres[1].emitted = init_vec3(0, 0, 0);
 	m.spheres[1].origin = init_vec3(-1, 1, -1);
 	m.spheres[1].radius = 0.25;
 	// m.spheres[1].material = lambertian;
@@ -189,11 +187,17 @@ int	main(int argc, char const *argv[])
 	m.cylinders[0].emitted = init_vec3(0, 0, 0);
 	m.cylinders[0].k_s = 0.8;
 	m.cylinders[0].k_d = 0.6;
+	m.lights = ft_calloc(sizeof(t_light), 1);
+	m.lights[0].color = init_vec3(1, 1, 1.5);
+	m.lights[0].point = init_vec3(0, 2, 0);
+	m.n_lights = 1;
 
 	render(&m, mlx);
 	free(m.spheres);
 	free(m.planes);
-	free(m.cylinders); */
+	free(m.cylinders);
+	(void)argc;
+	(void)argv;
 
 /* 	Test object count
 	int i = 0;

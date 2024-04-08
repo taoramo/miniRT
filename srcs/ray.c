@@ -36,7 +36,8 @@ int	hit(t_master *m, t_ray *r, t_interval t_minmax, t_hit_record *rec)
 		{
 			hit_anything = 1;
 			closest_so_far = temp.t;
-			*rec = temp;
+			if (rec)
+				*rec = temp;
 		}
 		i++;
 	}
@@ -48,7 +49,8 @@ int	hit(t_master *m, t_ray *r, t_interval t_minmax, t_hit_record *rec)
 		{
 			hit_anything = 1;
 			closest_so_far = temp.t;
-			*rec = temp;
+			if (rec)
+				*rec = temp;
 		}
 		i++;
 	}
@@ -60,7 +62,8 @@ int	hit(t_master *m, t_ray *r, t_interval t_minmax, t_hit_record *rec)
 		{
 			hit_anything = 1;
 			closest_so_far = temp.t;
-			*rec = temp;
+			if (rec)
+				*rec = temp;
 		}
 		i++;
 	}
@@ -97,7 +100,7 @@ t_vec3	shadow_ray(t_master *m, t_hit_record *rec, t_ray *ray)
 	{
 		shadow_ray.origin = rec->point;
 		shadow_ray.direction = vec3_minus_vec3(m->lights[0].point, rec->point);
-		if (!hit(m, &shadow_ray, init_interval(0.001, INFINITY), rec))
+		if (!hit(m, &shadow_ray, init_interval(0.001, INFINITY), 0))
 			return_color = vec3_plus_vec3(return_color, phong_model(rec, ray, ray, &m->lights[i]));
 		i++;
 	}
@@ -123,8 +126,9 @@ t_vec3	ray_color(t_master *m, t_ray *r, int depth)
 		return (init_vec3(0, 0, 0));
 	if (!hit(m, r, init_interval(0.001, INFINITY), &rec))
 		return (m->camera.background_color);
-	if (depth == m->max_depth && m->n_lights > 0 && rec.emitted.x != 0 && rec.emitted.y != 0 && rec.emitted.z != 0)
+	if (depth == m->max_depth && m->n_lights > 0 && rec.emitted.x == 0 && rec.emitted.y == 0 && rec.emitted.z == 0)
 		color_shadow_ray = shadow_ray(m, &rec, r);
+//	printf("R %f G %f B %f\n", color_shadow_ray.x, color_shadow_ray.y, color_shadow_ray.z);
 	if (lambertian_scatter(r, &rec, &scattered_diffuse))
 	{
 		attenuation_diffuse = vec3_times_d(rec.albedo, rec.k_d);
