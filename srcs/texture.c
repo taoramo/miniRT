@@ -17,7 +17,7 @@ t_vec3	get_solid_checkered_color(t_vec3 point,
 		return (color2);
 }
 
-t_vec3	get_texture_color(mlx_image_t *texture, double u, double v)
+t_vec3	get_texture_color(mlx_texture_t *texture, double u, double v)
 {
 	t_vec3		ret;
 	int			x;

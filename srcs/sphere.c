@@ -25,6 +25,10 @@ static void	set_sphere_face_normal(t_hit_record *rec,
 	else
 		rec->normal = vec3_times_d(outward_normal, -1.0);
 	get_sphere_uv(outward_normal, &rec->u, &rec->v);
+	rec->u_vector = init_vec3(1, 0, 0);
+	rec->v_vector = init_vec3(0, 1, 0);
+	if (sphere->bump_map)
+		rec->normal = bump_map(rec, sphere->bump_map);
 }
 
 t_vec3	get_sphere_checkered_color(t_hit_record *rec, t_sphere *sphere)
@@ -60,10 +64,6 @@ static void	get_albedo(t_sphere *sphere, t_hit_record *rec)
 	{
 		rec->albedo = get_texture_color(sphere->texture, rec->u, rec->v);
 		return ;
-	}
-	if (sphere->texture_type == bump_map)
-	{
-		rec->albedo = get_bump_map_color(sphere->texture, rec->u, rec->v);
 	}
 }
 

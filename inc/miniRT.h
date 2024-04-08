@@ -63,7 +63,6 @@ typedef enum e_texture_type
 	solid,
 	checker,
 	texture,
-	bump_map
 }	t_texture_type;
 
 typedef struct s_sphere
@@ -77,7 +76,8 @@ typedef struct s_sphere
 	t_vec3			checker_color;
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
-	mlx_image_t		*texture;
+	mlx_texture_t	*texture;
+	mlx_texture_t	*bump_map;
 	t_vec3			emitted;
 	double			k_d;
 	double			k_s;
@@ -94,7 +94,8 @@ typedef struct s_plane
 	t_vec3			checker_color;
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
-	mlx_image_t		*texture;
+	mlx_texture_t	*texture;
+	mlx_texture_t	*bump_map;
 	t_vec3			emitted;
 	double			k_d;
 	double			k_s;
@@ -113,7 +114,8 @@ typedef struct s_cylinder
 	t_vec3			checker_color;
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
-	mlx_image_t		*texture;
+	mlx_texture_t	*texture;
+	mlx_texture_t	*bump_map;
 	t_vec3			emitted;
 	double			k_d;
 	double			k_s;
@@ -132,7 +134,8 @@ typedef struct s_cone
 	t_vec3			checker_color;
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
-	mlx_image_t		*texture;
+	mlx_texture_t	*texture;
+	mlx_texture_t	*bump_map;
 	t_vec3			emitted;
 	double			k_d;
 	double			k_s;
@@ -195,6 +198,8 @@ typedef struct s_hit_record
 	double		k_d;
 	double		k_s;
 	int			is_temp;
+	t_vec3		u_vector;
+	t_vec3		v_vector;
 }	t_hit_record;
 
 typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered);
@@ -282,11 +287,11 @@ int				metal_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered);
 int				matte_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered);
 t_vec3			get_checkered_color(t_vec3 point, double coeff,
 					t_vec3 color1, t_vec3 color2);
-t_vec3			get_bump_map_color(mlx_image_t *texture, double u, double v);
-t_vec3			get_texture_color(mlx_image_t *texture, double u, double v);
+t_vec3			get_texture_color(mlx_texture_t *texture, double u, double v);
 int				hit_plane(t_ray *ray, t_interval t_minmax,
 					t_hit_record *rec, t_plane *plane);
 int				hit_cylinder(t_ray *ray, t_interval t_minmax, t_hit_record *rec, t_cylinder *cylinder);
 t_vec3			get_solid_checkered_color(t_vec3 point,
 					double coeff, t_vec3 color1, t_vec3 color2);
+t_vec3			bump_map(t_hit_record *rec, mlx_texture_t *bm);
 #endif

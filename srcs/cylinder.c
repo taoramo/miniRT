@@ -42,6 +42,10 @@ static void	set_cylinder_face_normal(t_hit_record *rec, t_ray *ray, t_cylinder *
 	outward_normal = unit_vector(vec3_minus_vec3(outward_normal, vec3_times_d(cylinder->axisnormal, m)));
 	rec->normal = outward_normal;
 	set_cylinder_uv(rec, cylinder, ray);
+	rec->v_vector = cylinder->axisnormal;
+	rec->u_vector = cross(cylinder->axisnormal, outward_normal);
+	if (cylinder->bump_map)
+		rec->normal = bump_map(rec, cylinder->bump_map);
 }
 
 static void	get_albedo(t_cylinder *cylinder, t_hit_record *rec)
@@ -60,10 +64,6 @@ static void	get_albedo(t_cylinder *cylinder, t_hit_record *rec)
 	{
 		rec->albedo = get_texture_color(cylinder->texture, rec->u, rec->v);
 		return ;
-	}
-	if (cylinder->texture_type == bump_map)
-	{
-		rec->albedo = get_bump_map_color(cylinder->texture, rec->u, rec->v);
 	}
 }
 
