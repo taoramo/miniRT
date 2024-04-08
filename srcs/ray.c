@@ -67,16 +67,23 @@ int	hit(t_master *m, t_ray *r, t_interval t_minmax, t_hit_record *rec)
 	return (hit_anything);
 }
 
-t_vec3	phong(t_hit_record *rec, t_ray *shadow_ray, t_ray *ray, t_light *light)
+t_vec3	phong_model(t_hit_record *rec, t_ray *shadow_ray, t_ray *ray, t_light *light)
 {
 	t_vec3	light_dir;
 	t_vec3	view_dir;
 	t_vec3	halfway_dir;
+	t_vec3	specular;
+	t_vec3	diffuse;
 
-	light_dir = unit_vector(shadow_ray->direction);
+	light_dir = vec3_times_d(unit_vector(shadow_ray->direction), -1.0);
 	view_dir = unit_vector(ray->direction);
 	halfway_dir = vec3_plus_vec3(light_dir, view_dir);
-	pow(max(dot(rec->normal, halfway_dir), 0.0), 1.0 / rec->material1) *
+	specular = vec3_times_d(light->color, pow(fmax(dot(rec->normal, halfway_dir), 0.0), 1.0 / rec->material1) * rec->k_s);
+	diffuse = vec3_times_vec3(vec3_times_d(light->color, fmax(0.f, dot(rec->normal, light_dir)) * rec->k_d), rec->albedo);
+	// printf("R %f G %f B %f\n", shadow_ray->direction.x, shadow_ray->direction.y, shadow_ray->direction.z);
+	// printf("%f\n", dot(rec->normal, light_dir));
+	return (vec3_plus_vec3(specular, diffuse));
+}
 
 t_vec3	shadow_ray(t_master *m, t_hit_record *rec, t_ray *ray)
 {
@@ -89,9 +96,9 @@ t_vec3	shadow_ray(t_master *m, t_hit_record *rec, t_ray *ray)
 	while (i < m->n_lights)
 	{
 		shadow_ray.origin = rec->point;
-		shadow_ray.direction = vec3_minus_vec3(m->lights[i].point, rec->point);
-		if (!hit(m, shadow_ray, init_interval(0.001, INFINITY), rec))
-			return_color = vec3_plus_vec3(return_color, phong(rec, ray, ray, &m->lights[i]));
+		shadow_ray.direction = vec3_minus_vec3(m->lights[0].point, rec->point);
+		if (!hit(m, &shadow_ray, init_interval(0.001, INFINITY), rec))
+			return_color = vec3_plus_vec3(return_color, phong_model(rec, ray, ray, &m->lights[i]));
 		i++;
 	}
 	return (return_color);
@@ -110,12 +117,14 @@ t_vec3	ray_color(t_master *m, t_ray *r, int depth)
 	attenuation_diffuse = init_vec3(0, 0, 0);
 	attenuation_specular = init_vec3(0, 0, 0);
 	emitted = init_vec3(0, 0, 0);
+	color_shadow_ray = init_vec3(0, 0, 0);
 	ft_bzero(&rec, sizeof(rec));
 	if (depth <= 0)
 		return (init_vec3(0, 0, 0));
 	if (!hit(m, r, init_interval(0.001, INFINITY), &rec))
 		return (m->camera.background_color);
-	color_shadow_ray = shadow_ray(m, rec);
+	if (depth == m->max_depth && m->n_lights > 0 && rec.emitted.x != 0 && rec.emitted.y != 0 && rec.emitted.z != 0)
+		color_shadow_ray = shadow_ray(m, &rec, r);
 	if (lambertian_scatter(r, &rec, &scattered_diffuse))
 	{
 		attenuation_diffuse = vec3_times_d(rec.albedo, rec.k_d);
