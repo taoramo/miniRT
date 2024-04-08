@@ -113,8 +113,8 @@ int	validate_cylinder(char **value_params)
 	|| validate_orientation(value_params[1]) || validate_size(value_params[2])
 	|| validate_size(value_params[3]) || validate_rgb(value_params[4])
 	|| validate_texture(value_params[5]) || validate_checker_rgbs(value_params)
-	|| validate_0_to_1(value_params[6])
-	|| validate_0_to_1(value_params[7]))
+	|| validate_0_to_1(value_params[6 + shift])
+	|| validate_0_to_1(value_params[7 + shift]))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

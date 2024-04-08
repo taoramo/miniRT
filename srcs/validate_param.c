@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:38 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/07 22:59:38 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/08 20:44:39 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,14 @@ int	validate_f_str(char *f_str)
 	{
 		if (!ft_isdigit(f_str[i])
 			&& f_str[i] != '.' && f_str[i] != '-')
+		{
+			printf("Char: %c\n", f_str[i - 3]);
+			printf("Char: %c\n", f_str[i - 2]);
+			printf("Char: %c\n", f_str[i - 1]);
+			printf("Char: %c\n", f_str[i]);
+			printf("Char: %c\n", f_str[i + 1]);
 			return (print_error("Forbidden chars in float string."));
+		}
 		else if (ft_isdigit(f_str[i]))
 			at_least_one_digit = 1;
 		i++;

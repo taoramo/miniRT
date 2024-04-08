@@ -19,6 +19,8 @@
 
 # define EMPTY_LINE 2
 
+# define DEFAULT_CHECKER_SIZE 2
+
 typedef struct s_camera
 {
 	double	hfov;
@@ -248,7 +250,7 @@ int				allocate_objects(int objects_count[], t_master *m);
 
 /* Initializer */
 void			initialize_master_struct(t_master *m, const char *ids[]);
-int				initialize(t_master *m, mlx_t *mlx, const char *argv[]);
+int				initialize(t_master *m, mlx_t **mlx, const char *argv[]);
 
 /* Ray tracer */
 t_ray			init_ray(t_vec3 origin, t_vec3 direction);

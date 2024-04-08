@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:46:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/08 17:18:54 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/08 22:56:51 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	initialize_coordinate(t_vec3 *coord, char *value_param)
 void	initialize_ambient(t_master *m, char **params)
 {
 	m->ambient.brightness = ft_atod(params[1]);
-	initialize_coordinate(&m->ambient.color, params[2]);
+	initialize_coordinate(&m->ambient.color, params[2]); // ?
 }
 
 // Initialize Camera
@@ -47,13 +47,15 @@ void	initialize_light(t_master *m, char **params)
 	t_light	*light;
 
 	i = index_of((char **)(m->ids), params[0]);
-	printf("i: %d\n", i);
+	printf("This i: %d\n", i);
 	j = (m->objects_count)[i] - 1;
+	printf("This j: %d\n", j);
 	light = &((m->lights)[j]);
 	initialize_coordinate(&light->point, params[1]);
 	// light->brightness = ft_atod(params[2]); // we apply it to the color
 	initialize_coordinate(&light->color, params[3]);
-	light->color = vec3_times_d(light->color, ft_atod(params[2]));
+	// Apply brightness to color
+	light->color = vec3_times_d(light->color, ft_atod(params[2])); // Should it be albedo alike format?
 	(m->objects_count)[i] -= 1;
 }
 
@@ -89,6 +91,7 @@ void	initialize_sphere(t_master *m, char **params)
 	initialize_coordinate(&sphere->origin, params[1]);
 	sphere->radius = ft_atod(params[2]) / 2;
 	initialize_coordinate(&sphere->albedo, params[3]);
+	sphere->albedo = vec3_div_d(sphere->albedo, 255.0);
 	// Texture
 	sphere->texture_type = get_texture_type(params[4], false);
 	shift = 0;
@@ -96,6 +99,9 @@ void	initialize_sphere(t_master *m, char **params)
 	{
 		shift = 1;
 		initialize_coordinate(&sphere->checker_color, params[5]);
+		sphere->checker_color = vec3_div_d(sphere->checker_color, 255.0);
+		sphere->checkered = 1;
+		sphere->checker_size_coeff = DEFAULT_CHECKER_SIZE;
 	}
 	// k_s
 	sphere->k_s = ft_atod(params[5 + shift]);
@@ -122,6 +128,7 @@ void	initialize_plane(t_master *m, char **params)
 	plane->normal = unit_vector(plane->normal);
 	// Color
 	initialize_coordinate(&plane->albedo, params[3]);
+	plane->albedo = vec3_div_d(plane->albedo, 255.0);
 	// Texture
 	plane->texture_type = get_texture_type(params[4], false);
 	shift = 0;
@@ -129,6 +136,9 @@ void	initialize_plane(t_master *m, char **params)
 	{
 		shift = 1;
 		initialize_coordinate(&plane->checker_color, params[5]);
+		plane->checker_color = vec3_div_d(plane->checker_color, 255.0);
+		plane->checkered = 1;
+		plane->checker_size_coeff = DEFAULT_CHECKER_SIZE;
 	}
 	// k_s
 	plane->k_s = ft_atod(params[5 + shift]);
@@ -154,6 +164,7 @@ void	initialize_cylinder(t_master *m, char **params)
 	cylinder->radius = ft_atod(params[3]) / 2;
 	cylinder->height = ft_atod(params[4]);
 	initialize_coordinate(&cylinder->albedo, params[5]);
+	cylinder->albedo = vec3_div_d(cylinder->albedo, 255.0);
 	// Texture
 	cylinder->texture_type = get_texture_type(params[6], false);
 	shift = 0;
@@ -161,6 +172,9 @@ void	initialize_cylinder(t_master *m, char **params)
 	{
 		shift = 1;
 		initialize_coordinate(&cylinder->checker_color, params[7]);
+		cylinder->checker_color = vec3_div_d(cylinder->checker_color, 255.0);
+		cylinder->checkered = 1;
+		cylinder->checker_size_coeff = DEFAULT_CHECKER_SIZE;
 	}
 	// k_s
 	cylinder->k_s = ft_atod(params[7 + shift]);
@@ -177,13 +191,13 @@ void	initialize_object(t_master *m, char **params)
 	// Camera init
 	else if (ft_strncmp(params[0], "C", 2) == 0)
 		initialize_camera(m, params);
-	// Lights init
+ 	// Lights init
 	else if (ft_strncmp(params[0], "l", 2) == 0)
 		initialize_light(m, params);
 	// Sphere init
 	else if (ft_strncmp(params[0], "sp", 3) == 0)
 		initialize_sphere(m, params);
- 	// Plane init
+  	// Plane init
 	else if (ft_strncmp(params[0], "pl", 3) == 0)
 		initialize_plane(m, params);
 	// Cylinder init
@@ -218,12 +232,13 @@ void initialize_objects(t_master *m, int fd)
 
 void initialize_scene(t_master *m, int fd)
 {
-
-	// Init camera
+	(void)fd;
+	// Init camera defaults
 	ft_bzero(&(m->camera), sizeof(m->camera));
 	m->camera.focal_length = 1.0;
-	m->camera.background_color = init_vec3(0, 0, 0);
+	m->camera.background_color = init_vec3(0, 0, 0); // should it be albedo alike format? probably should come from ambient light
 
+	// These are defined from initialize_object:
 	// m->camera.camera_center = init_vec3(0, 2, 2);
 	// m->camera.hfov = 120;
 	// m->camera.look_at = init_vec3(0, 0, -1);
@@ -241,13 +256,14 @@ void initialize_scene(t_master *m, int fd)
 void initialize_master_struct(t_master *m, const char *ids[])
 {
 	ft_bzero(m, sizeof(*m));
-	m->samples_per_pixel = 300;
+	m->samples_per_pixel = 10; //300
 	m->max_depth = 4;
 	m->ids = ids;
 }
 
-int	initialize(t_master *m, mlx_t *mlx, const char *argv[])
+int	initialize(t_master *m, mlx_t **mlx, const char *argv[])
 {
+	(void)m;
 	int fd;
 
 	fd = open(argv[1], O_RDONLY);
@@ -258,7 +274,7 @@ int	initialize(t_master *m, mlx_t *mlx, const char *argv[])
 	}
 
 	// Init mlx
-	mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);
+	*mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);
 	if (!mlx)
 		return (print_error("MLX42 init failed"));
 
