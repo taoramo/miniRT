@@ -48,7 +48,7 @@ typedef struct s_light
 	t_vec3	point;
 	t_vec3	orientation;
 	t_vec3	color;
-	t_vec3	brightness;
+	double	brightness;
 }	t_light;
 
 typedef enum e_type
@@ -240,11 +240,13 @@ int				validate_cylinder(char **value_params);
 int				validate_line_identifier(char *line, int objects_count[],
 					const char *ids[]);
 
+int				prepare_line(char **line, int fd);
 int				validate(const char *argv[], int objects_count[], const char *ids[]);
 
 int				allocate_objects(int objects_count[], t_master *m);
 
 /* Initializer */
+void			initialize_master_struct(t_master *m, const char *ids[]);
 int				initialize(t_master *m, mlx_t *mlx, const char *argv[]);
 
 /* Ray tracer */

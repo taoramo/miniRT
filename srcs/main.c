@@ -92,8 +92,12 @@ int	main(int argc, char const *argv[])
 	t_master	m;
 	mlx_t		*mlx;
 
-	m.ids = ids;
+
+	// Init master struct
+	initialize_master_struct(&m, ids);
 	mlx = NULL;
+	// print ids first element
+	printf("first element: %s\n", m.ids[0]);
 	ft_bzero(m.objects_count, sizeof(int) * N_OBJECT_TYPES);
 	if (argc < 2)
 	{
