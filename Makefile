@@ -4,8 +4,8 @@ LIBFT = ./libft/libft.a
 
 LIBMLX = ./MLX42
 
-MLX = $(LIBMLX)/build/libmlx42.a -Iinclude -lglfw -L/opt/homebrew/Cellar/glfw/3.4/lib/
-# MLX = $(LIBMLX)/build/libmlx42.a -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/"
+# MLX = $(LIBMLX)/build/libmlx42.a -Iinclude -lglfw -L/opt/homebrew/Cellar/glfw/3.4/lib/
+MLX = $(LIBMLX)/build/libmlx42.a -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/"
 # -L/usr/local/Cellar/glfw/lib/
 
 LIBS = $(LIBFT) $(MLX)

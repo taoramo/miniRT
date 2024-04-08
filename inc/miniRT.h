@@ -46,9 +46,9 @@ typedef struct s_ambient
 typedef struct s_light
 {
 	t_vec3	point;
-	t_vec3	orientation;
+	// t_vec3	orientation;
 	t_vec3	color;
-	double	brightness;
+	// double	brightness;
 }	t_light;
 
 typedef enum e_type
@@ -95,6 +95,7 @@ typedef struct s_plane
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
 	mlx_image_t		*texture;
+	// mlx_texture_t	*texture;
 	t_vec3			emitted;
 	double			k_d;
 	double			k_s;
@@ -156,7 +157,7 @@ typedef enum s_object_type
 
 typedef struct s_master
 {
-	int				objects_count[N_OBJECT_TYPES];
+	int				objects_count[N_OBJECT_TYPES]; // A C L sp pl cy
 	const char		**ids;
 	t_camera		camera;
 	int				samples_per_pixel;

@@ -88,7 +88,7 @@ int	render(t_master *m, mlx_t *mlx)
 
 int	main(int argc, char const *argv[])
 {
-	const char	*ids[N_OBJECT_TYPES] = {"A", "C", "L", "sp", "pl", "cy"};
+	const char	*ids[N_OBJECT_TYPES] = {"A", "C", "l", "sp", "pl", "cy"};
 	t_master	m;
 	mlx_t		*mlx;
 
@@ -96,8 +96,6 @@ int	main(int argc, char const *argv[])
 	// Init master struct
 	initialize_master_struct(&m, ids);
 	mlx = NULL;
-	// print ids first element
-	printf("first element: %s\n", m.ids[0]);
 	ft_bzero(m.objects_count, sizeof(int) * N_OBJECT_TYPES);
 	if (argc < 2)
 	{
@@ -109,6 +107,14 @@ int	main(int argc, char const *argv[])
 
 	if (allocate_objects(m.objects_count, &m) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+	
+/* 	//Test object count
+	int i = 0;
+	while (i < N_OBJECT_TYPES)
+	{
+		printf("%s : %d\n", m.ids[i], m.objects_count[i]);
+		i++;
+	} */
 
 	initialize(&m, mlx, argv);
 
@@ -188,18 +194,18 @@ int	main(int argc, char const *argv[])
 	m.cylinders[0].checker_color = init_vec3(1, 0, 0);
 	m.cylinders[0].emitted = init_vec3(0, 0, 0);
 	m.cylinders[0].k_s = 0.8;
-	m.cylinders[0].k_d = 0.6;
+	m.cylinders[0].k_d = 0.6;*/
 
-	render(&m, mlx);
-	free(m.spheres);
-	free(m.planes);
-	free(m.cylinders); */
+	// render(&m, mlx);
+	// free(m.spheres);
+	// free(m.planes);
+	// free(m.cylinders);
 
-/* 	Test object count
-	int i = 0;
+	// Test object count should be 0 at this point
+/* 	int i = 0;
 	while (i < N_OBJECT_TYPES)
 	{
-		printf("%d : %d\n", i, objects_count[i]);
+		printf("%s : %d\n", m.ids[i], m.objects_count[i]);
 		i++;
 	} */
 	return (EXIT_SUCCESS);
