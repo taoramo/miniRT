@@ -194,6 +194,7 @@ typedef struct s_hit_record
 	t_vec3		emitted;
 	double		k_d;
 	double		k_s;
+	int			is_temp;
 }	t_hit_record;
 
 typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered);
