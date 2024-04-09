@@ -16,6 +16,7 @@
 # define N_MATERIALS 3
 # define N_OBJECT_TYPES 6
 # define EPSILON 1e-8
+# define BUMP_SCALE 2
 
 # define EMPTY_LINE 2
 

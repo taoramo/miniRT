@@ -20,10 +20,10 @@ t_vec3	bump_map(t_hit_record *rec, mlx_texture_t *bm)
 
 	x = rec->u * bm->width;
 	y = (-1 * rec->v + 1) * bm->height;
-	ret = vec3_times_d(rec->u_vector, get_pixel_bw(bm, x, y)
-			- get_pixel_bw(bm, (x + 1) % bm->width, y));
-	ret = vec3_plus_vec3(ret, vec3_times_d(rec->v_vector, get_pixel_bw(bm, x, y)
-				- get_pixel_bw(bm, x, (y + 1) % bm->height)));
-	ret = vec3_plus_vec3(ret, rec->normal);
+	ret = vec3_times_d(rec->u_vector, get_pixel_bw(bm, (x - 1) % bm->width, y)
+			- get_pixel_bw(bm, (x + 1) % bm->width, y) * BUMP_SCALE);
+	ret = vec3_plus_vec3(ret, vec3_times_d(rec->v_vector, get_pixel_bw(bm, x, (y - 1) % bm->height)
+				- get_pixel_bw(bm, x, (y + 1) % bm->height) * BUMP_SCALE));
+	ret = unit_vector(vec3_plus_vec3(ret, rec->normal));
 	return (ret);
 }
