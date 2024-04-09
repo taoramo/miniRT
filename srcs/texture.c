@@ -1,5 +1,4 @@
 #include "miniRT.h"
-#include <stdint.h>
 
 t_vec3	get_solid_checkered_color(t_vec3 point,
 		double coeff, t_vec3 color1, t_vec3 color2)

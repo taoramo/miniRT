@@ -6,8 +6,10 @@ static void	set_plane_uv(t_hit_record *rec)
 	if (!rec->u_vector.x && !rec->u_vector.y && !rec->u_vector.z)
 		rec->u_vector = unit_vector(cross(rec->normal, init_vec3(0, 0, 1)));
 	rec->v_vector = unit_vector(cross(rec->normal, rec->u_vector));
-	rec->u = dot(rec->u_vector, rec->point) - floor(dot(rec->u_vector, rec->point));
-	rec->v = dot(rec->v_vector, rec->point) - floor(dot(rec->v_vector, rec->point));
+	rec->u = dot(rec->u_vector, rec->point)
+		- floor(dot(rec->u_vector, rec->point));
+	rec->v = dot(rec->v_vector, rec->point)
+		- floor(dot(rec->v_vector, rec->point));
 }
 
 static void	set_plane_face_normal(t_hit_record *rec, t_ray *ray, t_plane *plane)
@@ -23,26 +25,6 @@ static void	set_plane_face_normal(t_hit_record *rec, t_ray *ray, t_plane *plane)
 	if (plane->bump_map)
 		rec->normal = bump_map(rec, plane->bump_map);
 }
-
-/* static void	get_plane_uv(t_plane *plane, t_hit_record *rec, double *u, double *v)
-{
-	(void)rec;
-	t_vec3	point_on_plane;
-	t_vec3	a;
-	t_vec3	b;
-	double	x;
-
-	if (dot(plane->normal, init_vec3(0, 0, 1)) == 0)
-		a = init_vec3(0, 0, 1);
-	else
-	{
-		x = dot(plane->normal, plane->point);
-		point_on_plane = init_vec3(0, 0, x);
-		a = unit_vector(cross(plane->normal, vec3_plus_vec3(point_on_plane, plane->point)));
-	}
-	b = unit_vector(cross(plane->normal, a));
-
-} */
 
 static void	get_albedo(t_plane *plane, t_hit_record *rec)
 {
@@ -64,29 +46,31 @@ static void	get_albedo(t_plane *plane, t_hit_record *rec)
 	}
 }
 
+void	set_plane_rec(t_hit_record *rec, t_plane *plane, t_ray *ray, double t)
+{
+	rec->point = ray_at(*ray, t);
+	rec->material = plane->material;
+	rec->material1 = plane->material1;
+	rec->emitted = plane->emitted;
+	rec->k_s = plane->k_s;
+	rec->k_d = plane->k_d;
+	set_plane_face_normal(rec, ray, plane);
+	get_albedo(plane, rec);
+}
+
 int	hit_plane(t_ray *ray, t_interval t_minmax,
-		t_hit_record *rec, t_plane *plane)
+		double *t_new, t_plane *plane)
 {
 	double	denom;
 	double	t;
 
 	denom = dot(plane->normal, ray->direction);
-	if (fabs(denom) < 0.00000001)
+	if (fabs(denom) < EPSILON)
 		return (0);
 	t = (dot(plane->normal, plane->point)
 			- dot(plane->normal, ray->origin)) / denom;
 	if (!contains(t_minmax, t))
 		return (0);
-	if (!rec->is_temp)
-	{
-		rec->point = ray_at(*ray, t);
-		rec->material = plane->material;
-		rec->material1 = plane->material1;
-		rec->emitted = plane->emitted;
-		rec->k_s = plane->k_s;
-		rec->k_d = plane->k_d;
-		set_plane_face_normal(rec, ray, plane);
-		get_albedo(plane, rec);
-	}
+	*t_new = t;
 	return (1);
 }

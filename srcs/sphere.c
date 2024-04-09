@@ -67,8 +67,20 @@ static void	get_albedo(t_sphere *sphere, t_hit_record *rec)
 	}
 }
 
+void	set_sphere_rec(t_hit_record *rec, t_sphere *sphere, t_ray *ray, double t)
+{
+	rec->point = ray_at(*ray, t);
+	rec->material = sphere->material;
+	rec->material1 = sphere->material1;
+	rec->emitted = sphere->emitted;
+	rec->k_s = sphere->k_s;
+	rec->k_d = sphere->k_d;
+	set_sphere_face_normal(rec, ray, sphere);
+	get_albedo(sphere, rec);
+}
+
 int	hit_sphere(t_ray *ray, t_interval t_minmax,
-			t_hit_record *rec, t_sphere *sphere)
+			double *t, t_sphere *sphere)
 {
 	t_vec3	oc;
 	double	a;
@@ -90,17 +102,6 @@ int	hit_sphere(t_ray *ray, t_interval t_minmax,
 		if (!surrounds(t_minmax, root))
 			return (0);
 	}
-	if (!rec->is_temp)
-	{
-		rec->t = root;
-		rec->point = ray_at(*ray, root);
-		rec->material = sphere->material;
-		rec->material1 = sphere->material1;
-		rec->emitted = sphere->emitted;
-		rec->k_s = sphere->k_s;
-		rec->k_d = sphere->k_d;
-		set_sphere_face_normal(rec, ray, sphere);
-		get_albedo(sphere, rec);
-	}
+	*t = root;
 	return (1);
 }

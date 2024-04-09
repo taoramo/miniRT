@@ -22,11 +22,3 @@ int	metal_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered)
 				vec3_times_d(random_unit_vector(), rec->material1)));
 	return (dot(scattered->direction, rec->normal) > 0);
 }
-
-int	matte_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered)
-{
-	(void)r_in;
-	(void)rec;
-	(void)scattered;
-	return (1);
-}
