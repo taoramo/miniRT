@@ -18,6 +18,8 @@ t_vec3	bump_map(t_hit_record *rec, mlx_texture_t *bm)
 	int		y;
 	t_vec3	ret;
 
+	if (bm == NULL)
+		return (rec->normal);
 	x = rec->u * bm->width;
 	y = (-1 * rec->v + 1) * bm->height;
 	ret = vec3_times_d(rec->u_vector, get_pixel_bw(bm, (x - 1) % bm->width, y)

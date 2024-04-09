@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:46:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/08 22:56:51 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/09 14:25:49 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,13 @@ void	initialize_coordinate(t_vec3 *coord, char *value_param)
 // Initialize Ambient light
 void	initialize_ambient(t_master *m, char **params)
 {
-	m->ambient.brightness = ft_atod(params[1]);
-	initialize_coordinate(&m->ambient.color, params[2]); // ?
+	t_vec3 color;
+
+	// m->ambient.brightness = ft_atod(params[1]);
+	// initialize_coordinate(&m->ambient.color, params[2]); // ?
+	initialize_coordinate(&color, params[2]);
+	m->camera.background_color = vec3_times_d(color, ft_atod(params[1]));
+	m->camera.background_color = vec3_div_d(m->camera.background_color, 255.0);
 }
 
 // Initialize Camera
@@ -47,19 +52,17 @@ void	initialize_light(t_master *m, char **params)
 	t_light	*light;
 
 	i = index_of((char **)(m->ids), params[0]);
-	printf("This i: %d\n", i);
 	j = (m->objects_count)[i] - 1;
-	printf("This j: %d\n", j);
 	light = &((m->lights)[j]);
 	initialize_coordinate(&light->point, params[1]);
 	// light->brightness = ft_atod(params[2]); // we apply it to the color
 	initialize_coordinate(&light->color, params[3]);
 	// Apply brightness to color
-	light->color = vec3_times_d(light->color, ft_atod(params[2])); // Should it be albedo alike format?
+	light->color = vec3_times_d(light->color, ft_atod(params[2]) / 255.0);
 	(m->objects_count)[i] -= 1;
 }
 
-int	get_texture_type(char *text_type, bool is_bump)
+int	get_texture_type(char *text_type)
 {
 	int	str_len;
 
@@ -69,11 +72,7 @@ int	get_texture_type(char *text_type, bool is_bump)
 	else if (ft_strncmp(text_type, "checker", str_len + 1) == 0)
 		return (checker);
 	else if (ft_strncmp(text_type + str_len - 4, ".png", 5) == 0)
-	{
-		if (is_bump)
-			return (bump_map);
 		return (texture);
-	}
 	return (solid);
 }
 
@@ -88,12 +87,14 @@ void	initialize_sphere(t_master *m, char **params)
 	i = index_of((char **)(m->ids), params[0]);
 	j = (m->objects_count)[i] - 1;
 	sphere = &((m->spheres)[j]);
+	sphere->bump_map = NULL;
+	sphere->texture = NULL;
 	initialize_coordinate(&sphere->origin, params[1]);
 	sphere->radius = ft_atod(params[2]) / 2;
 	initialize_coordinate(&sphere->albedo, params[3]);
 	sphere->albedo = vec3_div_d(sphere->albedo, 255.0);
 	// Texture
-	sphere->texture_type = get_texture_type(params[4], false);
+	sphere->texture_type = get_texture_type(params[4]);
 	shift = 0;
 	if (sphere->texture_type == checker)
 	{
@@ -121,6 +122,8 @@ void	initialize_plane(t_master *m, char **params)
 	i = index_of((char **)(m->ids), params[0]);
 	j = (m->objects_count)[i] - 1;
 	plane = &((m->planes)[j]);
+	plane->bump_map = NULL;
+	plane->texture = NULL;
 	// Init point
 	initialize_coordinate(&plane->point, params[1]);
 	// Init normal
@@ -130,7 +133,7 @@ void	initialize_plane(t_master *m, char **params)
 	initialize_coordinate(&plane->albedo, params[3]);
 	plane->albedo = vec3_div_d(plane->albedo, 255.0);
 	// Texture
-	plane->texture_type = get_texture_type(params[4], false);
+	plane->texture_type = get_texture_type(params[4]);
 	shift = 0;
 	if (plane->texture_type == checker)
 	{
@@ -157,6 +160,8 @@ void	initialize_cylinder(t_master *m, char **params)
 	i = index_of((char **)(m->ids), params[0]);
 	j = (m->objects_count)[i] - 1;
 	cylinder = &((m->cylinders)[j]);
+	cylinder->bump_map = NULL;
+	cylinder->texture = NULL;
 	// Init center
 	initialize_coordinate(&cylinder->center, params[1]);
 	initialize_coordinate(&cylinder->axisnormal, params[2]);
@@ -166,7 +171,7 @@ void	initialize_cylinder(t_master *m, char **params)
 	initialize_coordinate(&cylinder->albedo, params[5]);
 	cylinder->albedo = vec3_div_d(cylinder->albedo, 255.0);
 	// Texture
-	cylinder->texture_type = get_texture_type(params[6], false);
+	cylinder->texture_type = get_texture_type(params[6]);
 	shift = 0;
 	if (cylinder->texture_type == checker)
 	{
@@ -236,12 +241,6 @@ void initialize_scene(t_master *m, int fd)
 	// Init camera defaults
 	ft_bzero(&(m->camera), sizeof(m->camera));
 	m->camera.focal_length = 1.0;
-	m->camera.background_color = init_vec3(0, 0, 0); // should it be albedo alike format? probably should come from ambient light
-
-	// These are defined from initialize_object:
-	// m->camera.camera_center = init_vec3(0, 2, 2);
-	// m->camera.hfov = 120;
-	// m->camera.look_at = init_vec3(0, 0, -1);
 
 	// Save objects count
 	m->n_lights = m->objects_count[2];
@@ -256,8 +255,8 @@ void initialize_scene(t_master *m, int fd)
 void initialize_master_struct(t_master *m, const char *ids[])
 {
 	ft_bzero(m, sizeof(*m));
-	m->samples_per_pixel = 10; //300
-	m->max_depth = 4;
+	m->samples_per_pixel = SAMPLES_PER_PIXEL;
+	m->max_depth = MAX_DEPTH;
 	m->ids = ids;
 }
 
