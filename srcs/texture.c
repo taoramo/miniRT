@@ -1,5 +1,4 @@
 #include "miniRT.h"
-#include <stdint.h>
 
 t_vec3	get_solid_checkered_color(t_vec3 point,
 		double coeff, t_vec3 color1, t_vec3 color2)
@@ -17,7 +16,7 @@ t_vec3	get_solid_checkered_color(t_vec3 point,
 		return (color2);
 }
 
-t_vec3	get_texture_color(mlx_image_t *texture, double u, double v)
+t_vec3	get_texture_color(mlx_texture_t *texture, double u, double v)
 {
 	t_vec3		ret;
 	int			x;
@@ -32,12 +31,4 @@ t_vec3	get_texture_color(mlx_image_t *texture, double u, double v)
 	ret.y = (*(pixelstart + 1)) / 255.0;
 	ret.z = (*(pixelstart + 2)) / 255.0;
 	return (ret);
-}
-
-t_vec3	get_bump_map_color(mlx_image_t *texture, double u, double v)
-{
-	(void)texture;
-	(void)u;
-	(void)v;
-	return (init_vec3(0, 0, 0));
 }

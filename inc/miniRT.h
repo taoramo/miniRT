@@ -10,12 +10,13 @@
 # include <fcntl.h>
 // TODO: remove this header
 # include <stdio.h>
-#include "libft.h"
+# include "libft.h"
 # define WWIDTH 1280
 # define WHEIGHT 720
 # define N_MATERIALS 3
 # define N_OBJECT_TYPES 6
 # define EPSILON 1e-8
+# define BUMP_SCALE 2
 
 # define EMPTY_LINE 2
 
@@ -65,7 +66,6 @@ typedef enum e_texture_type
 	solid,
 	checker,
 	texture,
-	bump_map
 }	t_texture_type;
 
 typedef struct s_sphere
@@ -79,7 +79,8 @@ typedef struct s_sphere
 	t_vec3			checker_color;
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
-	mlx_image_t		*texture;
+	mlx_texture_t	*texture;
+	mlx_texture_t	*bump_map;
 	t_vec3			emitted;
 	double			k_d;
 	double			k_s;
@@ -96,8 +97,8 @@ typedef struct s_plane
 	t_vec3			checker_color;
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
-	mlx_image_t		*texture;
-	// mlx_texture_t	*texture;
+	mlx_texture_t	*texture;
+	mlx_texture_t	*bump_map;
 	t_vec3			emitted;
 	double			k_d;
 	double			k_s;
@@ -116,7 +117,8 @@ typedef struct s_cylinder
 	t_vec3			checker_color;
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
-	mlx_image_t		*texture;
+	mlx_texture_t	*texture;
+	mlx_texture_t	*bump_map;
 	t_vec3			emitted;
 	double			k_d;
 	double			k_s;
@@ -135,7 +137,8 @@ typedef struct s_cone
 	t_vec3			checker_color;
 	double			checker_size_coeff;
 	t_texture_type	texture_type;
-	mlx_image_t		*texture;
+	mlx_texture_t	*texture;
+	mlx_texture_t	*bump_map;
 	t_vec3			emitted;
 	double			k_d;
 	double			k_s;
@@ -197,14 +200,46 @@ typedef struct s_hit_record
 	t_vec3		emitted;
 	double		k_d;
 	double		k_s;
+	int			is_temp;
+	t_vec3		u_vector;
+	t_vec3		v_vector;
 }	t_hit_record;
+
+typedef struct s_loop
+{
+	int				hit_anything;
+	double			closest_so_far;
+	t_interval		t_minmax;
+}	t_loop;
+
+typedef struct s_hit_cylinder
+{
+	double		root1;
+	double		root2;
+	t_ray		*ray;
+	t_cylinder	*cylinder;
+	t_interval	t_minmax;
+	t_vec3		oc;
+	double		a;
+	double		half_b;
+	double		c;
+	double		discriminant;
+}	t_hit_cylinder;
+
+typedef struct s_ray_colors
+{
+	t_vec3			diffuse;
+	t_vec3			specular;
+	t_vec3			shadow;
+	t_vec3			emitted;
+}	t_ray_colors;
 
 typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered);
 
 typedef int	(*t_val_f) (char *str);
 
 /* Utilities */
-typedef int		(*t_validate_str)(char *value_param);
+typedef int	(*t_validate_str)(char *value_param);
 double			ft_atod(const char *str);
 bool			is_space(char c);
 bool			is_capital(char c);
@@ -244,7 +279,8 @@ int				validate_line_identifier(char *line, int objects_count[],
 					const char *ids[]);
 
 int				prepare_line(char **line, int fd);
-int				validate(const char *argv[], int objects_count[], const char *ids[]);
+int				validate(const char *argv[],
+					int objects_count[], const char *ids[]);
 
 int				allocate_objects(int objects_count[], t_master *m);
 
@@ -257,9 +293,12 @@ t_ray			init_ray(t_vec3 origin, t_vec3 direction);
 unsigned int	colorsum_to_rgba(t_color c, int samples_per_pixel);
 t_color			ray_color(t_master *m, t_ray *r, int max_depth);
 t_vec3			ray_at(t_ray r, double t);
-
+int				hit(t_master *m, t_ray *r,
+					t_interval t_minmax, t_hit_record *rec);
 int				hit_sphere(t_ray *ray, t_interval t_minmax,
-					t_hit_record *rec, t_sphere *sphere);
+					double *t, t_sphere *sphere);
+void			set_sphere_rec(t_hit_record *rec,
+					t_sphere *sphere, t_ray *ray, double t);
 void			set_face_normal(t_hit_record *rec, t_ray *r,
 					t_sphere *sphere);
 t_interval		init_interval(double min, double max);
@@ -284,11 +323,17 @@ int				metal_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered);
 int				matte_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered);
 t_vec3			get_checkered_color(t_vec3 point, double coeff,
 					t_vec3 color1, t_vec3 color2);
-t_vec3			get_bump_map_color(mlx_image_t *texture, double u, double v);
-t_vec3			get_texture_color(mlx_image_t *texture, double u, double v);
+t_vec3			get_texture_color(mlx_texture_t *texture, double u, double v);
 int				hit_plane(t_ray *ray, t_interval t_minmax,
-					t_hit_record *rec, t_plane *plane);
-int				hit_cylinder(t_ray *ray, t_interval t_minmax, t_hit_record *rec, t_cylinder *cylinder);
+					double *t_new, t_plane *plane);
+void			set_plane_rec(t_hit_record *rec,
+					t_plane *plane, t_ray *ray, double t);
+int				hit_cylinder(t_ray *ray, t_interval t_minmax,
+					double *t, t_cylinder *cylinder);
+void			set_cylinder_rec(t_hit_record *rec,
+					t_cylinder *cylinder, t_ray *ray, double t);
+int				check_which_root(t_hit_cylinder *info, double *t);
 t_vec3			get_solid_checkered_color(t_vec3 point,
 					double coeff, t_vec3 color1, t_vec3 color2);
+t_vec3			bump_map(t_hit_record *rec, mlx_texture_t *bm);
 #endif

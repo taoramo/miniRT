@@ -36,7 +36,10 @@ SRCS = $(addprefix srcs/, \
 	materials.c \
 	texture.c \
 	plane.c \
-	cylinder.c)
+	cylinder.c \
+	cylinder2.c \
+	hit.c \
+	bumps.c)
 
 OBJS = $(SRCS:.c=.o)
 

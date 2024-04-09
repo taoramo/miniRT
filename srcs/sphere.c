@@ -25,6 +25,10 @@ static void	set_sphere_face_normal(t_hit_record *rec,
 	else
 		rec->normal = vec3_times_d(outward_normal, -1.0);
 	get_sphere_uv(outward_normal, &rec->u, &rec->v);
+	rec->u_vector = init_vec3(1, 0, 0);
+	rec->v_vector = init_vec3(0, 1, 0);
+	if (sphere->bump_map)
+		rec->normal = bump_map(rec, sphere->bump_map);
 }
 
 t_vec3	get_sphere_checkered_color(t_hit_record *rec, t_sphere *sphere)
@@ -61,14 +65,22 @@ static void	get_albedo(t_sphere *sphere, t_hit_record *rec)
 		rec->albedo = get_texture_color(sphere->texture, rec->u, rec->v);
 		return ;
 	}
-	if (sphere->texture_type == bump_map)
-	{
-		rec->albedo = get_bump_map_color(sphere->texture, rec->u, rec->v);
-	}
+}
+
+void	set_sphere_rec(t_hit_record *rec, t_sphere *sphere, t_ray *ray, double t)
+{
+	rec->point = ray_at(*ray, t);
+	rec->material = sphere->material;
+	rec->material1 = sphere->material1;
+	rec->emitted = sphere->emitted;
+	rec->k_s = sphere->k_s;
+	rec->k_d = sphere->k_d;
+	set_sphere_face_normal(rec, ray, sphere);
+	get_albedo(sphere, rec);
 }
 
 int	hit_sphere(t_ray *ray, t_interval t_minmax,
-			t_hit_record *rec, t_sphere *sphere)
+			double *t, t_sphere *sphere)
 {
 	t_vec3	oc;
 	double	a;
@@ -90,14 +102,6 @@ int	hit_sphere(t_ray *ray, t_interval t_minmax,
 		if (!surrounds(t_minmax, root))
 			return (0);
 	}
-	rec->t = root;
-	rec->point = ray_at(*ray, root);
-	rec->material = sphere->material;
-	rec->material1 = sphere->material1;
-	rec->emitted = sphere->emitted;
-	rec->k_s = sphere->k_s;
-	rec->k_d = sphere->k_d;
-	set_sphere_face_normal(rec, ray, sphere);
-	get_albedo(sphere, rec);
+	*t = root;
 	return (1);
 }
