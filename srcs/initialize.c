@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:46:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/09 14:25:49 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:33:49 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	initialize_sphere(t_master *m, char **params)
 	int			j;
 	t_sphere	*sphere;
 	int			shift;
+	char		*texture_path;
 
 	i = index_of((char **)(m->ids), params[0]);
 	j = (m->objects_count)[i] - 1;
@@ -104,6 +105,12 @@ void	initialize_sphere(t_master *m, char **params)
 		sphere->checkered = 1;
 		sphere->checker_size_coeff = DEFAULT_CHECKER_SIZE;
 	}
+	if (sphere->texture_type == texture)
+	{
+		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
+		sphere->texture = mlx_load_png(texture_path);
+		// free(texture_path);
+	}
 	// k_s
 	sphere->k_s = ft_atod(params[5 + shift]);
 	// k_d
@@ -118,6 +125,7 @@ void	initialize_plane(t_master *m, char **params)
 	int			j;
 	t_plane		*plane;
 	int			shift;
+	char		*texture_path;
 
 	i = index_of((char **)(m->ids), params[0]);
 	j = (m->objects_count)[i] - 1;
@@ -143,6 +151,12 @@ void	initialize_plane(t_master *m, char **params)
 		plane->checkered = 1;
 		plane->checker_size_coeff = DEFAULT_CHECKER_SIZE;
 	}
+	if (plane->texture_type == texture)
+	{
+		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
+		plane->texture = mlx_load_png(texture_path);
+		// free(texture_path);
+	}
 	// k_s
 	plane->k_s = ft_atod(params[5 + shift]);
 	// k_d
@@ -156,6 +170,7 @@ void	initialize_cylinder(t_master *m, char **params)
 	int			j;
 	t_cylinder	*cylinder;
 	int			shift;
+	char		*texture_path;
 
 	i = index_of((char **)(m->ids), params[0]);
 	j = (m->objects_count)[i] - 1;
@@ -180,6 +195,12 @@ void	initialize_cylinder(t_master *m, char **params)
 		cylinder->checker_color = vec3_div_d(cylinder->checker_color, 255.0);
 		cylinder->checkered = 1;
 		cylinder->checker_size_coeff = DEFAULT_CHECKER_SIZE;
+	}
+	if (cylinder->texture_type == texture)
+	{
+		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
+		cylinder->texture = mlx_load_png(texture_path);
+		// free(texture_path);
 	}
 	// k_s
 	cylinder->k_s = ft_atod(params[7 + shift]);

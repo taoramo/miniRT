@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:38 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/08 20:44:39 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/09 15:55:49 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,10 @@ int	validate_param(char *value_param, t_val_f f, t_interval range, char *err)
 	while (*tuple)
 	{
 		if (f(*tuple) || validate_f_range(*tuple, range.min, range.max, err))
+		{
+			free_split(temp);
 			return (EXIT_FAILURE);
+		}
 		tuple++;
 	}
 	free_split(temp);

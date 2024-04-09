@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:00:03 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/07 23:00:04 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:51:39 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int	str_array_length(char **str)
 	return (length);
 }
 
-void free_split(char **split)
+void	free_split(char **split)
 {
-	char **tmp;
+	char	**tmp;
 
 	tmp = split;
 	while (*tmp)

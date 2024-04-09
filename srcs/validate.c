@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:21 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/08 01:28:58 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:53:44 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	validate_scene(int objects_count[], const char *ids[], int fd)
 	return (EXIT_SUCCESS);
 }
 
-int allocate_objects(int objects_count[], t_master *m)
+int	allocate_objects(int objects_count[], t_master *m)
 {
 	if (objects_count[L])
 	{

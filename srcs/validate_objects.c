@@ -58,11 +58,12 @@ int	validate_light(char **value_params)
 int	validate_sphere(char **value_params)
 {
 	int	valid_count;
-	int shift;
+	int	shift;
 
 	valid_count = 6;
 	shift = checker_shift(value_params);
-	if (str_array_length(value_params) != valid_count + shift)
+	if (str_array_length(value_params) != valid_count + shift
+		&& str_array_length(value_params) != valid_count + shift + 1)
 	{
 		printf("Sphere must have %d parameters.\n", valid_count + shift);
 		return (EXIT_FAILURE);
@@ -71,7 +72,8 @@ int	validate_sphere(char **value_params)
 		|| validate_rgb(value_params[2]) || validate_texture(value_params[3])
 		|| validate_checker_rgbs(value_params)
 		|| validate_0_to_1(value_params[4 + shift])
-		|| validate_0_to_1(value_params[5 + shift]))
+		|| validate_0_to_1(value_params[5 + shift])
+		|| validate_bump_map(value_params[6 + shift]))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -79,20 +81,23 @@ int	validate_sphere(char **value_params)
 int	validate_plane(char **value_params)
 {
 	int	valid_count;
-	int shift;
+	int	shift;
 
 	valid_count = 6;
 	shift = checker_shift(value_params);
-	if (str_array_length(value_params) != valid_count + shift)
+	if (str_array_length(value_params) != valid_count + shift
+		&& str_array_length(value_params) != valid_count + shift + 1)
 	{
 		printf("Plane must have %d parameters.\n", valid_count + shift);
 		return (EXIT_FAILURE);
 	}
 	if (validate_position(value_params[0])
-	|| validate_orientation(value_params[1]) || validate_rgb(value_params[2])
-	|| validate_texture(value_params[3]) || validate_checker_rgbs(value_params)
-	|| validate_0_to_1(value_params[4 + shift])
-	|| validate_0_to_1(value_params[5 + shift]))
+		|| validate_orientation(value_params[1])
+		|| validate_rgb(value_params[2]) || validate_texture(value_params[3])
+		|| validate_checker_rgbs(value_params)
+		|| validate_0_to_1(value_params[4 + shift])
+		|| validate_0_to_1(value_params[5 + shift])
+		|| validate_bump_map(value_params[6 + shift]))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -100,21 +105,24 @@ int	validate_plane(char **value_params)
 int	validate_cylinder(char **value_params)
 {
 	int	valid_count;
-	int shift;
+	int	shift;
 
 	valid_count = 8;
 	shift = checker_shift(value_params);
-	if (str_array_length(value_params) != valid_count + shift)
+	if (str_array_length(value_params) != valid_count + shift
+		&& str_array_length(value_params) != valid_count + shift + 1)
 	{
 		printf("Cylinder must have %d parameters.\n", valid_count + shift);
 		return (EXIT_FAILURE);
 	}
 	if (validate_position(value_params[0])
-	|| validate_orientation(value_params[1]) || validate_size(value_params[2])
-	|| validate_size(value_params[3]) || validate_rgb(value_params[4])
-	|| validate_texture(value_params[5]) || validate_checker_rgbs(value_params)
-	|| validate_0_to_1(value_params[6 + shift])
-	|| validate_0_to_1(value_params[7 + shift]))
+		|| validate_orientation(value_params[1])
+		|| validate_size(value_params[2]) || validate_size(value_params[3])
+		|| validate_rgb(value_params[4]) || validate_texture(value_params[5])
+		|| validate_checker_rgbs(value_params)
+		|| validate_0_to_1(value_params[6 + shift])
+		|| validate_0_to_1(value_params[7 + shift])
+		|| validate_bump_map(value_params[8 + shift]))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

@@ -22,6 +22,7 @@
 # define SAMPLES_PER_PIXEL 5
 # define MAX_DEPTH 4
 # define DEFAULT_CHECKER_SIZE 2
+# define TEXTURES_PATH "./"
 
 typedef struct s_camera
 {
@@ -265,6 +266,7 @@ int				validate_texture(char *value_param);
 int				checker_shift(char **value_params);
 int				validate_checker_rgbs(char **value_params);
 int				validate_0_to_1(char *value_param);
+int				validate_bump_map(char *value_param);
 
 int				validate_param(char *value_param, t_val_f f,
 					t_interval range, char *err);
