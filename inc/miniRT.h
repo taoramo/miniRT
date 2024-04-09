@@ -255,6 +255,7 @@ void			replace_whitespaces(char *line);
 int				validate_int_str(char *int_str);
 int				validate_f_str(char *f_str);
 int				validate_f_range(char *f_str, float min, float max, char *err);
+int				validate_three_tuple_size(char *value_param);
 
 int				print_error(char *err);
 
@@ -266,6 +267,7 @@ int				validate_texture(char *value_param);
 int				checker_shift(char **value_params);
 int				validate_checker_rgbs(char **value_params);
 int				validate_0_to_1(char *value_param);
+int				validate_emitted(char *value_param);
 int				validate_bump_map(char *value_param);
 
 int				validate_param(char *value_param, t_val_f f,

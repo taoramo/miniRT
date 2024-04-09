@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:46:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/09 17:33:49 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/10 01:58:24 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,14 +107,31 @@ void	initialize_sphere(t_master *m, char **params)
 	}
 	if (sphere->texture_type == texture)
 	{
+		// texture_path = "./earthmap.png";
 		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
+		// texture_path = ft_strjoin("./", params[4]);
 		sphere->texture = mlx_load_png(texture_path);
-		// free(texture_path);
+		free(texture_path);
 	}
 	// k_s
 	sphere->k_s = ft_atod(params[5 + shift]);
 	// k_d
 	sphere->k_d = ft_atod(params[6 + shift]);
+	// fuzz
+	sphere->material1 = ft_atod(params[7 + shift]);
+	// Emission
+	// printf("%s\n", params[7 + shift]);
+	// printf("%s\n", params[8 + shift]);
+	// initialize_coordinate(&sphere->emitted , "0,0,0");
+	initialize_coordinate(&sphere->emitted , params[8 + shift]);
+	// Bump map
+	if (params[9 + shift])
+	{
+		texture_path = ft_strjoin("TEXTURES_PATH", params[9 + shift]);
+		// texture_path = ft_strjoin("./", params[9 + shift]);
+		sphere->bump_map = mlx_load_png(texture_path);
+		free(texture_path);
+	}
 	(m->objects_count)[i] -= 1;
 }
 
@@ -153,6 +170,8 @@ void	initialize_plane(t_master *m, char **params)
 	}
 	if (plane->texture_type == texture)
 	{
+		// texture_path = "./earthmap.png";
+		// texture_path = ft_strjoin("./", params[4]);
 		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
 		plane->texture = mlx_load_png(texture_path);
 		// free(texture_path);
@@ -161,6 +180,18 @@ void	initialize_plane(t_master *m, char **params)
 	plane->k_s = ft_atod(params[5 + shift]);
 	// k_d
 	plane->k_d = ft_atod(params[6 + shift]);
+	// fuzz
+	plane->material1 = ft_atod(params[7 + shift]);
+	// Emission
+	initialize_coordinate(&plane->emitted , params[8 + shift]);
+	// Bump map
+	// texture_path = ft_strjoin("./", params[9 + shift]);
+	if (params[9 + shift])
+	{
+		texture_path = ft_strjoin(TEXTURES_PATH, params[9 + shift]);
+		plane->bump_map = mlx_load_png(texture_path);
+		free(texture_path);
+	}
 	(m->objects_count)[i] -= 1;
 }
 
@@ -198,7 +229,8 @@ void	initialize_cylinder(t_master *m, char **params)
 	}
 	if (cylinder->texture_type == texture)
 	{
-		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
+		texture_path = "./earthmap.png";
+		// texture_path = ft_strjoin("./", params[4]);
 		cylinder->texture = mlx_load_png(texture_path);
 		// free(texture_path);
 	}
@@ -206,6 +238,18 @@ void	initialize_cylinder(t_master *m, char **params)
 	cylinder->k_s = ft_atod(params[7 + shift]);
 	// k_d
 	cylinder->k_d = ft_atod(params[8 + shift]);
+	// fuzz
+	cylinder->material1 = ft_atod(params[9 + shift]);
+	// Emission
+	initialize_coordinate(&cylinder->emitted , params[10 + shift]);
+	// Bump map
+	if (params[11 + shift])
+	{
+		// texture_path = ft_strjoin("./", params[11 + shift]);
+		texture_path = ft_strjoin(TEXTURES_PATH, params[11 + shift]);
+		cylinder->bump_map = mlx_load_png(texture_path);
+		free(texture_path);
+	}
 	(m->objects_count)[i] -= 1;
 }
 

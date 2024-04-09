@@ -206,18 +206,21 @@ int	main(int argc, char const *argv[])
 
 	// m.spheres[0].material = metal;
 
-	m.spheres[0].material1 = 0.3;
+	/* m.spheres[0].material1 = 0.3; */
+
 	//m.spheres[0].texture_type = texture; // changing to checker makes the highlight red???
 
 	// m.spheres[1].emitted = init_vec3(10, 10, 10);
 	// m.spheres[1].material = lambertian;
-	m.spheres[2].material1 = 0;
+
+/* 	m.spheres[2].material1 = 0;
 	m.spheres[2].checker_size_coeff = 8;
+ */
 	// m.spheres[1].texture_type = solid;
 
-	m.planes[0].emitted = init_vec3(0, 0, 0);
+/* 	m.planes[0].emitted = init_vec3(0, 0, 0);
 	m.planes[1].emitted = init_vec3(0, 0, 0);
-	m.planes[2].emitted = init_vec3(0, 0, 0);
+	m.planes[2].emitted = init_vec3(0, 0, 0); */
 
 	render(&m, mlx);
 	free(m.spheres);

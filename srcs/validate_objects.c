@@ -60,7 +60,7 @@ int	validate_sphere(char **value_params)
 	int	valid_count;
 	int	shift;
 
-	valid_count = 6;
+	valid_count = 8;
 	shift = checker_shift(value_params);
 	if (str_array_length(value_params) != valid_count + shift
 		&& str_array_length(value_params) != valid_count + shift + 1)
@@ -73,7 +73,9 @@ int	validate_sphere(char **value_params)
 		|| validate_checker_rgbs(value_params)
 		|| validate_0_to_1(value_params[4 + shift])
 		|| validate_0_to_1(value_params[5 + shift])
-		|| validate_bump_map(value_params[6 + shift]))
+		|| validate_0_to_1(value_params[6 + shift])
+		|| validate_emitted(value_params[7 + shift])
+		|| validate_bump_map(value_params[8 + shift]))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -83,7 +85,7 @@ int	validate_plane(char **value_params)
 	int	valid_count;
 	int	shift;
 
-	valid_count = 6;
+	valid_count = 8;
 	shift = checker_shift(value_params);
 	if (str_array_length(value_params) != valid_count + shift
 		&& str_array_length(value_params) != valid_count + shift + 1)
@@ -97,7 +99,9 @@ int	validate_plane(char **value_params)
 		|| validate_checker_rgbs(value_params)
 		|| validate_0_to_1(value_params[4 + shift])
 		|| validate_0_to_1(value_params[5 + shift])
-		|| validate_bump_map(value_params[6 + shift]))
+		|| validate_0_to_1(value_params[6 + shift])
+		|| validate_emitted(value_params[7 + shift])
+		|| validate_bump_map(value_params[8 + shift]))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -107,7 +111,7 @@ int	validate_cylinder(char **value_params)
 	int	valid_count;
 	int	shift;
 
-	valid_count = 8;
+	valid_count = 10;
 	shift = checker_shift(value_params);
 	if (str_array_length(value_params) != valid_count + shift
 		&& str_array_length(value_params) != valid_count + shift + 1)
@@ -122,7 +126,9 @@ int	validate_cylinder(char **value_params)
 		|| validate_checker_rgbs(value_params)
 		|| validate_0_to_1(value_params[6 + shift])
 		|| validate_0_to_1(value_params[7 + shift])
-		|| validate_bump_map(value_params[8 + shift]))
+		|| validate_0_to_1(value_params[8 + shift])
+		|| validate_emitted(value_params[9 + shift])
+		|| validate_bump_map(value_params[10 + shift]))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
