@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:31 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/10 01:55:02 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/10 14:35:22 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int validate_emitted(char *value_param)
 {
 	if (validate_three_tuple_size(value_param) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if (validate_param(value_param, validate_int_str, init_interval(0, __DBL_MAX__),
+	if (validate_param(value_param, validate_f_str, init_interval(0, __DBL_MAX__),
 		"Emit is not in [0, INFINITY].")) // NOTE: Validate three tuple can be also used for a number
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
