@@ -30,13 +30,9 @@ t_vec3	phong_model(t_hit_record *rec, t_ray *shadow_ray,
 	light_dir = vec3_times_d(unit_vector(shadow_ray->direction), 1.0);
 	view_dir = vec3_times_d(unit_vector(ray->direction), -1.0);
 	halfway_dir = unit_vector(vec3_plus_vec3(light_dir, view_dir));
-	if (rec->material1 > EPSILON)
-		specular = vec3_times_d(light->color,
-				pow(dot(rec->normal, halfway_dir),
-					1.0 / rec->material1) * rec->k_s);
-	else
-		specular = vec3_times_d(light->color,
-				dot(rec->normal, halfway_dir) * rec->k_s);
+	specular = vec3_times_d(light->color,
+			pow(dot(rec->normal, halfway_dir),
+				fmin(10, 1.0 / rec->material1)) * rec->k_s);
 	diffuse = vec3_times_vec3(vec3_times_d(light->color,
 				dot(rec->normal, light_dir)
 				* rec->k_d), rec->albedo);
