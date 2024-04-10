@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:46:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/10 02:02:38 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/10 12:33:14 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ void	initialize_ambient(t_master *m, char **params)
 {
 	t_vec3 color;
 
-	// m->ambient.brightness = ft_atod(params[1]);
-	// initialize_coordinate(&m->ambient.color, params[2]); // ?
 	initialize_coordinate(&color, params[2]);
 	m->camera.background_color = vec3_times_d(color, ft_atod(params[1]));
 	m->camera.background_color = vec3_div_d(m->camera.background_color, 255.0);
@@ -55,7 +53,6 @@ void	initialize_light(t_master *m, char **params)
 	j = (m->objects_count)[i] - 1;
 	light = &((m->lights)[j]);
 	initialize_coordinate(&light->point, params[1]);
-	// light->brightness = ft_atod(params[2]); // we apply it to the color
 	initialize_coordinate(&light->color, params[3]);
 	// Apply brightness to color
 	light->color = vec3_times_d(light->color, ft_atod(params[2]) / 255.0);
@@ -107,8 +104,6 @@ void	initialize_sphere(t_master *m, char **params)
 	}
 	if (sphere->texture_type == texture)
 	{
-		// texture_path = "./earthmap.png";
-		// texture_path = ft_strjoin("./", params[4]);
 		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
 		sphere->texture = mlx_load_png(texture_path);
 		free(texture_path);
@@ -120,14 +115,10 @@ void	initialize_sphere(t_master *m, char **params)
 	// fuzz
 	sphere->material1 = ft_atod(params[7 + shift]);
 	// Emission
-	// printf("%s\n", params[7 + shift]);
-	// printf("%s\n", params[8 + shift]);
-	// initialize_coordinate(&sphere->emitted , "0,0,0");
 	initialize_coordinate(&sphere->emitted , params[8 + shift]);
 	// Bump map
 	if (params[9 + shift])
 	{
-		// texture_path = ft_strjoin("./", params[9 + shift]);
 		texture_path = ft_strjoin(TEXTURES_PATH, params[9 + shift]);
 		sphere->bump_map = mlx_load_png(texture_path);
 		free(texture_path);
@@ -170,8 +161,6 @@ void	initialize_plane(t_master *m, char **params)
 	}
 	if (plane->texture_type == texture)
 	{
-		// texture_path = "./earthmap.png";
-		// texture_path = ft_strjoin("./", params[4]);
 		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
 		plane->texture = mlx_load_png(texture_path);
 		free(texture_path);
@@ -187,7 +176,6 @@ void	initialize_plane(t_master *m, char **params)
 	// Bump map
 	if (params[9 + shift])
 	{
-		// texture_path = ft_strjoin("./", params[9 + shift]);
 		texture_path = ft_strjoin(TEXTURES_PATH, params[9 + shift]);
 		plane->bump_map = mlx_load_png(texture_path);
 		free(texture_path);
@@ -229,11 +217,9 @@ void	initialize_cylinder(t_master *m, char **params)
 	}
 	if (cylinder->texture_type == texture)
 	{
-		// texture_path = "./earthmap.png";
-		// texture_path = ft_strjoin("./", params[4]);
 		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
 		cylinder->texture = mlx_load_png(texture_path);
-		// free(texture_path);
+		free(texture_path);
 	}
 	// k_s
 	cylinder->k_s = ft_atod(params[7 + shift]);
@@ -246,7 +232,6 @@ void	initialize_cylinder(t_master *m, char **params)
 	// Bump map
 	if (params[11 + shift])
 	{
-		// texture_path = ft_strjoin("./", params[11 + shift]);
 		texture_path = ft_strjoin(TEXTURES_PATH, params[11 + shift]);
 		cylinder->bump_map = mlx_load_png(texture_path);
 		free(texture_path);
