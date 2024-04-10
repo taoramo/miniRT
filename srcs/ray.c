@@ -27,18 +27,18 @@ t_vec3	phong_model(t_hit_record *rec, t_ray *shadow_ray,
 	t_vec3	specular;
 	t_vec3	diffuse;
 
-	light_dir = vec3_times_d(unit_vector(shadow_ray->direction), -1.0);
-	view_dir = unit_vector(ray->direction);
+	light_dir = vec3_times_d(unit_vector(shadow_ray->direction), 1.0);
+	view_dir = vec3_times_d(unit_vector(ray->direction), -1.0);
 	halfway_dir = unit_vector(vec3_plus_vec3(light_dir, view_dir));
 	if (rec->material1 > EPSILON)
 		specular = vec3_times_d(light->color,
-				pow(fmax(dot(rec->normal, halfway_dir), 0.0),
+				pow(dot(rec->normal, halfway_dir),
 					1.0 / rec->material1) * rec->k_s);
 	else
 		specular = vec3_times_d(light->color,
-				fmax(dot(rec->normal, halfway_dir), 0.0) * rec->k_s);
+				dot(rec->normal, halfway_dir) * rec->k_s);
 	diffuse = vec3_times_vec3(vec3_times_d(light->color,
-				fmax(0.f, dot(rec->normal, light_dir))
+				dot(rec->normal, light_dir)
 				* rec->k_d), rec->albedo);
 	return (vec3_plus_vec3(specular, diffuse));
 }
@@ -48,16 +48,19 @@ t_vec3	shadow_ray(t_master *m, t_hit_record *rec, t_ray *ray)
 	unsigned int		i;
 	t_ray				shadow_ray;
 	t_vec3				return_color;
+	double				length;
 
 	return_color = init_vec3(0, 0, 0);
 	i = 0;
 	while (i < m->n_lights)
 	{
 		shadow_ray.origin = rec->point;
-		shadow_ray.direction = vec3_minus_vec3(m->lights[0].point, rec->point);
-		if (!hit(m, &shadow_ray, init_interval(0.001, INFINITY), 0))
+		shadow_ray.direction = vec3_times_d(vec3_minus_vec3(m->lights[i].point, rec->point), 1.0);
+		length = vec3length(shadow_ray.direction);
+		shadow_ray.direction = unit_vector(shadow_ray.direction);
+		if (!hit(m, &shadow_ray, init_interval(0.001, length), 0))
 			return_color = vec3_plus_vec3(return_color,
-					phong_model(rec, ray, ray, &m->lights[i]));
+					phong_model(rec, &shadow_ray, ray, &m->lights[i]));
 		i++;
 	}
 	return (return_color);
