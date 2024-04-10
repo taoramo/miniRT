@@ -23,7 +23,6 @@ static void	set_cylinder_uv(t_hit_record *rec, t_cylinder *cylinder, t_ray *ray)
 	t_vec3	oc;
 
 	rec->u = 1 - atan2(rec->point.x, rec->point.z) / (2 * M_PI) + 0.5;
-	rec->v = rec->point.y - floor(rec->point.y);
 	oc = vec3_minus_vec3(ray->origin,
 			vec3_minus_vec3(cylinder->center,
 				vec3_times_d(cylinder->axisnormal, cylinder->height / 2)));

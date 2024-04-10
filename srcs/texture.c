@@ -23,8 +23,10 @@ t_vec3	get_texture_color(mlx_texture_t *texture, double u, double v)
 	int			y;
 	uint8_t		*pixelstart;
 
-	x = u * texture->width;
-	y = (-1.0 * v + 1) * texture->height;
+	if (!texture)
+		return (init_vec3(0, 0, 0));
+	x = (int)(u * texture->width) % texture->width;
+	y = (int)((-1.0 * v + 1) * texture->height) % texture->height;
 	pixelstart = texture->pixels
 		+ (y * texture->width + x) * 4;
 	ret.x = (*(pixelstart)) / 255.0;
