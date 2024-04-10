@@ -37,6 +37,10 @@ void	loop_through_planes(t_loop *loop, t_ray *r,
 			loop->closest_so_far = t;
 			if (rec)
 				set_plane_rec(rec, &m->planes[i], r, t);
+			// if (i == 0 && rec->point.x > 1 && rec->point.x < 2)
+			// {
+			// 	printf("X: %f, Y: %f, Z: %f\n", rec->point.x, rec->point.y, rec->point.z);
+			// }
 		}
 		i++;
 	}

@@ -19,7 +19,7 @@ unsigned int	colorsum_to_rgba(t_color c, int samples_per_pixel)
 }
 
 t_vec3	phong_model(t_hit_record *rec, t_ray *shadow_ray,
-			t_ray *ray, t_light *light)
+			t_ray *ray, t_light *light, double sign)
 {
 	t_vec3	light_dir;
 	t_vec3	view_dir;
@@ -27,7 +27,8 @@ t_vec3	phong_model(t_hit_record *rec, t_ray *shadow_ray,
 	t_vec3	specular;
 	t_vec3	diffuse;
 
-	light_dir = vec3_times_d(unit_vector(shadow_ray->direction), -1.0);
+	light_dir = vec3_times_d(unit_vector(shadow_ray->direction), sign);
+	// light_dir = vec3_times_d(unit_vector(shadow_ray->direction), -1.0); // why -1.0 ???
 	view_dir = unit_vector(ray->direction);
 	halfway_dir = unit_vector(vec3_plus_vec3(light_dir, view_dir));
 	if (rec->material1 > EPSILON)
@@ -47,6 +48,7 @@ t_vec3	shadow_ray(t_master *m, t_hit_record *rec, t_ray *ray)
 {
 	unsigned int		i;
 	t_ray				shadow_ray;
+	t_ray				shadow_ray2;
 	t_vec3				return_color;
 
 	return_color = init_vec3(0, 0, 0);
@@ -54,10 +56,17 @@ t_vec3	shadow_ray(t_master *m, t_hit_record *rec, t_ray *ray)
 	while (i < m->n_lights)
 	{
 		shadow_ray.origin = rec->point;
-		shadow_ray.direction = vec3_minus_vec3(m->lights[0].point, rec->point);
+		shadow_ray.direction = vec3_minus_vec3(m->lights[i].point, rec->point); // why [0] ???
+		shadow_ray2.origin = rec->point;
+		shadow_ray2.direction = vec3_times_d(vec3_minus_vec3(m->lights[i].point, rec->point), -1.0);
+
+		// if (!hit(m, &shadow_ray, init_interval(0.001, INFINITY), 0))
 		if (!hit(m, &shadow_ray, init_interval(0.001, INFINITY), 0))
 			return_color = vec3_plus_vec3(return_color,
-					phong_model(rec, ray, ray, &m->lights[i]));
+					phong_model(rec, &shadow_ray, ray, &m->lights[i], 1.0)); // should it be the shadow_ray as the first ray??
+		if (!hit(m, &shadow_ray2, init_interval(0.001, INFINITY), 0))
+			return_color = vec3_plus_vec3(return_color,
+					phong_model(rec, &shadow_ray2, ray, &m->lights[i], -1.0)); // should it be the shadow_ray as the first ray??
 		i++;
 	}
 	return (return_color);
