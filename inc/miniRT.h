@@ -322,8 +322,8 @@ int				hit_sphere(t_ray *ray, t_interval t_minmax,
 					double *t, t_sphere *sphere);
 void			set_sphere_rec(t_hit_record *rec,
 					t_sphere *sphere, t_ray *ray, double t);
-void			set_face_normal(t_hit_record *rec, t_ray *r,
-					t_sphere *sphere);
+// void			set_face_normal(t_hit_record *rec, t_ray *r, 
+					// t_sphere *sphere); // not used anywhere??
 t_interval		init_interval(double min, double max);
 int				contains(t_interval i, double x);
 int				surrounds(t_interval i, double x);

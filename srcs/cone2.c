@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 20:41:02 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/11 22:58:12 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/12 00:36:15 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,30 @@ static void	set_cone_uv(t_hit_record *rec, t_cone *cone)
 	rec->v = vec3length(vec3_minus_vec3(rec->point, cone->tip)) / (cone->height / 2);
 }
 
-static void	set_cone_face_normal(t_hit_record *rec,
-				t_ray *ray, t_cone *cone)
+static void	set_cone_face_normal(t_hit_record *rec, 
+			t_ray *r, t_cone *cone)
 {
  	t_vec3	outward_normal;
 	t_vec3	tip_to_intersection;
-	t_vec3 axis;
+	t_vec3	axis;
+
+	int	front_face;
 	
 	tip_to_intersection = vec3_minus_vec3(cone->tip, rec->point);
 	
-	t_vec3 axis = cone->axis;
+	axis = cone->axis;
 		if (rec->point.y > cone->tip.y)
 			axis = vec3_times_d(axis, -1);
 	outward_normal = cross(axis, tip_to_intersection);
 	outward_normal = cross(tip_to_intersection, outward_normal);
 	outward_normal = unit_vector(outward_normal);
 	rec->normal = outward_normal;
+
+	front_face = dot(r->direction, outward_normal) < 0;
+	if (front_face != 0)
+		rec->normal = outward_normal;
+	else
+		rec->normal = vec3_times_d(outward_normal, -1.0);
 
 	set_cone_uv(rec, cone);
 	// rec->v_vector = cone->axis;

@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:45:32 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/11 17:31:13 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/12 00:13:16 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,6 @@ int	check_root_cone(double root, t_ray *ray, t_cone *cone)
 		return (1);
 	else
 		return (0);
-/* 	// Calculate the distance from the hit point to the center of the base
-	double distance_to_center = vec3length(vec3_minus_vec3(ray_at(*ray, root), cone->tip));
-
-	// Check if the hit point lies within the circular base
-	if (surrounds(init_interval(-cone->height, cone->height), m)
-		&& distance_to_center <= cone->radius) {
-		return 1;
-	} else {
-		return 0;
-	} */
 }
 
 int	check_which_root_cone(t_hit_cone *info, double *t)
@@ -73,22 +63,7 @@ int		hit_cone(t_ray *ray, t_interval t_minmax,
 	info.ray = ray;
 	info.cone = cone;
 	info.t_minmax = t_minmax;
-
-
-	// info.oc = vec3_minus_vec3(ray->origin, vec3_minus_vec3(cone->tip,
-	// 			vec3_times_d(cone->axis, cone->height / 2)));
 	info.oc = vec3_minus_vec3(ray->origin, cone->tip);
-	/*
-	info.a = dot(ray->direction,cone->axis) * dot(ray->direction, cone->axis) - 0.1 * 0.1;
-	info.b = 2 * (dot(ray->direction,cone->axis) * dot(info.oc,cone->axis) - dot(ray->direction, info.oc) * 0.1 * 0.1);
-    info.c = dot(info.oc, cone->axis) * dot(info.oc, cone->axis) - dot(info.oc, info.oc) * 0.1 * 0.1; */
-
-	// info.a = ray->direction.x * ray->direction.x - ray->direction.y
-	// 	* ray->direction.y + ray->direction.z * ray->direction.z;
-	// info.half_b = info.oc.x * ray->direction.x - info.oc.y
-	// 	* ray->direction.y + info.oc.z * ray->direction.z;
-	// info.c = info.oc.x * info.oc.x - info.oc.y * info.oc.y + info.oc.z
-	// 	* info.oc.z;
 	double angle = degrees_to_radians(cone->angle);
 	info.a = ray->direction.x * ray->direction.x - ray->direction.y
 		* ray->direction.y * pow(sin(angle), 2) + ray->direction.z * ray->direction.z;
