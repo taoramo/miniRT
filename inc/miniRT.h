@@ -166,7 +166,7 @@ typedef enum s_object_type
 
 typedef struct s_master
 {
-	int				objects_count[N_OBJECT_TYPES]; // A C L sp pl cy
+	int				objects_count[N_OBJECT_TYPES]; // A C L sp pl cy co
 	const char		**ids;
 	t_camera		camera;
 	int				samples_per_pixel;

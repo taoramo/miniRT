@@ -219,26 +219,27 @@ int	main(int argc, char const *argv[])
 	m.planes[1].emitted = init_vec3(0, 0, 0);
 	m.planes[2].emitted = init_vec3(0, 0, 0); */
 
-	m.n_cones = 1;
-	m.cones = malloc(sizeof(t_cone) * m.n_cones);
-	m.cones[0].tip = init_vec3(0, 4, 0);
+/* 	m.n_cones = 1;
+	m.cones = malloc(sizeof(t_cone) * m.n_cones); */
+
+/* 	m.cones[0].tip = init_vec3(0, 1, 0);
 	m.cones[0].axis = init_vec3(0, 1, 0);
 	m.cones[0].height = 5;
-	m.cones[0].angle = 80;
+	m.cones[0].angle = 20;
 	// m.cones[0].radius = m.cones[0].height / tan(degrees_to_radians(m.cones[0].angle));
 	// m.cones[0].material = lambertian;
-	m.cones[0].material1 = 0.7;
 	m.cones[0].texture_type = solid;
+	m.cones[0].texture = NULL;
 	m.cones[0].albedo = init_vec3(0.5, 0.5, 0.5);
-	m.cones[0].emitted = init_vec3(0, 0, 0);
 	m.cones[0].k_s = 0.5;
 	m.cones[0].k_d = 0.5;
+	m.cones[0].material1 = 0.7;
+	m.cones[0].emitted = init_vec3(0, 0, 0);
 	m.cones[0].checker_color = init_vec3(0.3, 0.4, 0.7);
-	m.cones[0].checker_size_coeff = 2;	
+	m.cones[0].checker_size_coeff = DEFAULT_CHECKER_SIZE;
 	m.cones[0].checkered = 0;
 	m.cones[0].bump_map = NULL;
-	m.cones[0].texture = NULL;
-
+ */
 
 	render(&m, mlx);
 	free(m.spheres);

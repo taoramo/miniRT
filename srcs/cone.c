@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:45:32 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/11 02:57:50 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:37:11 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	check_root_cone(double root, t_ray *ray, t_cone *cone)
 	oc = vec3_minus_vec3(ray->origin, cone->tip);
 	m = dot(ray->direction, cone->axis)
 		* root + dot(oc, cone->axis);
-	if (surrounds(init_interval(-cone->height, cone->height), m))
+	if (surrounds(init_interval(-cone->height / 2, cone->height / 2), m))
 		return (1);
 	else
 		return (0);

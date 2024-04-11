@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:21 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/10 21:05:51 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/11 16:50:28 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	allocate_objects(int objects_count[], t_master *m)
 	}
 	if (objects_count[co])
 	{
-		m->cones = malloc(sizeof(t_cylinder) * objects_count[cy]);
+		m->cones = malloc(sizeof(t_cone) * objects_count[co]);
 		if (!m->cones)
 			return (EXIT_FAILURE);
 	}
