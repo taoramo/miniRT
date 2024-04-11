@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 20:41:02 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/11 18:07:00 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/11 22:58:12 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,46 +31,34 @@ t_vec3	get_cone_checkered_color(t_hit_record *rec, t_cone *cone)
 		return (cone->checker_color);
 }
 
-/* static void	set_cone_uv(t_hit_record *rec, t_cone *cone, t_ray *ray)
+static void	set_cone_uv(t_hit_record *rec, t_cone *cone)
 {
-	
-} */
-
-static void	set_cone_uv(t_hit_record *rec, t_cone *cone, t_ray *ray)
-{
-	// double	m;
-	// t_vec3	oc;
-	(void)ray;
 	rec->u = (1 - atan2(rec->point.x, rec->point.z) / (2 * M_PI) + 0.5);
-/* 	oc = vec3_minus_vec3(ray->origin,
-			vec3_minus_vec3(cone->tip,
-				vec3_times_d(cone->axis, cone->height / 2)));
-	m = dot(ray->direction, cone->axis)
-		* rec->t + dot(oc, cone->axis);
-	rec->v = m / cone->height; */
 	rec->v = vec3length(vec3_minus_vec3(rec->point, cone->tip)) / (cone->height / 2);
 }
 
 static void	set_cone_face_normal(t_hit_record *rec,
 				t_ray *ray, t_cone *cone)
 {
-	t_vec3	outward_normal;
-	double	m;
-	t_vec3	oc;
-
-	oc = vec3_minus_vec3(ray->origin, vec3_minus_vec3(cone->tip,
-				vec3_times_d(cone->axis, cone->height / 2)));
-	m = dot(ray->direction, cone->axis)
-		* rec->t + dot(oc, cone->axis);
-	outward_normal = vec3_minus_vec3(rec->point,
-			vec3_minus_vec3(cone->tip,
-				vec3_times_d(cone->axis, cone->height / 2)));
-	outward_normal = unit_vector(vec3_minus_vec3(outward_normal,
-				vec3_times_d(cone->axis, m)));
+ 	t_vec3	outward_normal;
+	t_vec3	tip_to_intersection;
+	t_vec3 axis;
+	
+	tip_to_intersection = vec3_minus_vec3(cone->tip, rec->point);
+	
+	t_vec3 axis = cone->axis;
+		if (rec->point.y > cone->tip.y)
+			axis = vec3_times_d(axis, -1);
+	outward_normal = cross(axis, tip_to_intersection);
+	outward_normal = cross(tip_to_intersection, outward_normal);
+	outward_normal = unit_vector(outward_normal);
 	rec->normal = outward_normal;
-	set_cone_uv(rec, cone, ray);
-	rec->v_vector = cone->axis;
-	rec->u_vector = cross(cone->axis, outward_normal);
+
+	set_cone_uv(rec, cone);
+	// rec->v_vector = cone->axis;
+	// rec->u_vector = cross(cone->axis, outward_normal);
+	rec->v_vector = tip_to_intersection; // check if it is correct ?
+	rec->u_vector = cross(tip_to_intersection, outward_normal); // check if it is correct ??
 	if (cone->bump_map)
 		rec->normal = bump_map(rec, cone->bump_map);
 }
@@ -105,7 +93,4 @@ void	set_cone_rec(t_hit_record *rec,
 	rec->k_d = cone->k_d;
 	set_cone_face_normal(rec, ray, cone);
 	get_albedo(cone, rec);
-
-	// cone->albedo = init_vec3(255,0,0);
-	// rec->albedo = init_vec3(255,0,0);
 }
