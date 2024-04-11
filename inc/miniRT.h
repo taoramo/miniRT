@@ -21,7 +21,7 @@
 # define EMPTY_LINE 2
 # define SAMPLES_PER_PIXEL 10
 # define MAX_DEPTH 4
-# define DEFAULT_CHECKER_SIZE 2
+# define DEFAULT_CHECKER_SIZE 20
 # define TEXTURES_PATH "./"
 
 typedef struct s_camera

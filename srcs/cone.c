@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:45:32 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/11 13:37:11 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/11 17:31:13 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,10 @@ int		hit_cone(t_ray *ray, t_interval t_minmax,
 	// 	* info.oc.z;
 	double angle = degrees_to_radians(cone->angle);
 	info.a = ray->direction.x * ray->direction.x - ray->direction.y
-		* ray->direction.y * pow(cos(angle), 2) + ray->direction.z * ray->direction.z;
+		* ray->direction.y * pow(sin(angle), 2) + ray->direction.z * ray->direction.z;
 	info.half_b = info.oc.x * ray->direction.x - info.oc.y
-		* ray->direction.y * pow(cos(angle), 2) + info.oc.z * ray->direction.z;
-	info.c = (info.oc.x * info.oc.x - info.oc.y * info.oc.y * pow(cos(angle), 2) + info.oc.z
+		* ray->direction.y * pow(sin(angle), 2) + info.oc.z * ray->direction.z;
+	info.c = (info.oc.x * info.oc.x - info.oc.y * info.oc.y * pow(sin(angle), 2) + info.oc.z
 		* info.oc.z);
 
 	if (fabs(info.a) < EPSILON && fabs(info.half_b) < EPSILON)
