@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:46:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/10 12:33:14 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/11 03:22:42 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	initialize_sphere(t_master *m, char **params)
 	sphere = &((m->spheres)[j]);
 	sphere->bump_map = NULL;
 	sphere->texture = NULL;
+	sphere->checkered = 0;
 	initialize_coordinate(&sphere->origin, params[1]);
 	sphere->radius = ft_atod(params[2]) / 2;
 	initialize_coordinate(&sphere->albedo, params[3]);
@@ -140,6 +141,7 @@ void	initialize_plane(t_master *m, char **params)
 	plane = &((m->planes)[j]);
 	plane->bump_map = NULL;
 	plane->texture = NULL;
+	plane->checkered = 0;
 	// Init point
 	initialize_coordinate(&plane->point, params[1]);
 	// Init normal
@@ -196,6 +198,7 @@ void	initialize_cylinder(t_master *m, char **params)
 	cylinder = &((m->cylinders)[j]);
 	cylinder->bump_map = NULL;
 	cylinder->texture = NULL;
+	cylinder->checkered = 0;
 	// Init center
 	initialize_coordinate(&cylinder->center, params[1]);
 	initialize_coordinate(&cylinder->axisnormal, params[2]);
@@ -217,7 +220,7 @@ void	initialize_cylinder(t_master *m, char **params)
 	}
 	if (cylinder->texture_type == texture)
 	{
-		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
+		texture_path = ft_strjoin(TEXTURES_PATH, params[6]);
 		cylinder->texture = mlx_load_png(texture_path);
 		free(texture_path);
 	}
@@ -234,6 +237,64 @@ void	initialize_cylinder(t_master *m, char **params)
 	{
 		texture_path = ft_strjoin(TEXTURES_PATH, params[11 + shift]);
 		cylinder->bump_map = mlx_load_png(texture_path);
+		free(texture_path);
+	}
+	(m->objects_count)[i] -= 1;
+}
+
+void	initialize_cone(t_master *m, char **params)
+{
+	int			i;
+	int			j;
+	t_cone	*cone;
+	int			shift;
+	char		*texture_path;
+
+	i = index_of((char **)(m->ids), params[0]);
+	j = (m->objects_count)[i] - 1;
+	cone = &((m->cones)[j]);
+	cone->bump_map = NULL;
+	cone->texture = NULL;
+	cone->checkered = 0;
+	// Init center
+	initialize_coordinate(&cone->tip, params[1]);
+	initialize_coordinate(&cone->axis, params[2]);
+	cone->axis = unit_vector(cone->axis);
+	// cone->radius = ft_atod(params[3]) / 2;
+	cone->height = ft_atod(params[3]);
+	cone->angle = ft_atod(params[4]);
+	initialize_coordinate(&cone->albedo, params[5]);
+	cone->albedo = vec3_div_d(cone->albedo, 255.0);
+	// Texture
+	cone->texture_type = get_texture_type(params[6]);
+	shift = 0;
+	if (cone->texture_type == checker)
+	{
+		shift = 1;
+		initialize_coordinate(&cone->checker_color, params[7]);
+		cone->checker_color = vec3_div_d(cone->checker_color, 255.0);
+		cone->checkered = 1;
+		cone->checker_size_coeff = DEFAULT_CHECKER_SIZE;
+	}
+	if (cone->texture_type == texture)
+	{
+		texture_path = ft_strjoin(TEXTURES_PATH, params[6]);
+		cone->texture = mlx_load_png(texture_path);
+		free(texture_path);
+	}
+	// k_s
+	cone->k_s = ft_atod(params[7 + shift]);
+	// k_d
+	cone->k_d = ft_atod(params[8 + shift]);
+	// fuzz
+	cone->material1 = ft_atod(params[9 + shift]);
+	// Emission
+	initialize_coordinate(&cone->emitted , params[10 + shift]);
+	// Bump map
+	if (params[11 + shift])
+	{
+		texture_path = ft_strjoin(TEXTURES_PATH, params[11 + shift]);
+		cone->bump_map = mlx_load_png(texture_path);
 		free(texture_path);
 	}
 	(m->objects_count)[i] -= 1;
@@ -259,9 +320,9 @@ void	initialize_object(t_master *m, char **params)
 	// Cylinder init
 	else if (ft_strncmp(params[0], "cy", 3) == 0)
 		initialize_cylinder(m, params);
-/* 	// Cone init
+	// Cone init
 	else if (ft_strncmp(params[0], "co", 3) == 0)
-		initialize_cylinder(m, params); */
+		initialize_cone(m, params);
 }
 
 void initialize_objects(t_master *m, int fd)
@@ -298,7 +359,7 @@ void initialize_scene(t_master *m, int fd)
 	m->n_spheres = m->objects_count[3];
 	m->n_planes = m->objects_count[4];
 	m->n_cylinders = m->objects_count[5];
-	/* m->n_cones = m->objects_count[6]; */
+	m->n_cones = m->objects_count[6];
 	initialize_objects(m, fd);
 
 }

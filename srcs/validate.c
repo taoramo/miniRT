@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:21 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/09 17:53:44 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/10 21:05:51 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	validate_scene(int objects_count[], const char *ids[], int fd)
 		printf("%d. %s\n", ++i, line);
 		if (validate_line_identifier(line, objects_count, ids) == EXIT_FAILURE)
 		{
+			printf("Failed to validate this line: %s\n", line);
 			free(line);
 			return (EXIT_FAILURE);
 		}
@@ -88,8 +89,12 @@ int	allocate_objects(int objects_count[], t_master *m)
 		if (!m->cylinders)
 			return (EXIT_FAILURE);
 	}
-	// if (objects_count[co])
-	// 	allocate_cone();
+	if (objects_count[co])
+	{
+		m->cones = malloc(sizeof(t_cylinder) * objects_count[cy]);
+		if (!m->cones)
+			return (EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }
 

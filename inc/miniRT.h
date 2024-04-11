@@ -14,7 +14,7 @@
 # define WWIDTH 1280
 # define WHEIGHT 720
 # define N_MATERIALS 3
-# define N_OBJECT_TYPES 6
+# define N_OBJECT_TYPES 7
 # define EPSILON 1e-8
 # define BUMP_SCALE 2
 
@@ -128,7 +128,8 @@ typedef struct s_cylinder
 
 typedef struct s_cone
 {
-	double			angle;
+	double			angle; // ?
+	// double			radius;
 	double			height;
 	t_vec3			tip;
 	t_vec3			axis;
@@ -159,7 +160,8 @@ typedef enum s_object_type
 	L,
 	sp,
 	pl,
-	cy
+	cy,
+	co
 }	t_object_type;
 
 typedef struct s_master
@@ -228,6 +230,21 @@ typedef struct s_hit_cylinder
 	double		discriminant;
 }	t_hit_cylinder;
 
+typedef struct s_hit_cone
+{
+	double		root1;
+	double		root2;
+	t_ray		*ray;
+	t_cone		*cone;
+	t_interval	t_minmax;
+	t_vec3		oc;
+	double		a;
+	double		b;
+	double		half_b;
+	double		c;
+	double		discriminant;
+}	t_hit_cone;
+
 typedef struct s_ray_colors
 {
 	t_vec3			diffuse;
@@ -279,6 +296,7 @@ int				validate_light(char **value_params);
 int				validate_sphere(char **value_params);
 int				validate_plane(char **value_params);
 int				validate_cylinder(char **value_params);
+int				validate_cone(char **value_params);
 
 int				validate_line_identifier(char *line, int objects_count[],
 					const char *ids[]);
@@ -341,4 +359,11 @@ int				check_which_root(t_hit_cylinder *info, double *t);
 t_vec3			get_solid_checkered_color(t_vec3 point,
 					double coeff, t_vec3 color1, t_vec3 color2);
 t_vec3			bump_map(t_hit_record *rec, mlx_texture_t *bm);
+
+int				hit_cone(t_ray *ray, t_interval t_minmax,
+					double *t, t_cone *cone);
+void			set_cone_rec(t_hit_record *rec,
+					t_cone *cone, t_ray *ray, double t);
+int				check_which_root_cone(t_hit_cone *info, double *t);
+
 #endif

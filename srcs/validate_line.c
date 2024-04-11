@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:23 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/07 23:36:05 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/10 21:26:51 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	validate_line_parameters(char *line, t_object_type id)
 		is_exit_failure = validate_plane(params + 1);
 	else if (id == cy)
 		is_exit_failure = validate_cylinder(params + 1);
-	// else if (id == co)
-	// 	is_exit_failure = validate_cone(params + 1);
+	else if (id == co)
+		is_exit_failure = validate_cone(params + 1);
 	free_split(params);
 	return (is_exit_failure);
 	// return (is_exit_failure && print_error("Invalid parameters."));

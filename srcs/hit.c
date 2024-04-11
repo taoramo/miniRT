@@ -63,6 +63,27 @@ void	loop_through_cylinders(t_loop *loop, t_ray *r,
 	}
 }
 
+void	loop_through_cones(t_loop *loop, t_ray *r,
+						t_master *m, t_hit_record *rec)
+{
+	unsigned int	i;
+	double			t;
+
+	i = 0;
+	while (i < m->n_cones)
+	{
+		if (hit_cone(r, init_interval(loop->t_minmax.min,
+					loop->closest_so_far), &t, &m->cones[i]))
+		{
+			loop->hit_anything = 1;
+			loop->closest_so_far = t;
+			if (rec)
+				set_cone_rec(rec, &m->cones[i], r, t);
+		}
+		i++;
+	}
+}
+
 int	hit(t_master *m, t_ray *r, t_interval t_minmax, t_hit_record *rec)
 {
 	t_loop	loop;
@@ -73,5 +94,6 @@ int	hit(t_master *m, t_ray *r, t_interval t_minmax, t_hit_record *rec)
 	loop_through_spheres(&loop, r, m, rec);
 	loop_through_planes(&loop, r, m, rec);
 	loop_through_cylinders(&loop, r, m, rec);
+	loop_through_cones(&loop, r, m, rec);
 	return (loop.hit_anything);
 }

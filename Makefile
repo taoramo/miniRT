@@ -39,7 +39,9 @@ SRCS = $(addprefix srcs/, \
 	cylinder.c \
 	cylinder2.c \
 	hit.c \
-	bumps.c)
+	bumps.c \
+	cone.c \
+	cone2.c)
 
 OBJS = $(SRCS:.c=.o)
 

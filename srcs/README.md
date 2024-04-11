@@ -110,8 +110,35 @@ pl 0,-1,0 0,1,0 122,122,204 solid 0.5 0.5 0.3 0,0,0
 cy <position> <orientation> <diameter> <height> <RGB color> <texture> <specular> <diffusion> <fuzz> <emission> [<bump_map>]
 ```
 
-- position: x,y,z coordinates of the light point
-- brightness: the light brightness ratio in range [0.0, 1.0]
+- position: x,y,z coordinates of the center of the cylinder
+- orientation: 3d normalized vector of axis of cylinder. In range [-1,1] for each x,y,z axis
+- diameter: the cylinder diameter
+- height: the cylinder height
+- RGB color in range [0-255]
+- texture: solid / checker / *.png
+	- If a texture is **checker**, RGB color is added right after it. So the format becomes:
+	 `cy <position> <orientation> <diameter> <height> <RGB color> <texture> <specular> <diffusion> <emission> [<bump_map>]`
+- specular coefficient
+- diffusion coefficient
+- fuzz coefficient
+- emission (x,y,z) in range from 0 to infinity
+- bump map: (optional): it should be a .png file 
+
+Examples:
+```
+cy 50.0,0.0,20.6 0,0,1.0 14.2 21.42 10,0,255 solid 0.1 0.6 0,0,0 bumps.png
+```
+
+### Cone
+
+```
+co <position> <orientation> <diameter> <height> <RGB color> <texture> <specular> <diffusion> <fuzz> <emission> [<bump_map>]
+```
+
+- position: x,y,z coordinates of the center of the cylinder
+- orientation: 3d normalized vector of axis of cylinder. In range [-1,1] for each x,y,z axis
+- diameter: the cylinder diameter
+- height: the cylinder height
 - RGB color in range [0-255]
 - texture: solid / checker / *.png
 	- If a texture is **checker**, RGB color is added right after it. So the format becomes:
