@@ -217,7 +217,7 @@ void	initialize_cylinder(t_master *m, char **params)
 	}
 	if (cylinder->texture_type == texture)
 	{
-		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
+		texture_path = ft_strjoin(TEXTURES_PATH, params[6]);
 		cylinder->texture = mlx_load_png(texture_path);
 		free(texture_path);
 	}
