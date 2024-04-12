@@ -167,7 +167,18 @@ int	render(t_master *m, mlx_t *mlx)
 // }
 
 
-
+void close_hook(void *master)
+{
+	t_master *m;
+	
+	printf("Close hook was called!\n");
+	m = (t_master *)master;
+	free(m->spheres);
+	free(m->planes);
+	free(m->cylinders);
+	free(m->lights);
+	free(m->cones);
+}
 
 int	main(int argc, char const *argv[])
 {
@@ -175,6 +186,8 @@ int	main(int argc, char const *argv[])
 	t_master	m;
 	mlx_t		*mlx;
 
+	// Init master struct
+	// mlx = NULL;
 	initialize_master_struct(&m, ids);
 	ft_bzero(m.objects_count, sizeof(int) * N_OBJECT_TYPES);
 	if (argc < 2)
@@ -187,8 +200,6 @@ int	main(int argc, char const *argv[])
 
 	if (allocate_objects(m.objects_count, &m) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	// Init master struct
-	mlx = NULL;
 	//Test object count
 	int i = 0;
 	while (i < N_OBJECT_TYPES)
@@ -240,13 +251,12 @@ int	main(int argc, char const *argv[])
 	m.cones[0].checkered = 0;
 	m.cones[0].bump_map = NULL;
  */
-
+	mlx_close_hook(mlx, &close_hook, &m);
 	render(&m, mlx);
-	free(m.spheres);
+/* 	free(m.spheres);
 	free(m.planes);
 	free(m.cylinders);
 	free(m.lights);
-	free(m.cones);
-
+	free(m.cones); */
 	return (EXIT_SUCCESS);
 }

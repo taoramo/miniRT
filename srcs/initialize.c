@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:46:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/11 16:51:33 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/12 03:09:31 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -340,7 +340,6 @@ void initialize_objects(t_master *m, int fd)
 		printf("%d. %s\n", ++i, line);
 		params = ft_split(line, ' ');
 		initialize_object(m, params);
-
 		free(line);
 		free_split(params);
 		line = get_next_line(fd);

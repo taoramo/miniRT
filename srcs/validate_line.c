@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:23 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/10 21:26:51 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/12 01:40:28 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,15 @@ int	validate_line_identifier(char *line, int objects_count[], const char *ids[])
 		id_with_space = ft_strjoin(ids[id], " ");
 		if (!ft_strncmp(line, id_with_space, ft_strlen(ids[id]) + 1))
 		{
-			objects_count[id]++;
 			free(id_with_space);
+			objects_count[id]++;
 			if (is_capital(ids[id][0]) &&
 				validate_unique(objects_count, id) == EXIT_FAILURE)
 				return (EXIT_FAILURE);
 			return (validate_line_parameters(line, id));
 		}
+		else
+			free(id_with_space);
 		id++;
 	}
 	if (id == N_OBJECT_TYPES)

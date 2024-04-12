@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:48 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/07 22:59:48 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/12 03:07:38 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,10 @@ double	ft_atod(const char *str)
 	before = ft_substr(str, 0, pos - str);
 	result = ft_atoi(before);
 	if (!pos)
+	{
+		free(before);
 		return (result);
+	}
 	after = ft_substr(&pos[1], 0, ft_strlen(&pos[1]));
 	if (str[0] == '-')
 		k = -1;

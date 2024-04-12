@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:38 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/10 01:13:03 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/12 02:51:06 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ int	validate_param(char *value_param, t_val_f f, t_interval range, char *err)
 	char	**temp;
 
 	tuple = ft_split(value_param, ',');
+	if (!tuple)
+		return (print_error("Memory allocation failed."));
 	temp = tuple;
 	while (*tuple)
 	{
