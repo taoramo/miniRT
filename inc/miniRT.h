@@ -124,6 +124,8 @@ typedef struct s_cylinder
 	t_vec3			emitted;
 	double			k_d;
 	double			k_s;
+	double			m;
+	t_vec3			oc;
 }	t_cylinder;
 
 typedef struct s_cone

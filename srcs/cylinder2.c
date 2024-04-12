@@ -17,38 +17,29 @@ t_vec3	get_cylinder_checkered_color(t_hit_record *rec, t_cylinder *cylinder)
 		return (cylinder->checker_color);
 }
 
-static void	set_cylinder_uv(t_hit_record *rec, t_cylinder *cylinder, t_ray *ray)
+static void	set_cylinder_uv(t_hit_record *rec, t_cylinder *cylinder)
 {
-	double	m;
-	t_vec3	oc;
-
-	rec->u = 1 - atan2(rec->point.x, rec->point.z) / (2 * M_PI) + 0.5;
-	oc = vec3_minus_vec3(ray->origin,
-			vec3_minus_vec3(cylinder->center,
-				vec3_times_d(cylinder->axisnormal, cylinder->height / 2)));
-	m = dot(ray->direction, cylinder->axisnormal)
-		* rec->t + dot(oc, cylinder->axisnormal);
-	rec->v = m / cylinder->height;
+	rec->u = (atan2(-1.0 * rec->point.z, rec->point.x) + M_PI) / (2 * M_PI);
+	rec->v = cylinder->m / cylinder->height;
 }
 
 static void	set_cylinder_face_normal(t_hit_record *rec,
 				t_ray *ray, t_cylinder *cylinder)
 {
 	t_vec3	outward_normal;
-	double	m;
-	t_vec3	oc;
 
-	oc = vec3_minus_vec3(ray->origin, vec3_minus_vec3(cylinder->center,
+	cylinder->oc = vec3_minus_vec3(ray->origin,
+			vec3_minus_vec3(cylinder->center,
 				vec3_times_d(cylinder->axisnormal, cylinder->height / 2)));
-	m = dot(ray->direction, cylinder->axisnormal)
-		* rec->t + dot(oc, cylinder->axisnormal);
+	cylinder->m = dot(vec3_plus_vec3(rec->point, cylinder->oc),
+			cylinder->axisnormal);
 	outward_normal = vec3_minus_vec3(rec->point,
 			vec3_minus_vec3(cylinder->center,
 				vec3_times_d(cylinder->axisnormal, cylinder->height / 2)));
 	outward_normal = unit_vector(vec3_minus_vec3(outward_normal,
-				vec3_times_d(cylinder->axisnormal, m)));
+				vec3_times_d(cylinder->axisnormal, cylinder->m)));
 	rec->normal = outward_normal;
-	set_cylinder_uv(rec, cylinder, ray);
+	set_cylinder_uv(rec, cylinder);
 	rec->v_vector = cylinder->axisnormal;
 	rec->u_vector = cross(cylinder->axisnormal, outward_normal);
 	if (cylinder->bump_map)
