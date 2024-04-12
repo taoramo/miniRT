@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:21 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/12 16:05:27 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/12 16:54:05 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	validate_scene(int objects_count[], const char *ids[], int fd)
 	{
 		if (prepare_line(&line, fd) == EMPTY_LINE)
 			continue ;
-		printf("%d. %s\n", ++i, line);
+		printf("%d. %s\n", ++i, line); // // leads to Conditional jump or move depends on uninitialised value(s) and Uninitialised value was created by a stack allocation
 		if (validate_line_identifier(line, objects_count, ids) == EXIT_FAILURE)
 		{
 			printf("Failed to validate this line: %s\n", line);

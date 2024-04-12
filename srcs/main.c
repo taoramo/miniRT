@@ -77,13 +77,13 @@ int	render(t_master *m, mlx_t *mlx)
 
 	img = mlx_new_image(mlx, WWIDTH, WHEIGHT);
 	if (!img)
-		return (ft_error());
+		return (print_error("New image failed."));
 	make_image(m, img);
 	if (mlx_image_to_window(mlx, img, 0, 0) < 0)
-		return (ft_error());
+		return (print_error("Image to window failed."));
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 // int	main(void)
@@ -167,7 +167,7 @@ int	render(t_master *m, mlx_t *mlx)
 // }
 
 
-void close_hook(void *master)
+/* void close_hook(void *master)
 {
 	t_master *m;
 	
@@ -178,7 +178,7 @@ void close_hook(void *master)
 	free(m->cylinders);
 	free(m->lights);
 	free(m->cones);
-}
+} */
 
 int	main(int argc, char const *argv[])
 {
@@ -187,7 +187,7 @@ int	main(int argc, char const *argv[])
 	mlx_t		*mlx;
 
 	// Init master struct
-	// mlx = NULL;
+	mlx = NULL;
 	initialize_master_struct(&m, ids);
 	ft_bzero(m.objects_count, sizeof(int) * N_OBJECT_TYPES);
 	if (argc < 2)
@@ -204,59 +204,18 @@ int	main(int argc, char const *argv[])
 	int i = 0;
 	while (i < N_OBJECT_TYPES)
 	{
-		printf("%s : %d\n", m.ids[i], m.objects_count[i]);
+		printf("%s : %d\n", m.ids[i], m.objects_count[i]); // leads to Conditional jump or move depends on uninitialised value(s) and Uninitialised value was created by a stack allocation
 		i++;
 	}
-
 	initialize(&m, &mlx, argv);
 
-	// m.spheres[0].emitted = init_vec3(10, 10, 10);
-
-	// m.spheres[0].material = metal;
-
-	/* m.spheres[0].material1 = 0.3; */
-
-	//m.spheres[0].texture_type = texture; // changing to checker makes the highlight red???
-
-	// m.spheres[1].emitted = init_vec3(10, 10, 10);
-	// m.spheres[1].material = lambertian;
-
-/* 	m.spheres[2].material1 = 0;
-	m.spheres[2].checker_size_coeff = 8;
- */
-	// m.spheres[1].texture_type = solid;
-
-/* 	m.planes[0].emitted = init_vec3(0, 0, 0);
-	m.planes[1].emitted = init_vec3(0, 0, 0);
-	m.planes[2].emitted = init_vec3(0, 0, 0); */
-
-/* 	m.n_cones = 1;
-	m.cones = malloc(sizeof(t_cone) * m.n_cones); */
-
-/* 	m.cones[0].tip = init_vec3(0, 1, 0);
-	m.cones[0].axis = init_vec3(0, 1, 0);
-	m.cones[0].height = 5;
-	m.cones[0].angle = 20;
-	// m.cones[0].radius = m.cones[0].height / tan(degrees_to_radians(m.cones[0].angle));
-	// m.cones[0].material = lambertian;
-	m.cones[0].texture_type = solid;
-	m.cones[0].texture = NULL;
-	m.cones[0].albedo = init_vec3(0.5, 0.5, 0.5);
-	m.cones[0].k_s = 0.5;
-	m.cones[0].k_d = 0.5;
-	m.cones[0].material1 = 0.7;
-	m.cones[0].emitted = init_vec3(0, 0, 0);
-	m.cones[0].checker_color = init_vec3(0.3, 0.4, 0.7);
-	m.cones[0].checker_size_coeff = DEFAULT_CHECKER_SIZE;
-	m.cones[0].checkered = 0;
-	m.cones[0].bump_map = NULL;
- */
-	mlx_close_hook(mlx, &close_hook, &m);
-	render(&m, mlx);
-/* 	free(m.spheres);
+	// mlx_close_hook(mlx, &close_hook, &m);
+	if (render(&m, mlx) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	free(m.spheres);
 	free(m.planes);
 	free(m.cylinders);
 	free(m.lights);
-	free(m.cones); */
+	free(m.cones);
 	return (EXIT_SUCCESS);
 }
