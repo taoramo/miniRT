@@ -6,21 +6,11 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:21 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/11 16:50:28 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/12 16:05:27 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
-
-// Identifier
-// A, C, L, sp, pl, cy
-
-// A 0.2 255,255,255
-// C -50.0,0,20 0,0,1 70
-// L -40.0,50.0,0.0 0.6 10,0,255
-// sp 0.0,0.0,20.6 12.6 10,0,255
-// pl 0.0,0.0,-10.0 0.0,1.0,0.0 0,0,225
-// cy 50.0,0.0,20.6 0.0,0.0,1.0 14.2 21.42 10,0,255
 
 int	prepare_line(char **line, int fd)
 {
@@ -29,8 +19,9 @@ int	prepare_line(char **line, int fd)
 	tmp = ft_strtrim(*line, " \f\n\r\t\v");
 	free(*line);
 	*line = tmp;
-	if (!tmp[0])
+	if (!tmp || !tmp[0])
 	{
+		free(*line);
 		*line = get_next_line(fd);
 		return (EMPTY_LINE);
 	}
