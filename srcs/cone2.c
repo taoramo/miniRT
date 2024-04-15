@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 20:41:02 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/12 00:36:15 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:00:51 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ t_vec3	get_cone_checkered_color(t_hit_record *rec, t_cone *cone)
 static void	set_cone_uv(t_hit_record *rec, t_cone *cone)
 {
 	rec->u = (1 - atan2(rec->point.x, rec->point.z) / (2 * M_PI) + 0.5);
+	if (rec->u > 1)
+		rec->u = rec->u - floor(rec->u);
 	rec->v = vec3length(vec3_minus_vec3(rec->point, cone->tip)) / (cone->height / 2);
 }
 
@@ -47,14 +49,13 @@ static void	set_cone_face_normal(t_hit_record *rec,
 	int	front_face;
 	
 	tip_to_intersection = vec3_minus_vec3(cone->tip, rec->point);
-	
+
 	axis = cone->axis;
 		if (rec->point.y > cone->tip.y)
-			axis = vec3_times_d(axis, -1);
+		axis = vec3_times_d(axis, -1);
 	outward_normal = cross(axis, tip_to_intersection);
 	outward_normal = cross(tip_to_intersection, outward_normal);
 	outward_normal = unit_vector(outward_normal);
-	rec->normal = outward_normal;
 
 	front_face = dot(r->direction, outward_normal) < 0;
 	if (front_face != 0)
@@ -63,10 +64,8 @@ static void	set_cone_face_normal(t_hit_record *rec,
 		rec->normal = vec3_times_d(outward_normal, -1.0);
 
 	set_cone_uv(rec, cone);
-	// rec->v_vector = cone->axis;
-	// rec->u_vector = cross(cone->axis, outward_normal);
-	rec->v_vector = tip_to_intersection; // check if it is correct ?
-	rec->u_vector = cross(tip_to_intersection, outward_normal); // check if it is correct ??
+	rec->v_vector = unit_vector(tip_to_intersection); // check if it is correct ? should it be unit vector?
+	rec->u_vector = cross(tip_to_intersection, outward_normal); // check if it is correct ?? should it be unit vector?
 	if (cone->bump_map)
 		rec->normal = bump_map(rec, cone->bump_map);
 }

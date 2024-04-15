@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:34 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/10 01:54:48 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/15 01:29:17 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
  */
 int validate_position(char *value_param)
 {
+	if (validate_three_tuple_size(value_param) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	if (validate_param(value_param, validate_f_str, init_interval(-__DBL_MAX__, __DBL_MAX__),
 			"Position is out of range."))
 		return (EXIT_FAILURE);
