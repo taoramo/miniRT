@@ -21,6 +21,8 @@ SRCS = $(addprefix srcs/, \
 	vec3c.c \
 	sphere.c \
 	initialize_objects.c \
+	initialize_objects2.c \
+	initialize_param.c \
 	initialize_texture.c \
 	initialize.c \
 	interval.c \

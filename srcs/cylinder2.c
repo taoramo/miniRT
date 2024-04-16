@@ -60,7 +60,8 @@ static void	get_albedo(t_cylinder *cylinder, t_hit_record *rec)
 	}
 	if (cylinder->texture.type == PNG_FILE)
 	{
-		rec->albedo = get_texture_color(cylinder->texture.texture_obj, rec->u, rec->v);
+		rec->albedo = get_texture_color(cylinder->texture.texture_obj,
+				rec->u, rec->v);
 		return ;
 	}
 }
@@ -69,7 +70,6 @@ void	set_cylinder_rec(t_hit_record *rec,
 			t_cylinder *cylinder, t_ray *ray, double t)
 {
 	rec->point = ray_at(*ray, t);
-	// rec->material = cylinder->material; // ?
 	rec->material1 = cylinder->phong.material1;
 	rec->emitted = cylinder->phong.emitted;
 	rec->k_s = cylinder->phong.k_s;

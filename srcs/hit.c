@@ -31,7 +31,7 @@ void	loop_through_planes(t_loop *loop, t_ray *r,
 	while (i < m->n_planes)
 	{
 		if (hit_plane(r, init_interval(loop->t_minmax.min,
-						loop->closest_so_far), &t, &m->planes[i]))
+					loop->closest_so_far), &t, &m->planes[i]))
 		{
 			loop->hit_anything = 1;
 			loop->closest_so_far = t;

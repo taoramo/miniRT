@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:31 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/10 14:35:22 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:08:32 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ int	validate_checker_rgbs(char **value_params)
 	{
 		if (validate_rgb(value_params[checker_ind + 1]))
 			return (EXIT_FAILURE);
-		// if (validate_rgb(value_params[checker_ind + 2])) // Remove it, we only have one color for checker
-		// 	return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -45,19 +43,19 @@ int	validate_0_to_1(char *value_param)
 	return (EXIT_SUCCESS);
 }
 
-int validate_emitted(char *value_param)
+int	validate_emitted(char *value_param)
 {
 	if (validate_three_tuple_size(value_param) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if (validate_param(value_param, validate_f_str, init_interval(0, __DBL_MAX__),
-		"Emit is not in [0, INFINITY].")) // NOTE: Validate three tuple can be also used for a number
+	if (validate_param(value_param, validate_f_str,
+			init_interval(0, __DBL_MAX__), "Emit is not in [0, INFINITY]."))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
 int	validate_bump_map(char *value_param)
 {
-	size_t str_len;
+	size_t	str_len;
 
 	if (!value_param)
 		return (EXIT_SUCCESS);

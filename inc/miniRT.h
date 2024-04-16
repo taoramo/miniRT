@@ -285,6 +285,10 @@ int				allocate_objects(int objects_count[], t_master *m);
 void			initialize_master_struct(t_master *m, const char *ids[]);
 int				initialize(t_master *m, mlx_t **mlx, const char *argv[]);
 
+void			initialize_ambient(t_master *m, char **params);
+void			initialize_camera(t_master *m, char **params);
+void			initialize_light(t_master *m, char **params);
+
 void			initialize_sphere(t_master *m, char **params);
 void			initialize_plane(t_master *m, char **params);
 void			initialize_cylinder(t_master *m, char **params);
@@ -292,6 +296,10 @@ void			initialize_cone(t_master *m, char **params);
 
 void			initialize_coordinate(t_vec3 *coord, char *value_param);
 void			initialize_texture(t_texture *texture, char **params, int i);
+void			initialize_phong(t_phong *phong, char **params, int i,
+					int shift);
+void			initialize_bump_map(t_texture *texture, char **params, int i,
+					int shift);
 
 int				get_index_shift(t_texture *texture);
 
@@ -326,7 +334,6 @@ int				lambertian_scatter(t_hit_record *rec, t_ray *scattered);
 int				near_zero(t_vec3 vec);
 t_vec3			reflect(t_vec3 v, t_vec3 n);
 int				metal_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered);
-// int				matte_scatter(t_ray *r_in, t_hit_record *rec, t_ray *scattered); // not used?
 t_vec3			get_checkered_color(t_vec3 point, double coeff,
 					t_vec3 color1, t_vec3 color2);
 t_vec3			get_texture_color(mlx_texture_t *texture, double u, double v);

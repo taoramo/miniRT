@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:45:32 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 15:21:54 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 15:45:33 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,12 @@ int	hit_cone(t_ray *ray, t_interval t_minmax, double *t, t_cone *cone)
 	info.t_minmax = t_minmax;
 	info.oc = vec3_minus_vec3(ray->origin, cone->tip);
 	info.angle = degrees_to_radians(cone->angle);
-	info.a = ray->direction.x * ray->direction.x - ray->direction.y
-		* ray->direction.y * pow(sin(info.angle), 2) + ray->direction.z * ray->direction.z;
-	info.half_b = info.oc.x * ray->direction.x - info.oc.y
-		* ray->direction.y * pow(sin(info.angle), 2) + info.oc.z * ray->direction.z;
+	info.a = ray->direction.x * ray->direction.x
+		- ray->direction.y * ray->direction.y * pow(sin(info.angle), 2)
+		+ ray->direction.z * ray->direction.z;
+	info.half_b = info.oc.x * ray->direction.x
+		- info.oc.y * ray->direction.y * pow(sin(info.angle), 2)
+		+ info.oc.z * ray->direction.z;
 	info.c = (info.oc.x * info.oc.x - info.oc.y * info.oc.y
 			* pow(sin(info.angle), 2) + info.oc.z * info.oc.z);
 	if (fabs(info.a) < EPSILON && fabs(info.half_b) < EPSILON)
