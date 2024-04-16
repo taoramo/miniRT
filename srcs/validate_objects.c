@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:45:54 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 16:45:55 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 21:00:34 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	validate_camera(char **value_params)
 		return (EXIT_FAILURE);
 	// FOV [0, 180]
 	if (validate_param(value_params[2], validate_int_str, init_interval(0, 180),
-		"Camera FOV is not in [0, 180]."))
+			"Camera FOV is not in [0, 180]."))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

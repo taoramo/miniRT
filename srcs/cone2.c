@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 20:41:02 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 16:06:40 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 20:58:11 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ static void	get_albedo(t_cone *cone, t_hit_record *rec)
 	}
 	if (cone->texture.type == PNG_FILE)
 	{
-		rec->albedo = get_texture_color(cone->texture.texture_obj, rec->u, rec->v);
+		rec->albedo = get_texture_color(cone->texture.texture_obj,
+				rec->u, rec->v);
 		return ;
 	}
 }

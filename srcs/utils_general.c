@@ -6,13 +6,13 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:00:03 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/09 17:51:39 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 20:59:41 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-bool is_capital(char c)
+bool	is_capital(char c)
 {
 	return (c >= 'A' && c <= 'Z');
 }
@@ -21,7 +21,7 @@ bool is_capital(char c)
  * Checks for \t (ht) - tab, \n (nl) - new line, \v (vt) vertical tab, 
  * \f (np) - feed form aka new page, \r (cr) - carriage return
 */
-bool is_space(char c)
+bool	is_space(char c)
 {
 	return (c == ' ' || (c >= 9 && c <= 13));
 }
@@ -52,7 +52,7 @@ void	free_split(char **split)
 	free(split);
 }
 
-int index_of(char **arr, char *str)
+int	index_of(char **arr, char *str)
 {
 	int	i;
 
