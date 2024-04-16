@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:21 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/12 16:54:05 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 20:29:56 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	validate_scene(int objects_count[], const char *ids[], int fd)
 	{
 		if (prepare_line(&line, fd) == EMPTY_LINE)
 			continue ;
-		printf("%d. %s\n", ++i, line); // // leads to Conditional jump or move depends on uninitialised value(s) and Uninitialised value was created by a stack allocation
+		printf("%d. %s\n", ++i, line);
 		if (validate_line_identifier(line, objects_count, ids) == EXIT_FAILURE)
 		{
 			printf("Failed to validate this line: %s\n", line);
@@ -54,38 +54,35 @@ int	validate_scene(int objects_count[], const char *ids[], int fd)
 	return (EXIT_SUCCESS);
 }
 
+int	allocate_object(int objects_count[], void **objects,
+	t_object_type type, int size)
+{
+	if (objects_count[type])
+	{
+		*objects = malloc(size * objects_count[type]);
+		if (!(*objects))
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
 int	allocate_objects(int objects_count[], t_master *m)
 {
-	if (objects_count[L])
-	{
-		m->lights = malloc(sizeof(t_light) * objects_count[L]);
-		if (!m->lights)
-			return (EXIT_FAILURE);
-	}
-	if (objects_count[sp])
-	{
-		m->spheres = malloc(sizeof(t_sphere) * objects_count[sp]);
-		if (!m->spheres)
-			return (EXIT_FAILURE);
-	}
-	if (objects_count[pl])
-	{
-		m->planes = malloc(sizeof(t_plane) * objects_count[pl]);
-		if (!m->planes)
-			return (EXIT_FAILURE);
-	}
-	if (objects_count[cy])
-	{
-		m->cylinders = malloc(sizeof(t_cylinder) * objects_count[cy]);
-		if (!m->cylinders)
-			return (EXIT_FAILURE);
-	}
-	if (objects_count[co])
-	{
-		m->cones = malloc(sizeof(t_cone) * objects_count[co]);
-		if (!m->cones)
-			return (EXIT_FAILURE);
-	}
+	if (allocate_object(objects_count, (void **)&m->lights, l,
+			sizeof(t_light)) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	if (allocate_object(objects_count, (void **)&m->spheres, sp,
+			sizeof(t_sphere)) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	if (allocate_object(objects_count, (void **)&m->planes, pl,
+			sizeof(t_plane)) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	if (allocate_object(objects_count, (void **)&m->cylinders, cy,
+			sizeof(t_cylinder)) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	if (allocate_object(objects_count, (void **)&m->cones, co,
+			sizeof(t_cone)) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
@@ -104,54 +101,3 @@ int	validate(const char *argv[], int objects_count[], const char *ids[])
 	close(fd);
 	return (EXIT_SUCCESS);
 }
-
-// int	main(int argc, char const *argv[])
-// {
-// 	int			fd;
-// 	int			objects_count[N_OBJECT_TYPES];
-// 	const char	*ids[N_OBJECT_TYPES] = {"A", "C", "L", "sp", "pl", "cy"};
-// 	t_master	m;
-// 	// t_camera	camera;
-// 	// mlx_t		*mlx;
-
-// 	ft_bzero(objects_count, sizeof(int) * N_OBJECT_TYPES);
-// 	if (argc < 2)
-// 	{
-// 		printf("Usage: %s <filename>\n", argv[0]);
-// 		return (1);
-// 	}
-// 	fd = open(argv[1], O_RDONLY);
-// 	if (fd < 0)
-// 	{
-// 		perror("Error");
-// 		return (1);
-// 	}
-// 	if (validate_scene(objects_count, ids, fd) == EXIT_FAILURE)
-// 		return (EXIT_FAILURE);
-// 	close(fd);
-
-// 	if (allocate_objects(objects_count, &m) == EXIT_FAILURE)
-// 		return (EXIT_FAILURE);
-
-// 	fd = open(argv[1], O_RDONLY);
-// 	if (fd < 0)
-// 	{
-// 		perror("Error");
-// 		return (1);
-// 	}
-// 	// initialize_scene(&m, &camera, mlx);
-// 	close(fd);
-
-// /* 	Test object count
-// 	int i = 0;
-// 	while (i < N_OBJECT_TYPES)
-// 	{
-// 		printf("%d : %d\n", i, objects_count[i]);
-// 		i++;
-// 	} */
-
-
-
-
-// 	return (EXIT_SUCCESS);
-// }

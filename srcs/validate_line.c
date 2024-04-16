@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:23 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/12 01:40:28 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 20:22:08 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	validate_line_parameters(char *line, t_object_type id)
 		is_exit_failure = validate_ambient_light(params + 1);
 	else if (id == C)
 		is_exit_failure = validate_camera(params + 1);
-	else if (id == L)
+	else if (id == l)
 		is_exit_failure = validate_light(params + 1);
 	else if (id == sp)
 		is_exit_failure = validate_sphere(params + 1);

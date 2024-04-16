@@ -2,12 +2,6 @@
 #include "miniRT.h"
 #include "vec3.h"
 
-int	ft_error(void)
-{
-	return (1);
-}
-// TODO: calculate focal_length from FOV angle
-
 void	calculate_camera(t_camera *c)
 {
 	double	viewport_width;
@@ -36,39 +30,40 @@ void	calculate_camera(t_camera *c)
 					c->pixel_delta_u), 0.5));
 }
 
+void	make_pixel(t_master *m, t_pixel *pixel, t_ray *ray)
+{
+	int		sample;
+
+	sample = -1;
+	pixel->color = init_vec3(0, 0, 0);
+	while (++sample < m->samples_per_pixel)
+	{
+		*ray = get_ray(&m->camera, pixel->x, pixel->y);
+		pixel->color = vec3_plus_vec3(pixel->color,
+				ray_color(m, ray, m->max_depth));
+	}
+}
+
 void	make_image(t_master *m, mlx_image_t *img)
 {
-	t_vec3		color;
-	int			i;
-	int			j;
-	int			sample;
+	t_pixel		pixel;
 	t_ray		ray;
 
 	calculate_camera(&m->camera);
-	j = 0;
-	while (j < WHEIGHT)
+	pixel.color = init_vec3(-1, -1, 0);
+	pixel.y = -1;
+	while (++pixel.y < WHEIGHT)
 	{
-		i = 0;
-		while (i < WWIDTH)
+		pixel.x = -1;
+		while (++pixel.x < WWIDTH)
 		{
-			sample = 0;
-			color = init_vec3(0, 0, 0);
-			while (sample < m->samples_per_pixel)
-			{
-				ray = get_ray(&m->camera, i, j);
-				color = vec3_plus_vec3(color,
-						ray_color(m, &ray, m->max_depth));
-				sample++;
-			}
-			mlx_put_pixel(img, i, j, colorsum_to_rgba(color,
+			make_pixel(m, &pixel, &ray);
+			mlx_put_pixel(img, pixel.x, pixel.y, colorsum_to_rgba(pixel.color,
 					m->samples_per_pixel));
-			i++;
 		}
-		j++;
-		if (j % 100 == 0)
+		if (pixel.y % 100 == 0)
 			write(1, "x", 1);
 	}
-	return ;
 }
 
 int	render(t_master *m, mlx_t *mlx)
@@ -92,7 +87,6 @@ int	main(int argc, char const *argv[])
 	t_master	m;
 	mlx_t		*mlx;
 
-	// Init master struct
 	mlx = NULL;
 	initialize_master_struct(&m, ids);
 	ft_bzero(m.objects_count, sizeof(int) * N_OBJECT_TYPES);
@@ -105,13 +99,6 @@ int	main(int argc, char const *argv[])
 		return (EXIT_FAILURE);
 	if (allocate_objects(m.objects_count, &m) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-/* 	//Test object count
-	int i = 0;
-	while (i < N_OBJECT_TYPES)
-	{
-		printf("%s : %d\n", m.ids[i], m.objects_count[i]); // leads to Conditional jump or move depends on uninitialised value(s) and Uninitialised value was created by a stack allocation
-		i++;
-	} */
 	initialize(&m, &mlx, argv);
 	if (render(&m, mlx) == EXIT_FAILURE)
 		return (EXIT_FAILURE);

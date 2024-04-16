@@ -55,7 +55,8 @@ t_vec3	shadow_ray(t_master *m, t_hit_record *rec, t_ray *ray)
 	while (i < m->n_lights)
 	{
 		shadow_ray.origin = rec->point;
-		shadow_ray.direction = vec3_times_d(vec3_minus_vec3(m->lights[i].point, rec->point), 1.0);
+		shadow_ray.direction = vec3_times_d(vec3_minus_vec3(m->lights[i].point,
+					rec->point), 1.0);
 		length = vec3length(shadow_ray.direction);
 		shadow_ray.direction = unit_vector(shadow_ray.direction);
 		if (!hit(m, &shadow_ray, init_interval(0.001, length), 0))

@@ -24,6 +24,13 @@
 # define DEFAULT_CHECKER_SIZE 20
 # define TEXTURES_PATH "./"
 
+typedef struct s_pixel
+{
+	int		x;
+	int		y;
+	t_vec3	color;
+}	t_pixel;
+
 typedef struct s_camera
 {
 	double	hfov;
@@ -132,7 +139,7 @@ typedef enum s_object_type
 {
 	A,
 	C,
-	L,
+	l,
 	sp,
 	pl,
 	cy,

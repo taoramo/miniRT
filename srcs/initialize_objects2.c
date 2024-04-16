@@ -6,13 +6,12 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:18:37 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 16:20:29 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 19:38:44 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-// Initialize Sphere
 void	initialize_sphere(t_master *m, char **params)
 {
 	int			i;
@@ -40,7 +39,6 @@ void	initialize_sphere(t_master *m, char **params)
 	(m->objects_count)[i] -= 1;
 }
 
-// Initialize Plane
 void	initialize_plane(t_master *m, char **params)
 {
 	int			i;
