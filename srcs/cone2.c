@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 20:41:02 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 14:09:19 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 15:00:46 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,10 @@ void	set_cone_rec(t_hit_record *rec,
 {
 	rec->point = ray_at(*ray, t);
 	// rec->material = cone->material; // ?
-	rec->material1 = cone->material1;
-	rec->emitted = cone->emitted;
-	rec->k_s = cone->k_s;
-	rec->k_d = cone->k_d;
+	rec->material1 = cone->phong.material1;
+	rec->emitted = cone->phong.emitted;
+	rec->k_s = cone->phong.k_s;
+	rec->k_d = cone->phong.k_d;
 	set_cone_face_normal(rec, ray, cone);
 	get_albedo(cone, rec);
 }

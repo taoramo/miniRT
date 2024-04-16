@@ -50,10 +50,10 @@ void	set_plane_rec(t_hit_record *rec, t_plane *plane, t_ray *ray, double t)
 {
 	rec->point = ray_at(*ray, t);
 	// rec->material = plane->material; // ?
-	rec->material1 = plane->material1;
-	rec->emitted = plane->emitted;
-	rec->k_s = plane->k_s;
-	rec->k_d = plane->k_d;
+	rec->material1 = plane->phong.material1;
+	rec->emitted = plane->phong.emitted;
+	rec->k_s = plane->phong.k_s;
+	rec->k_d = plane->phong.k_d;
 	set_plane_face_normal(rec, ray, plane);
 	get_albedo(plane, rec);
 }

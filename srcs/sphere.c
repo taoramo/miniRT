@@ -71,10 +71,10 @@ void	set_sphere_rec(t_hit_record *rec, t_sphere *sphere, t_ray *ray, double t)
 {
 	rec->point = ray_at(*ray, t);
 	// rec->material = sphere->material; // ?
-	rec->material1 = sphere->material1;
-	rec->emitted = sphere->emitted;
-	rec->k_s = sphere->k_s;
-	rec->k_d = sphere->k_d;
+	rec->material1 = sphere->phong.material1;
+	rec->emitted = sphere->phong.emitted;
+	rec->k_s = sphere->phong.k_s;
+	rec->k_d = sphere->phong.k_d;
 	set_sphere_face_normal(rec, ray, sphere);
 	get_albedo(sphere, rec);
 }

@@ -6,13 +6,13 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:45:32 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/12 00:13:16 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 15:21:54 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	check_root_cone(double root, t_ray *ray, t_cone *cone)
+static int	check_root_cone(double root, t_ray *ray, t_cone *cone)
 {
 	double	m;
 	t_vec3	oc;
@@ -26,7 +26,7 @@ int	check_root_cone(double root, t_ray *ray, t_cone *cone)
 		return (0);
 }
 
-int	check_which_root_cone(t_hit_cone *info, double *t)
+static int	check_which_root_cone(t_hit_cone *info, double *t)
 {
 	int	root1_is_valid;
 	int	root2_is_valid;
@@ -55,8 +55,19 @@ int	check_which_root_cone(t_hit_cone *info, double *t)
 	return (1);
 }
 
-int		hit_cone(t_ray *ray, t_interval t_minmax,
-				double *t, t_cone *cone)
+static int	calculate_roots_check(t_hit_cone *info, double *t)
+{
+	info->discriminant = info->half_b * info->half_b - info->a * info->c;
+	if (info->discriminant < 0)
+		return (0);
+	info->root1 = (-info->half_b - sqrt(info->discriminant)) / info->a;
+	info->root2 = (-info->half_b + sqrt(info->discriminant)) / info->a;
+	if (!check_which_root_cone(info, t))
+		return (0);
+	return (1);
+}
+
+int	hit_cone(t_ray *ray, t_interval t_minmax, double *t, t_cone *cone)
 {
 	t_hit_cone	info;
 
@@ -64,14 +75,13 @@ int		hit_cone(t_ray *ray, t_interval t_minmax,
 	info.cone = cone;
 	info.t_minmax = t_minmax;
 	info.oc = vec3_minus_vec3(ray->origin, cone->tip);
-	double angle = degrees_to_radians(cone->angle);
+	info.angle = degrees_to_radians(cone->angle);
 	info.a = ray->direction.x * ray->direction.x - ray->direction.y
-		* ray->direction.y * pow(sin(angle), 2) + ray->direction.z * ray->direction.z;
+		* ray->direction.y * pow(sin(info.angle), 2) + ray->direction.z * ray->direction.z;
 	info.half_b = info.oc.x * ray->direction.x - info.oc.y
-		* ray->direction.y * pow(sin(angle), 2) + info.oc.z * ray->direction.z;
-	info.c = (info.oc.x * info.oc.x - info.oc.y * info.oc.y * pow(sin(angle), 2) + info.oc.z
-		* info.oc.z);
-
+		* ray->direction.y * pow(sin(info.angle), 2) + info.oc.z * ray->direction.z;
+	info.c = (info.oc.x * info.oc.x - info.oc.y * info.oc.y
+			* pow(sin(info.angle), 2) + info.oc.z * info.oc.z);
 	if (fabs(info.a) < EPSILON && fabs(info.half_b) < EPSILON)
 		return (0);
 	else if (fabs(info.a) < EPSILON && fabs(info.half_b) > EPSILON)
@@ -79,13 +89,5 @@ int		hit_cone(t_ray *ray, t_interval t_minmax,
 		*t = -info.c / (4 * info.half_b);
 		return (1);
 	}
-
-	info.discriminant = info.half_b * info.half_b - info.a * info.c;
-	if (info.discriminant < 0)
-		return (0);
-	info.root1 = (-info.half_b - sqrt(info.discriminant)) / info.a;
-	info.root2 = (-info.half_b + sqrt(info.discriminant)) / info.a;
-	if (!check_which_root_cone(&info, t))
-		return (0);
-	return (1);
+	return (calculate_roots_check(&info, t));
 }

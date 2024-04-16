@@ -15,7 +15,7 @@ int	check_root(double root, t_ray *ray, t_cylinder *cylinder)
 		return (0);
 }
 
-int	check_which_root(t_hit_cylinder *info, double *t)
+static int	check_which_root(t_hit_cylinder *info, double *t)
 {
 	int	root1_is_valid;
 	int	root2_is_valid;
@@ -56,7 +56,7 @@ int	hit_cylinder(t_ray *ray, t_interval t_minmax,
 				vec3_times_d(cylinder->axisnormal, cylinder->height / 2)));
 	info.a = vec3length_squared(ray->direction) - dot(ray->direction,
 			cylinder->axisnormal) * dot(ray->direction, cylinder->axisnormal);
-	if (fabs(info.a) < 0.00000001)
+	if (fabs(info.a) < EPSILON)
 		return (0);
 	info.half_b = dot(info.oc, ray->direction) - dot(ray->direction,
 			cylinder->axisnormal) * dot(info.oc, cylinder->axisnormal);

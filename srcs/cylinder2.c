@@ -70,10 +70,10 @@ void	set_cylinder_rec(t_hit_record *rec,
 {
 	rec->point = ray_at(*ray, t);
 	// rec->material = cylinder->material; // ?
-	rec->material1 = cylinder->material1;
-	rec->emitted = cylinder->emitted;
-	rec->k_s = cylinder->k_s;
-	rec->k_d = cylinder->k_d;
+	rec->material1 = cylinder->phong.material1;
+	rec->emitted = cylinder->phong.emitted;
+	rec->k_s = cylinder->phong.k_s;
+	rec->k_d = cylinder->phong.k_d;
 	set_cylinder_face_normal(rec, ray, cylinder);
 	get_albedo(cylinder, rec);
 }

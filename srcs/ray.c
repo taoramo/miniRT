@@ -82,7 +82,7 @@ t_vec3	ray_color(t_master *m, t_ray *r, int depth)
 	if (depth == m->max_depth && m->n_lights > 0 && rec.emitted.x == 0
 		&& rec.emitted.y == 0 && rec.emitted.z == 0)
 		colors.shadow = shadow_ray(m, &rec, r);
-	if (rec.k_d && lambertian_scatter(r, &rec, &scattered_diffuse))
+	if (rec.k_d && lambertian_scatter(&rec, &scattered_diffuse))
 		colors.diffuse = vec3_times_d(rec.albedo, rec.k_d);
 	if (rec.k_s && metal_scatter(r, &rec, &scattered_specular))
 		colors.specular = vec3_times_d(rec.albedo, rec.k_s);

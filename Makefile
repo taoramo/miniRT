@@ -20,6 +20,8 @@ SRCS = $(addprefix srcs/, \
 	vec3b.c \
 	vec3c.c \
 	sphere.c \
+	initialize_objects.c \
+	initialize_texture.c \
 	initialize.c \
 	interval.c \
 	utils.c \
