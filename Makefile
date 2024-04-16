@@ -15,6 +15,7 @@ INCLUDES = -I ./inc/ -I $(LIBMLX)/include/MLX42 -I ./libft/
 SRCS = $(addprefix srcs/, \
 	ft_atod.c \
 	main.c \
+	render.c \
 	ray.c \
 	vec3a.c \
 	vec3b.c \

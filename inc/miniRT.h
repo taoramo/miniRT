@@ -313,6 +313,7 @@ void			initialize_bump_map(t_texture *texture, char **params, int i,
 int				get_index_shift(t_texture *texture);
 
 /* Ray tracer */
+int				render(t_master *m, mlx_t *mlx);
 t_ray			init_ray(t_vec3 origin, t_vec3 direction);
 unsigned int	colorsum_to_rgba(t_color c, int samples_per_pixel);
 t_color			ray_color(t_master *m, t_ray *r, int max_depth);
@@ -323,8 +324,6 @@ int				hit_sphere(t_ray *ray, t_interval t_minmax,
 					double *t, t_sphere *sphere);
 void			set_sphere_rec(t_hit_record *rec,
 					t_sphere *sphere, t_ray *ray, double t);
-// void			set_face_normal(t_hit_record *rec, t_ray *r, 
-					// t_sphere *sphere); // not used anywhere??
 t_interval		init_interval(double min, double max);
 int				contains(t_interval i, double x);
 int				surrounds(t_interval i, double x);
