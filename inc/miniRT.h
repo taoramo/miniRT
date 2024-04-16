@@ -51,59 +51,49 @@ typedef struct s_ambient
 typedef struct s_light
 {
 	t_vec3	point;
-	// t_vec3	orientation;
 	t_vec3	color;
-	// double	brightness;
 }	t_light;
 
-typedef enum e_type
-{
-	lambertian,
-	metal,
-	phong
-}	t_type;
 
 typedef enum e_texture_type
 {
-	solid,
-	checker,
-	texture,
+	SOLID,
+	CHECKER,
+	PNG_FILE,
 }	t_texture_type;
+
+typedef	struct s_texture
+{
+	int				checkered;
+	t_vec3			checker_color;
+	double			checker_size_coeff;
+	t_texture_type	type;
+	mlx_texture_t	*texture_obj;
+	mlx_texture_t	*bump_map;
+}	t_texture;
 
 typedef struct s_sphere
 {
 	t_vec3			origin;
 	double			radius;
-	t_type			material;
 	t_vec3			albedo;
-	double			material1;
-	int				checkered;
-	t_vec3			checker_color;
-	double			checker_size_coeff;
-	t_texture_type	texture_type;
-	mlx_texture_t	*texture;
-	mlx_texture_t	*bump_map;
+	t_texture		texture;
 	t_vec3			emitted;
-	double			k_d;
 	double			k_s;
+	double			k_d;
+	double			material1;
 }	t_sphere;
 
 typedef struct s_plane
 {
 	t_vec3			point;
 	t_vec3			normal;
-	t_type			material;
 	t_vec3			albedo;
-	double			material1;
-	int				checkered;
-	t_vec3			checker_color;
-	double			checker_size_coeff;
-	t_texture_type	texture_type;
-	mlx_texture_t	*texture;
-	mlx_texture_t	*bump_map;
+	t_texture		texture;
 	t_vec3			emitted;
-	double			k_d;
 	double			k_s;
+	double			k_d;
+	double			material1;
 }	t_plane;
 
 typedef struct s_cylinder
@@ -112,41 +102,28 @@ typedef struct s_cylinder
 	t_vec3			axisnormal;
 	double			radius;
 	double			height;
-	t_type			material;
 	t_vec3			albedo;
-	double			material1;
-	int				checkered;
-	t_vec3			checker_color;
-	double			checker_size_coeff;
-	t_texture_type	texture_type;
-	mlx_texture_t	*texture;
-	mlx_texture_t	*bump_map;
+	t_texture		texture;
 	t_vec3			emitted;
-	double			k_d;
 	double			k_s;
+	double			k_d;
+	double			material1;
 	double			m;
 	t_vec3			oc;
 }	t_cylinder;
 
 typedef struct s_cone
 {
-	double			angle; // ?
-	// double			radius;
+	double			angle;
 	double			height;
 	t_vec3			tip;
 	t_vec3			axis;
-	t_type			material;
 	t_vec3			albedo;
-	double			material1;
-	int				checkered;
-	t_vec3			checker_color;
-	double			checker_size_coeff;
-	t_texture_type	texture_type;
-	mlx_texture_t	*texture;
-	mlx_texture_t	*bump_map;
+	t_texture		texture;
 	t_vec3			emitted;
-	double			k_d;
 	double			k_s;
+	double			k_d;
+	double			material1;
 }	t_cone;
 
 typedef struct s_interval
@@ -168,7 +145,7 @@ typedef enum s_object_type
 
 typedef struct s_master
 {
-	int				objects_count[N_OBJECT_TYPES]; // A C L sp pl cy co
+	int				objects_count[N_OBJECT_TYPES]; // A C l sp pl cy co
 	const char		**ids;
 	t_camera		camera;
 	int				samples_per_pixel;
@@ -198,7 +175,6 @@ typedef struct s_hit_record
 	t_vec3		normal;
 	double		t;
 	int			front_face;
-	t_type		material;
 	t_vec3		albedo;
 	double		material1;
 	double		u;
@@ -255,7 +231,7 @@ typedef struct s_ray_colors
 	t_vec3			emitted;
 }	t_ray_colors;
 
-typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered);
+// typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered); // is it used anywhere?
 
 typedef int	(*t_val_f) (char *str);
 

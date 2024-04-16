@@ -27,8 +27,8 @@ static void	set_sphere_face_normal(t_hit_record *rec,
 	get_sphere_uv(outward_normal, &rec->u, &rec->v);
 	rec->u_vector = init_vec3(1, 0, 0);
 	rec->v_vector = init_vec3(0, 1, 0);
-	if (sphere->bump_map)
-		rec->normal = bump_map(rec, sphere->bump_map);
+	if (sphere->texture.bump_map)
+		rec->normal = bump_map(rec, sphere->texture.bump_map);
 }
 
 t_vec3	get_sphere_checkered_color(t_hit_record *rec, t_sphere *sphere)
@@ -38,31 +38,31 @@ t_vec3	get_sphere_checkered_color(t_hit_record *rec, t_sphere *sphere)
 	int		x;
 	int		y;
 
-	checker_u = rec->u * sphere->checker_size_coeff * 2;
-	checker_v = rec->v * sphere->checker_size_coeff;
+	checker_u = rec->u * sphere->texture.checker_size_coeff * 2;
+	checker_v = rec->v * sphere->texture.checker_size_coeff;
 	x = floor(checker_u);
 	y = floor(checker_v);
 	if ((x + y) % 2)
 		return (sphere->albedo);
 	else
-		return (sphere->checker_color);
+		return (sphere->texture.checker_color);
 }
 
 static void	get_albedo(t_sphere *sphere, t_hit_record *rec)
 {
-	if (sphere->texture_type == solid)
+	if (sphere->texture.type == SOLID)
 	{
 		rec->albedo = sphere->albedo;
 		return ;
 	}
-	if (sphere->texture_type == checker)
+	if (sphere->texture.type == CHECKER)
 	{
 		rec->albedo = get_sphere_checkered_color(rec, sphere);
 		return ;
 	}
-	if (sphere->texture_type == texture)
+	if (sphere->texture.type == PNG_FILE)
 	{
-		rec->albedo = get_texture_color(sphere->texture, rec->u, rec->v);
+		rec->albedo = get_texture_color(sphere->texture.texture_obj, rec->u, rec->v);
 		return ;
 	}
 }
@@ -70,7 +70,7 @@ static void	get_albedo(t_sphere *sphere, t_hit_record *rec)
 void	set_sphere_rec(t_hit_record *rec, t_sphere *sphere, t_ray *ray, double t)
 {
 	rec->point = ray_at(*ray, t);
-	rec->material = sphere->material;
+	// rec->material = sphere->material; // ?
 	rec->material1 = sphere->material1;
 	rec->emitted = sphere->emitted;
 	rec->k_s = sphere->k_s;

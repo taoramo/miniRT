@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 20:41:02 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/15 15:00:51 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 13:58:53 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ t_vec3	get_cone_checkered_color(t_hit_record *rec, t_cone *cone)
 	int		cone_coeff;
 
 	cone_coeff = 2; // just to play with the checker size to look same as for a sphere
-	checker_u = rec->u * cone->checker_size_coeff * 4 / cone_coeff;
-	checker_v = rec->v * cone->checker_size_coeff / cone_coeff;
+	checker_u = rec->u * cone->texture.checker_size_coeff * 4 / cone_coeff;
+	checker_v = rec->v * cone->texture.checker_size_coeff / cone_coeff;
 	x = floor(checker_u);
 	y = floor(checker_v);
 	if ((x + y) % 2)
 		return (cone->albedo);
 	else
-		return (cone->checker_color);
+		return (cone->texture.checker_color);
 }
 
 static void	set_cone_uv(t_hit_record *rec, t_cone *cone)
@@ -66,25 +66,25 @@ static void	set_cone_face_normal(t_hit_record *rec,
 	set_cone_uv(rec, cone);
 	rec->v_vector = unit_vector(tip_to_intersection); // check if it is correct ? should it be unit vector?
 	rec->u_vector = cross(tip_to_intersection, outward_normal); // check if it is correct ?? should it be unit vector?
-	if (cone->bump_map)
-		rec->normal = bump_map(rec, cone->bump_map);
+	if (cone->texture.bump_map)
+		rec->normal = bump_map(rec, cone->texture.bump_map);
 }
 
 static void	get_albedo(t_cone *cone, t_hit_record *rec)
 {
-	if (cone->texture_type == solid)
+	if (cone->texture.type == SOLID)
 	{
 		rec->albedo = cone->albedo;
 		return ;
 	}
-	if (cone->texture_type == checker)
+	if (cone->texture.type == CHECKER)
 	{
 		rec->albedo = get_cone_checkered_color(rec, cone);
 		return ;
 	}
-	if (cone->texture_type == texture)
+	if (cone->texture.type == PNG_FILE)
 	{
-		rec->albedo = get_texture_color(cone->texture, rec->u, rec->v);
+		rec->albedo = get_texture_color(cone->texture.texture_obj, rec->u, rec->v);
 		return ;
 	}
 }
@@ -93,7 +93,7 @@ void	set_cone_rec(t_hit_record *rec,
 			t_cone *cone, t_ray *ray, double t)
 {
 	rec->point = ray_at(*ray, t);
-	rec->material = cone->material;
+	// rec->material = cone->material; // ?
 	rec->material1 = cone->material1;
 	rec->emitted = cone->emitted;
 	rec->k_s = cone->k_s;
