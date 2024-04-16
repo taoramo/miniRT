@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:34 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/15 01:29:17 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:43:39 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 /**
  * Position
  */
-int validate_position(char *value_param)
+int	validate_position(char *value_param)
 {
 	if (validate_three_tuple_size(value_param) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if (validate_param(value_param, validate_f_str, init_interval(-__DBL_MAX__, __DBL_MAX__),
+	if (validate_param(value_param, validate_f_str,
+			init_interval(-__DBL_MAX__, __DBL_MAX__),
 			"Position is out of range."))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
@@ -28,7 +29,7 @@ int validate_position(char *value_param)
 /**
  * Camera orientation [-1.0, 1.0]
  */
-int validate_orientation(char *value_param)
+int	validate_orientation(char *value_param)
 {
 	if (validate_param(value_param, validate_f_str, init_interval(-1.0, 1.0),
 			"Orientation is not in [-1, 1]."))
@@ -41,15 +42,15 @@ int validate_orientation(char *value_param)
  */
 int	validate_size(char *value_param)
 {
-	if (validate_param(value_param, validate_f_str, init_interval(0.0, __DBL_MAX__),
-		"Size parameter is out of range."))
+	if (validate_param(value_param, validate_f_str,
+			init_interval(0.0, __DBL_MAX__), "Size parameter is out of range."))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
-int validate_three_tuple_size(char *value_param)
+int	validate_three_tuple_size(char *value_param)
 {
-	char **split_param;
+	char	**split_param;
 
 	split_param = ft_split(value_param, ',');
 	if (str_array_length(split_param) != 3)
@@ -72,18 +73,4 @@ int	validate_rgb(char *value_param)
 			"RGB color is not in [0, 255]."))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
-}
-
-int	validate_texture(char *value_param)
-{
-	size_t str_len;
-
-	str_len = ft_strlen(value_param);
-	if (ft_strncmp(value_param, "solid", str_len + 1) == 0)
-		return (EXIT_SUCCESS);
-	if (ft_strncmp(value_param, "checker", str_len + 1) == 0)
-		return (EXIT_SUCCESS);
-	if (ft_strncmp(value_param + str_len - 4, ".png", 5) == 0)
-		return (EXIT_SUCCESS);
-	return (print_error("Texture not implemented."));
 }

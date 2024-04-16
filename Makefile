@@ -33,6 +33,7 @@ SRCS = $(addprefix srcs/, \
 	validate_param_spec.c \
 	validate_param_spec2.c \
 	validate_objects.c \
+	validate_objects2.c \
 	validate_line.c \
 	validate.c \
 	ray2.c \

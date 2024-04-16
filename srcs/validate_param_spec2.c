@@ -6,20 +6,24 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:31 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 16:08:32 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:44:08 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	checker_shift(char **value_params)
+int	validate_texture(char *value_param)
 {
-	int	shift;
+	size_t	str_len;
 
-	shift = 0;
-	if (index_of(value_params, "checker") != -1)
-		shift = 1;
-	return (shift);
+	str_len = ft_strlen(value_param);
+	if (ft_strncmp(value_param, "solid", str_len + 1) == 0)
+		return (EXIT_SUCCESS);
+	if (ft_strncmp(value_param, "checker", str_len + 1) == 0)
+		return (EXIT_SUCCESS);
+	if (ft_strncmp(value_param + str_len - 4, ".png", 5) == 0)
+		return (EXIT_SUCCESS);
+	return (print_error("Texture not implemented."));
 }
 
 int	validate_checker_rgbs(char **value_params)

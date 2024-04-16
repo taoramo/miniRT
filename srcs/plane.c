@@ -36,12 +36,14 @@ static void	get_albedo(t_plane *plane, t_hit_record *rec)
 	if (plane->texture.type == CHECKER)
 	{
 		rec->albedo = get_solid_checkered_color(rec->point,
-				plane->texture.checker_size_coeff, plane->albedo, plane->texture.checker_color);
+				plane->texture.checker_size_coeff, plane->albedo,
+				plane->texture.checker_color);
 		return ;
 	}
 	if (plane->texture.type == PNG_FILE)
 	{
-		rec->albedo = get_texture_color(plane->texture.texture_obj, rec->u, rec->v);
+		rec->albedo = get_texture_color(plane->texture.texture_obj,
+				rec->u, rec->v);
 		return ;
 	}
 }
@@ -49,7 +51,6 @@ static void	get_albedo(t_plane *plane, t_hit_record *rec)
 void	set_plane_rec(t_hit_record *rec, t_plane *plane, t_ray *ray, double t)
 {
 	rec->point = ray_at(*ray, t);
-	// rec->material = plane->material; // ?
 	rec->material1 = plane->phong.material1;
 	rec->emitted = plane->phong.emitted;
 	rec->k_s = plane->phong.k_s;

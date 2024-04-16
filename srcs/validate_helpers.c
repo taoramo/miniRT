@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:28 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/12 15:48:48 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:44:15 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,14 @@ void	replace_whitespaces(char *line)
 			line[i] = ' ';
 		i++;
 	}
+}
+
+int	checker_shift(char **value_params)
+{
+	int	shift;
+
+	shift = 0;
+	if (index_of(value_params, "checker") != -1)
+		shift = 1;
+	return (shift);
 }
