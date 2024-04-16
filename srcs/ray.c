@@ -32,10 +32,14 @@ t_vec3	phong_model(t_hit_record *rec, t_ray *shadow_ray,
 	halfway_dir = unit_vector(vec3_plus_vec3(light_dir, view_dir));
 	specular = vec3_times_d(light->color,
 			pow(dot(rec->normal, halfway_dir),
-				fmin(10, 1.0 / rec->material1)) * rec->k_s);
+				fmax(10, 1.0 / rec->material1)) * rec->k_s);
 	diffuse = vec3_times_vec3(vec3_times_d(light->color,
 				dot(rec->normal, light_dir)
 				* rec->k_d), rec->albedo);
+	if (dot(rec->normal, light_dir) < 0 || dot(rec->normal, halfway_dir) < 0)
+		specular = init_vec3(0, 0, 0);
+	if (dot(rec->normal, light_dir) < 0)
+		diffuse = init_vec3(0, 0, 0);
 	return (vec3_plus_vec3(specular, diffuse));
 }
 

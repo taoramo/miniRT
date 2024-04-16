@@ -22,26 +22,26 @@ static void	set_plane_face_normal(t_hit_record *rec, t_ray *ray, t_plane *plane)
 	else
 		rec->normal = plane->normal;
 	set_plane_uv(rec);
-	if (plane->bump_map)
-		rec->normal = bump_map(rec, plane->bump_map);
+	if (plane->texture.bump_map)
+		rec->normal = bump_map(rec, plane->texture.bump_map);
 }
 
 static void	get_albedo(t_plane *plane, t_hit_record *rec)
 {
-	if (plane->texture_type == solid)
+	if (plane->texture.type == SOLID)
 	{
 		rec->albedo = plane->albedo;
 		return ;
 	}
-	if (plane->texture_type == checker)
+	if (plane->texture.type == CHECKER)
 	{
 		rec->albedo = get_solid_checkered_color(rec->point,
-				plane->checker_size_coeff, plane->albedo, plane->checker_color);
+				plane->texture.checker_size_coeff, plane->albedo, plane->texture.checker_color);
 		return ;
 	}
-	if (plane->texture_type == texture)
+	if (plane->texture.type == PNG_FILE)
 	{
-		rec->albedo = get_texture_color(plane->texture, rec->u, rec->v);
+		rec->albedo = get_texture_color(plane->texture.texture_obj, rec->u, rec->v);
 		return ;
 	}
 }
@@ -49,7 +49,7 @@ static void	get_albedo(t_plane *plane, t_hit_record *rec)
 void	set_plane_rec(t_hit_record *rec, t_plane *plane, t_ray *ray, double t)
 {
 	rec->point = ray_at(*ray, t);
-	rec->material = plane->material;
+	// rec->material = plane->material; // ?
 	rec->material1 = plane->material1;
 	rec->emitted = plane->emitted;
 	rec->k_s = plane->k_s;

@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:46:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/12 03:09:31 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:03:14 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,46 @@ int	get_texture_type(char *text_type)
 
 	str_len = ft_strlen(text_type);
 	if (ft_strncmp(text_type, "solid", str_len + 1) == 0)
-		return (solid);
+		return (SOLID);
 	else if (ft_strncmp(text_type, "checker", str_len + 1) == 0)
-		return (checker);
+		return (CHECKER);
 	else if (ft_strncmp(text_type + str_len - 4, ".png", 5) == 0)
-		return (texture);
-	return (solid);
+		return (PNG_FILE);
+	return (SOLID);
+}
+
+int	get_index_shift(t_texture *texture)
+{
+	int shift;
+
+	shift = 0;
+	if (texture->type == CHECKER)
+		shift = 1;
+	return (shift);
+}
+
+/**
+ * @param index index of texture type in params
+*/
+void initialize_texture(t_texture *texture, char **params, int index)
+{
+	char		*texture_path;
+
+	texture->type = get_texture_type(params[index]);
+	if (texture->type == CHECKER)
+	{
+		initialize_coordinate(&texture->checker_color, params[index + 1]);
+		texture->checker_color = vec3_div_d(texture->checker_color, 255.0);
+		texture->checkered = 1;
+		texture->checker_size_coeff = DEFAULT_CHECKER_SIZE;
+	}
+	if (texture->type == PNG_FILE)
+	{
+		texture_path = ft_strjoin(TEXTURES_PATH, params[index]);
+		texture->texture_obj = mlx_load_png(texture_path);
+		free(texture_path);
+	}
+
 }
 
 // Initialize Sphere
@@ -85,30 +119,16 @@ void	initialize_sphere(t_master *m, char **params)
 	i = index_of((char **)(m->ids), params[0]);
 	j = (m->objects_count)[i] - 1;
 	sphere = &((m->spheres)[j]);
-	sphere->bump_map = NULL;
-	sphere->texture = NULL;
-	sphere->checkered = 0;
+	sphere->texture.bump_map = NULL;
+	sphere->texture.texture_obj = NULL;
+	sphere->texture.checkered = 0;
 	initialize_coordinate(&sphere->origin, params[1]);
 	sphere->radius = ft_atod(params[2]) / 2;
 	initialize_coordinate(&sphere->albedo, params[3]);
 	sphere->albedo = vec3_div_d(sphere->albedo, 255.0);
 	// Texture
-	sphere->texture_type = get_texture_type(params[4]);
-	shift = 0;
-	if (sphere->texture_type == checker)
-	{
-		shift = 1;
-		initialize_coordinate(&sphere->checker_color, params[5]);
-		sphere->checker_color = vec3_div_d(sphere->checker_color, 255.0);
-		sphere->checkered = 1;
-		sphere->checker_size_coeff = DEFAULT_CHECKER_SIZE;
-	}
-	if (sphere->texture_type == texture)
-	{
-		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
-		sphere->texture = mlx_load_png(texture_path);
-		free(texture_path);
-	}
+	initialize_texture(&sphere->texture, params, 4);
+	shift = get_index_shift(&sphere->texture);
 	// k_s
 	sphere->k_s = ft_atod(params[5 + shift]);
 	// k_d
@@ -121,7 +141,7 @@ void	initialize_sphere(t_master *m, char **params)
 	if (params[9 + shift])
 	{
 		texture_path = ft_strjoin(TEXTURES_PATH, params[9 + shift]);
-		sphere->bump_map = mlx_load_png(texture_path);
+		sphere->texture.bump_map = mlx_load_png(texture_path);
 		free(texture_path);
 	}
 	(m->objects_count)[i] -= 1;
@@ -139,9 +159,9 @@ void	initialize_plane(t_master *m, char **params)
 	i = index_of((char **)(m->ids), params[0]);
 	j = (m->objects_count)[i] - 1;
 	plane = &((m->planes)[j]);
-	plane->bump_map = NULL;
-	plane->texture = NULL;
-	plane->checkered = 0;
+	plane->texture.bump_map = NULL;
+	plane->texture.texture_obj = NULL;
+	plane->texture.checkered = 0;
 	// Init point
 	initialize_coordinate(&plane->point, params[1]);
 	// Init normal
@@ -151,22 +171,8 @@ void	initialize_plane(t_master *m, char **params)
 	initialize_coordinate(&plane->albedo, params[3]);
 	plane->albedo = vec3_div_d(plane->albedo, 255.0);
 	// Texture
-	plane->texture_type = get_texture_type(params[4]);
-	shift = 0;
-	if (plane->texture_type == checker)
-	{
-		shift = 1;
-		initialize_coordinate(&plane->checker_color, params[5]);
-		plane->checker_color = vec3_div_d(plane->checker_color, 255.0);
-		plane->checkered = 1;
-		plane->checker_size_coeff = DEFAULT_CHECKER_SIZE;
-	}
-	if (plane->texture_type == texture)
-	{
-		texture_path = ft_strjoin(TEXTURES_PATH, params[4]);
-		plane->texture = mlx_load_png(texture_path);
-		free(texture_path);
-	}
+	initialize_texture(&plane->texture, params, 4);
+	shift = get_index_shift(&plane->texture);
 	// k_s
 	plane->k_s = ft_atod(params[5 + shift]);
 	// k_d
@@ -179,7 +185,7 @@ void	initialize_plane(t_master *m, char **params)
 	if (params[9 + shift])
 	{
 		texture_path = ft_strjoin(TEXTURES_PATH, params[9 + shift]);
-		plane->bump_map = mlx_load_png(texture_path);
+		plane->texture.bump_map = mlx_load_png(texture_path);
 		free(texture_path);
 	}
 	(m->objects_count)[i] -= 1;
@@ -196,9 +202,9 @@ void	initialize_cylinder(t_master *m, char **params)
 	i = index_of((char **)(m->ids), params[0]);
 	j = (m->objects_count)[i] - 1;
 	cylinder = &((m->cylinders)[j]);
-	cylinder->bump_map = NULL;
-	cylinder->texture = NULL;
-	cylinder->checkered = 0;
+	cylinder->texture.bump_map = NULL;
+	cylinder->texture.texture_obj = NULL;
+	cylinder->texture.checkered = 0;
 	// Init center
 	initialize_coordinate(&cylinder->center, params[1]);
 	initialize_coordinate(&cylinder->axisnormal, params[2]);
@@ -208,22 +214,8 @@ void	initialize_cylinder(t_master *m, char **params)
 	initialize_coordinate(&cylinder->albedo, params[5]);
 	cylinder->albedo = vec3_div_d(cylinder->albedo, 255.0);
 	// Texture
-	cylinder->texture_type = get_texture_type(params[6]);
-	shift = 0;
-	if (cylinder->texture_type == checker)
-	{
-		shift = 1;
-		initialize_coordinate(&cylinder->checker_color, params[7]);
-		cylinder->checker_color = vec3_div_d(cylinder->checker_color, 255.0);
-		cylinder->checkered = 1;
-		cylinder->checker_size_coeff = DEFAULT_CHECKER_SIZE;
-	}
-	if (cylinder->texture_type == texture)
-	{
-		texture_path = ft_strjoin(TEXTURES_PATH, params[6]);
-		cylinder->texture = mlx_load_png(texture_path);
-		free(texture_path);
-	}
+	initialize_texture(&cylinder->texture, params, 6);
+	shift = get_index_shift(&cylinder->texture);
 	// k_s
 	cylinder->k_s = ft_atod(params[7 + shift]);
 	// k_d
@@ -236,7 +228,7 @@ void	initialize_cylinder(t_master *m, char **params)
 	if (params[11 + shift])
 	{
 		texture_path = ft_strjoin(TEXTURES_PATH, params[11 + shift]);
-		cylinder->bump_map = mlx_load_png(texture_path);
+		cylinder->texture.bump_map = mlx_load_png(texture_path);
 		free(texture_path);
 	}
 	(m->objects_count)[i] -= 1;
@@ -253,35 +245,20 @@ void	initialize_cone(t_master *m, char **params)
 	i = index_of((char **)(m->ids), params[0]);
 	j = (m->objects_count)[i] - 1;
 	cone = &((m->cones)[j]);
-	cone->bump_map = NULL;
-	cone->texture = NULL;
-	cone->checkered = 0;
+	cone->texture.bump_map = NULL;
+	cone->texture.texture_obj = NULL;
+	cone->texture.checkered = 0;
 	// Init center
 	initialize_coordinate(&cone->tip, params[1]);
 	initialize_coordinate(&cone->axis, params[2]);
 	cone->axis = unit_vector(cone->axis);
-	// cone->radius = ft_atod(params[3]) / 2;
 	cone->height = ft_atod(params[3]);
 	cone->angle = ft_atod(params[4]);
 	initialize_coordinate(&cone->albedo, params[5]);
 	cone->albedo = vec3_div_d(cone->albedo, 255.0);
 	// Texture
-	cone->texture_type = get_texture_type(params[6]);
-	shift = 0;
-	if (cone->texture_type == checker)
-	{
-		shift = 1;
-		initialize_coordinate(&cone->checker_color, params[7]);
-		cone->checker_color = vec3_div_d(cone->checker_color, 255.0);
-		cone->checkered = 1;
-		cone->checker_size_coeff = DEFAULT_CHECKER_SIZE;
-	}
-	if (cone->texture_type == texture)
-	{
-		texture_path = ft_strjoin(TEXTURES_PATH, params[6]);
-		cone->texture = mlx_load_png(texture_path);
-		free(texture_path);
-	}
+	initialize_texture(&cone->texture, params, 6);
+	shift = get_index_shift(&cone->texture);
 	// k_s
 	cone->k_s = ft_atod(params[7 + shift]);
 	// k_d
@@ -294,7 +271,7 @@ void	initialize_cone(t_master *m, char **params)
 	if (params[11 + shift])
 	{
 		texture_path = ft_strjoin(TEXTURES_PATH, params[11 + shift]);
-		cone->bump_map = mlx_load_png(texture_path);
+		cone->texture.bump_map = mlx_load_png(texture_path);
 		free(texture_path);
 	}
 	(m->objects_count)[i] -= 1;
@@ -348,7 +325,6 @@ void initialize_objects(t_master *m, int fd)
 
 void initialize_scene(t_master *m, int fd)
 {
-	(void)fd;
 	// Init camera defaults
 	ft_bzero(&(m->camera), sizeof(m->camera));
 	m->camera.focal_length = 1.0;
