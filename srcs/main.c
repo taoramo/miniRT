@@ -80,6 +80,16 @@ int	render(t_master *m, mlx_t *mlx)
 	return (EXIT_SUCCESS);
 }
 
+void	handle_esc(mlx_key_data_t keydata, void *m)
+{
+	if (keydata.key == 256)
+	{
+		mlx_terminate(((t_master *)m)->mlx);
+		free_all(m);
+		exit(EXIT_SUCCESS);
+	}
+}
+
 int	main(int argc, char const *argv[])
 {
 	const char	*ids[N_OBJECT_TYPES] = {"A", "C", "l", "sp", "pl", "cy", "co"};
@@ -99,12 +109,10 @@ int	main(int argc, char const *argv[])
 	if (allocate_objects(m.objects_count, &m) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	initialize(&m, &mlx, argv);
+	mlx_key_hook(mlx, handle_esc, &m);
+	mlx_set_setting(MLX_STRETCH_IMAGE, true);
 	if (render(&m, mlx) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	free(m.spheres);
-	free(m.planes);
-	free(m.cylinders);
-	free(m.lights);
-	free(m.cones);
+	free_all(&m);
 	return (EXIT_SUCCESS);
 }

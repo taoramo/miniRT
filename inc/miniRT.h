@@ -19,7 +19,7 @@
 # define BUMP_SCALE 2
 
 # define EMPTY_LINE 2
-# define SAMPLES_PER_PIXEL 200
+# define SAMPLES_PER_PIXEL 10
 # define MAX_DEPTH 4
 # define DEFAULT_CHECKER_SIZE 20
 # define TEXTURES_PATH "./"
@@ -148,6 +148,7 @@ typedef enum s_object_type
 
 typedef struct s_master
 {
+	mlx_t			*mlx;
 	int				objects_count[N_OBJECT_TYPES]; // A C l sp pl cy co
 	const char		**ids;
 	t_camera		camera;
@@ -246,6 +247,7 @@ bool			is_capital(char c);
 void			free_split(char **split);
 int				index_of(char **arr, char *str);
 int				str_array_length(char **str);
+void			free_all(t_master *m);
 
 /* Validator */
 void			replace_whitespaces(char *line);

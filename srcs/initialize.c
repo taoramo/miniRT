@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:46:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 20:59:22 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 21:27:14 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int	initialize(t_master *m, mlx_t **mlx, const char *argv[])
 	*mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);
 	if (!mlx)
 		return (print_error("MLX42 init failed"));
+	m->mlx = *mlx;
 	initialize_scene(m, fd);
 	close(fd);
 	return (EXIT_SUCCESS);

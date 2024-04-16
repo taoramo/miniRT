@@ -19,3 +19,12 @@ double	linear_to_gamma(double linear)
 {
 	return (sqrt(linear));
 }
+
+void	free_all(t_master *m)
+{
+	free(m->spheres);
+	free(m->planes);
+	free(m->cylinders);
+	free(m->lights);
+	free(m->cones);
+}
