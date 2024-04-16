@@ -1,4 +1,3 @@
-#include "MLX42.h"
 #include "miniRT.h"
 #include "vec3.h"
 

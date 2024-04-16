@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 20:41:02 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 20:58:11 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 21:05:11 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ static void	set_cone_face_normal(t_hit_record *rec, t_ray *r, t_cone *cone)
 	else
 		rec->normal = vec3_times_d(outward_normal, -1.0);
 	set_cone_uv(rec, cone);
-	rec->v_vector = unit_vector(tip_to_intersection); // check if it is correct ? should it be unit vector?
-	rec->u_vector = cross(tip_to_intersection, outward_normal); // check if it is correct ?? should it be unit vector?
+	rec->v_vector = unit_vector(tip_to_intersection);
+	rec->u_vector = cross(tip_to_intersection, outward_normal);
 	if (cone->texture.bump_map)
 		rec->normal = bump_map(rec, cone->texture.bump_map);
 }

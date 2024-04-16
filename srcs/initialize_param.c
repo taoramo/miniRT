@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:12:38 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 16:16:01 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/04/16 21:02:38 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,9 @@ void	initialize_coordinate(t_vec3 *coord, char *value_param)
 */
 void	initialize_phong(t_phong *phong, char **params, int i, int shift)
 {
-	// k_s
 	phong->k_s = ft_atod(params[i++ + shift]);
-	// k_d
 	phong->k_d = ft_atod(params[i++ + shift]);
-	// fuzz
 	phong->material1 = ft_atod(params[i++ + shift]);
-	// Emission
 	initialize_coordinate(&phong->emitted, params[i++ + shift]);
 }
 
