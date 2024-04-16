@@ -35,6 +35,8 @@ static void	set_cone_uv(t_hit_record *rec, t_cone *cone)
 {
 	rec->u = (1 - atan2(rec->point.x, rec->point.z) / (2 * M_PI) + 0.5);
 	rec->v = vec3length(vec3_minus_vec3(rec->point, cone->tip)) / (cone->height / 2);
+	rec->u = rec->u - floor(rec->u);
+	rec->v = rec->v - floor(rec->v);
 }
 
 static void	set_cone_face_normal(t_hit_record *rec, 
@@ -65,7 +67,7 @@ static void	set_cone_face_normal(t_hit_record *rec,
 	set_cone_uv(rec, cone);
 	// rec->v_vector = cone->axis;
 	// rec->u_vector = cross(cone->axis, outward_normal);
-	rec->v_vector = tip_to_intersection; // check if it is correct ?
+	rec->v_vector = unit_vector(tip_to_intersection); // check if it is correct ?
 	rec->u_vector = cross(tip_to_intersection, outward_normal); // check if it is correct ??
 	if (cone->bump_map)
 		rec->normal = bump_map(rec, cone->bump_map);
