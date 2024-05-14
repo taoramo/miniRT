@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:21 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 20:29:56 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:59:57 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ int	validate(const char *argv[], int objects_count[], const char *ids[])
 {
 	int			fd;
 
+	if (validate_filename(argv[1]) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 	{

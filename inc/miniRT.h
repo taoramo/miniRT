@@ -252,6 +252,8 @@ void			free_all(t_master *m);
 /* Validator */
 void			replace_whitespaces(char *line);
 
+int				validate_filename(const char* filename);
+
 int				validate_int_str(char *int_str);
 int				validate_f_str(char *f_str);
 int				validate_f_range(char *f_str, float min, float max, char *err);

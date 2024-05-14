@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:23 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 21:04:14 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/14 19:03:33 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,15 @@ int	validate_line_identifier(char *line, int objects_count[], const char *ids[])
 	}
 	if (id == N_OBJECT_TYPES)
 		return (print_error("Invalid identifier."));
+	return (EXIT_SUCCESS);
+}
+
+int	validate_filename(const char *filename)
+{
+	char	*dot_pos;
+
+	dot_pos = ft_strnstr(filename, ".rt", ft_strlen(filename));
+	if (!dot_pos || *(dot_pos + 3))
+		return (print_error("Wrong file format"));
 	return (EXIT_SUCCESS);
 }
