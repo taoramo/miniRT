@@ -33,7 +33,7 @@ int	main(int argc, char const *argv[])
 	ft_bzero(m.objects_count, sizeof(int) * N_OBJECT_TYPES);
 	if (argc < 2)
 	{
-		printf("Usage: %s <filename>\n", argv[0]);
+		ft_printf("Usage: %s <filename>\n", argv[0]);
 		return (1);
 	}
 	if (validate(argv, m.objects_count, ids) == EXIT_FAILURE)

@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 23:46:04 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 21:27:14 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:36:35 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	initialize_objects(t_master *m, int fd)
 	{
 		if (prepare_line(&line, fd) == EMPTY_LINE)
 			continue ;
-		printf("%d. %s\n", ++i, line);
+		ft_printf("%d. %s\n", ++i, line);
 		params = ft_split(line, ' ');
 		initialize_object(m, params);
 		free(line);

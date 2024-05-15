@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:21 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/05/14 19:31:06 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:44:15 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,14 @@ int	validate_scene(int objects_count[], const char *ids[], int fd)
 	char		*line;
 	int			i;
 
-	// i = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
 		if (prepare_line(&line, fd) == EMPTY_LINE)
 			continue ;
-		// printf("%d. %s\n", ++i, line);
 		if (validate_line_identifier(line, objects_count, ids) == EXIT_FAILURE)
 		{
-			printf("Failed to validate this line: %s\n", line);
+			ft_printf("Failed to validate this line: %s\n", line);
 			free(line);
 			return (EXIT_FAILURE);
 		}
@@ -55,7 +53,7 @@ int	validate_scene(int objects_count[], const char *ids[], int fd)
 		;
 	if (i == N_OBJECT_TYPES)
 		return (print_error("No objects"));
-	printf("Scene validated.\n");
+	ft_printf("Scene validated.\n");
 	return (EXIT_SUCCESS);
 }
 
