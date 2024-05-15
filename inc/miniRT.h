@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   miniRT.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/15 16:38:09 by toramo            #+#    #+#             */
+/*   Updated: 2024/05/15 16:38:11 by toramo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINIRT_H
 # define MINIRT_H
 
@@ -8,8 +20,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
-// TODO: remove this header
-# include <stdio.h>
 # include "libft.h"
 # define WWIDTH 1280
 # define WHEIGHT 720
@@ -61,7 +71,6 @@ typedef struct s_light
 	t_vec3	color;
 }	t_light;
 
-
 typedef enum e_texture_type
 {
 	SOLID,
@@ -69,7 +78,7 @@ typedef enum e_texture_type
 	PNG_FILE,
 }	t_texture_type;
 
-typedef	struct s_texture
+typedef struct s_texture
 {
 	int				checkered;
 	t_vec3			checker_color;
@@ -235,8 +244,6 @@ typedef struct s_ray_colors
 	t_vec3			emitted;
 }	t_ray_colors;
 
-// typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered); // is it used anywhere?
-
 typedef int	(*t_val_f) (char *str);
 
 /* Utilities */
@@ -252,7 +259,7 @@ void			free_all(t_master *m);
 /* Validator */
 void			replace_whitespaces(char *line);
 
-int				validate_filename(const char* filename);
+int				validate_filename(const char *filename);
 
 int				validate_int_str(char *int_str);
 int				validate_f_str(char *f_str);
