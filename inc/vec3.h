@@ -1,7 +1,19 @@
-#ifndef VEC3_H
-#define VEC3_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vec3.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/15 08:59:38 by toramo            #+#    #+#             */
+/*   Updated: 2024/05/15 09:00:43 by toramo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include <math.h>
+#ifndef VEC3_H
+# define VEC3_H
+
+# include <math.h>
 
 typedef struct s_vec3
 {
@@ -10,7 +22,7 @@ typedef struct s_vec3
 	double	z;
 }	t_vec3;
 
-typedef t_vec3 t_color;
+typedef t_vec3	t_color;
 
 t_vec3	vec3_plus_vec3(t_vec3 u, t_vec3 v);
 t_vec3	vec3_minus_vec3(t_vec3 u, t_vec3 v);

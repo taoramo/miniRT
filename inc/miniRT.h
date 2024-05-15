@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   miniRT.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/15 08:58:11 by toramo            #+#    #+#             */
+/*   Updated: 2024/05/15 08:59:26 by toramo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINIRT_H
 # define MINIRT_H
 
@@ -61,7 +73,6 @@ typedef struct s_light
 	t_vec3	color;
 }	t_light;
 
-
 typedef enum e_texture_type
 {
 	SOLID,
@@ -69,7 +80,7 @@ typedef enum e_texture_type
 	PNG_FILE,
 }	t_texture_type;
 
-typedef	struct s_texture
+typedef struct s_texture
 {
 	int				checkered;
 	t_vec3			checker_color;
@@ -234,8 +245,6 @@ typedef struct s_ray_colors
 	t_vec3			shadow;
 	t_vec3			emitted;
 }	t_ray_colors;
-
-// typedef int	(*t_f) (t_ray *r_in, t_hit_record *rec, t_ray *scattered); // is it used anywhere?
 
 typedef int	(*t_val_f) (char *str);
 
