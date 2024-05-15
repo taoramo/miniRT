@@ -78,7 +78,7 @@ int	initialize(t_master *m, mlx_t **mlx, const char *argv[])
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 	{
-		perror("Error");
+		write(2, "Error", 5);
 		return (EXIT_FAILURE);
 	}
 	*mlx = mlx_init(WWIDTH, WHEIGHT, "miniRT", true);

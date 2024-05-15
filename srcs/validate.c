@@ -98,7 +98,7 @@ int	validate(const char *argv[], int objects_count[], const char *ids[])
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 	{
-		perror("Error");
+		write(2, "Error", 5);
 		return (1);
 	}
 	if (validate_scene(objects_count, ids, fd) == EXIT_FAILURE)
