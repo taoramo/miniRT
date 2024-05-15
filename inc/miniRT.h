@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:38:09 by toramo            #+#    #+#             */
-/*   Updated: 2024/05/15 16:38:11 by toramo           ###   ########.fr       */
+/*   Updated: 2024/05/15 17:55:05 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include "libft.h"
+# include <stdio.h> // remove this
 # define WWIDTH 1280
 # define WHEIGHT 720
 # define N_MATERIALS 3
