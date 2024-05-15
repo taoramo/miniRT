@@ -25,7 +25,8 @@ void	initialize_camera(t_master *m, char **params)
 {
 	initialize_coordinate(&m->camera.camera_center, params[1]);
 	initialize_coordinate(&m->camera.look_at, params[2]);
-	m->camera.look_at = unit_vector(m->camera.look_at);
+	m->camera.look_at = vec3_plus_vec3(m->camera.look_at,
+			m->camera.camera_center);
 	m->camera.hfov = ft_atod(params[3]);
 }
 
