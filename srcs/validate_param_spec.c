@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:34 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/05/15 18:04:32 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/16 12:45:15 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,21 @@ int	validate_orientation(char *value_param)
 	vector = ft_split(value_param, ',');
 	if (!vector)
 		return (print_error("Camera orientation vector allocation failed"));
-	printf("Vector[0]: %s\n", vector[0]);
-	printf("Vector[1]: %s\n", vector[1]);
-	printf("Vector[2]: %s\n", vector[2]);
+	// printf("Vector[0]: %s\n", vector[0]);
+	// printf("Vector[1]: %s\n", vector[1]);
+	// printf("Vector[2]: %s\n", vector[2]);
 	normal = init_vec3(ft_atod(vector[0]), ft_atod(vector[1]), ft_atod(vector[2]));
-	printf("Vector[0]: %f\n", (float)ft_atod(vector[0]));
-	printf("Vector[1]: %f\n", (float)ft_atod(vector[1]));
-	printf("Vector[2]: %f\n", (float)ft_atod(vector[2]));
+	// printf("Vector[0]: %f\n", (float)ft_atod(vector[0]));
+	// printf("Vector[1]: %f\n", (float)ft_atod(vector[1]));
+	// printf("Vector[2]: %f\n", (float)ft_atod(vector[2]));
 	length = vec3length(normal);
-	printf("Length: %f\n", length);
-	printf("Subtraction: %f\n", length - 1.0);
+	// printf("Length: %f\n", length);
+	// printf("Subtraction: %f\n", length - 1.0);
 
 	if (length - 1.0 >= EPSILON || length - 1.0 < 0)
-		return (print_error("Camera vector is not normalized"));
+		print_error("3D Normalized vector should be normalized. It still will be normalized now.");
+	if (length <= EPSILON && length >= 0)
+		return (print_error("3D Normalized is 0 or almost 0."));
 	if (validate_param(value_param, validate_f_str, init_interval(-1.0, 1.0),
 			"Orientation is not in [-1, 1]."))
 		return (EXIT_FAILURE);
