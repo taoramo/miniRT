@@ -30,7 +30,7 @@ void	initialize_phong(t_phong *phong, char **params, int i, int shift)
 {
 	phong->k_s = ft_atod(params[i++ + shift]);
 	phong->k_d = ft_atod(params[i++ + shift]);
-	phong->material1 = ft_atod(params[i++ + shift]);
+	phong->material1 = fmax(0.001, ft_atod(params[i++ + shift]));
 	initialize_coordinate(&phong->emitted, params[i++ + shift]);
 }
 

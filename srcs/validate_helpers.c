@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:28 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 16:44:15 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:37:01 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	print_error(char *err)
 {
-	printf("Error:\n");
+	ft_printf("Error\n");
 	if (err[0])
-		printf("%s\n", err);
+		ft_printf("%s\n", err);
 	return (EXIT_FAILURE);
 }
 

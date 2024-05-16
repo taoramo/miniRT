@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/15 08:58:11 by toramo            #+#    #+#             */
-/*   Updated: 2024/05/15 08:59:26 by toramo           ###   ########.fr       */
+/*   Created: 2024/05/15 16:38:09 by toramo            #+#    #+#             */
+/*   Updated: 2024/05/15 17:55:05 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
-// TODO: remove this header
-# include <stdio.h>
 # include "libft.h"
+# include <stdio.h> // remove this
 # define WWIDTH 1280
 # define WHEIGHT 720
 # define N_MATERIALS 3
@@ -260,6 +259,8 @@ void			free_all(t_master *m);
 
 /* Validator */
 void			replace_whitespaces(char *line);
+
+int				validate_filename(const char *filename);
 
 int				validate_int_str(char *int_str);
 int				validate_f_str(char *f_str);

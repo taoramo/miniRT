@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/15 08:51:26 by toramo            #+#    #+#             */
-/*   Updated: 2024/05/15 08:51:30 by toramo           ###   ########.fr       */
+/*   Created: 2024/05/15 16:40:22 by toramo            #+#    #+#             */
+/*   Updated: 2024/05/15 16:40:23 by toramo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(int argc, char const *argv[])
 	ft_bzero(m.objects_count, sizeof(int) * N_OBJECT_TYPES);
 	if (argc < 2)
 	{
-		printf("Usage: %s <filename>\n", argv[0]);
+		ft_printf("Usage: %s <filename>\n", argv[0]);
 		return (1);
 	}
 	if (validate(argv, m.objects_count, ids) == EXIT_FAILURE)

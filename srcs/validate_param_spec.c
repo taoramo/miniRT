@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:34 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 16:43:39 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/16 12:45:15 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,27 @@ int	validate_position(char *value_param)
 }
 
 /**
- * Camera orientation [-1.0, 1.0]
+ * Orientation [-1.0, 1.0] (3d normalized vector)
  */
 int	validate_orientation(char *value_param)
 {
+	char	**vector;
+	t_vec3	normal;
+	double	length;
+
+	if (validate_three_tuple_size(value_param) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	vector = ft_split(value_param, ',');
+	if (!vector)
+		return (print_error("Camera orientation vector allocation failed"));
+	normal = init_vec3(ft_atod(vector[0]),
+			ft_atod(vector[1]), ft_atod(vector[2]));
+	length = vec3length(normal);
+	if (length - 1.0 >= EPSILON || length - 1.0 < 0)
+		print_error("3D Normalized vector should be normalized. \
+		It still will be normalized now.");
+	if (length <= EPSILON && length >= 0)
+		return (print_error("3D Normalized is 0 or almost 0."));
 	if (validate_param(value_param, validate_f_str, init_interval(-1.0, 1.0),
 			"Orientation is not in [-1, 1]."))
 		return (EXIT_FAILURE);

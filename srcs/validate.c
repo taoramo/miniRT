@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:21 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/04/16 20:29:56 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:44:15 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,26 @@ int	validate_scene(int objects_count[], const char *ids[], int fd)
 	char		*line;
 	int			i;
 
-	i = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
 		if (prepare_line(&line, fd) == EMPTY_LINE)
 			continue ;
-		printf("%d. %s\n", ++i, line);
 		if (validate_line_identifier(line, objects_count, ids) == EXIT_FAILURE)
 		{
-			printf("Failed to validate this line: %s\n", line);
+			ft_printf("Failed to validate this line: %s\n", line);
 			free(line);
 			return (EXIT_FAILURE);
 		}
 		free(line);
 		line = get_next_line(fd);
 	}
-	printf("Scene validated.\n");
+	i = -1;
+	while (++i < N_OBJECT_TYPES && !objects_count[i])
+		;
+	if (i == N_OBJECT_TYPES)
+		return (print_error("No objects"));
+	ft_printf("Scene validated.\n");
 	return (EXIT_SUCCESS);
 }
 
@@ -90,10 +93,12 @@ int	validate(const char *argv[], int objects_count[], const char *ids[])
 {
 	int			fd;
 
+	if (validate_filename(argv[1]) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 	{
-		perror("Error");
+		write(2, "Error", 5);
 		return (1);
 	}
 	if (validate_scene(objects_count, ids, fd) == EXIT_FAILURE)
