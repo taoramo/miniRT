@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:59:34 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/05/16 12:45:15 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:58:42 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	validate_orientation(char *value_param)
 		return (print_error("Camera orientation vector allocation failed"));
 	normal = init_vec3(ft_atod(vector[0]),
 			ft_atod(vector[1]), ft_atod(vector[2]));
+	free_split(vector);
 	length = vec3length(normal);
 	if (length - 1.0 >= EPSILON || length - 1.0 < 0)
 		print_error("3D Normalized vector should be normalized. \
