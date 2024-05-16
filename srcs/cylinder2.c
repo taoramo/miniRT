@@ -62,7 +62,10 @@ static void	set_cylinder_face_normal(t_hit_record *rec,
 				vec3_times_d(cylinder->axisnormal, cylinder->height / 2)));
 	outward_normal = unit_vector(vec3_minus_vec3(outward_normal,
 				vec3_times_d(cylinder->axisnormal, cylinder->m)));
-	rec->normal = vec3_times_d(outward_normal, -1.0);
+	if (dot(ray->direction, outward_normal) < 0)
+		rec->normal = outward_normal;
+	else
+		rec->normal = vec3_times_d(outward_normal, -1.0);
 	set_cylinder_uv(rec, cylinder);
 	rec->v_vector = cylinder->axisnormal;
 	rec->u_vector = cross(cylinder->axisnormal, outward_normal);

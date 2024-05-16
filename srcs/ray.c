@@ -92,8 +92,7 @@ t_vec3	ray_color(t_master *m, t_ray *r, int depth)
 		return (init_vec3(0, 0, 0));
 	if (!hit(m, r, init_interval(0.001, INFINITY), &rec))
 		return (m->camera.background_color);
-	if (depth == m->max_depth && m->n_lights > 0 && rec.emitted.x == 0
-		&& rec.emitted.y == 0 && rec.emitted.z == 0)
+	if (depth == m->max_depth && m->n_lights > 0)
 		colors.shadow = shadow_ray(m, &rec, r);
 	if (rec.k_d && lambertian_scatter(&rec, &scattered_diffuse))
 		colors.diffuse = vec3_times_d(rec.albedo, rec.k_d);
