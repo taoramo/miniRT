@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:45:14 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/05/15 16:37:14 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/17 12:58:18 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	validate_cylinder(char **value_params)
 	if (str_array_length(value_params) != valid_count + shift
 		&& str_array_length(value_params) != valid_count + shift + 1)
 	{
+		ft_printf("Error\n");
 		ft_printf("Cylinder must have %d parameters.\n", valid_count + shift);
 		return (EXIT_FAILURE);
 	}
@@ -49,6 +50,7 @@ int	validate_cone(char **value_params)
 	if (str_array_length(value_params) != valid_count + shift
 		&& str_array_length(value_params) != valid_count + shift + 1)
 	{
+		ft_printf("Error\n");
 		ft_printf("Cone must have %d parameters.\n", valid_count + shift);
 		return (EXIT_FAILURE);
 	}

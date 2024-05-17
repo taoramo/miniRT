@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:45:54 by vshchuki          #+#    #+#             */
-/*   Updated: 2024/05/15 16:37:08 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/17 12:58:09 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	validate_sphere(char **value_params)
 	if (str_array_length(value_params) != valid_count + shift
 		&& str_array_length(value_params) != valid_count + shift + 1)
 	{
+		ft_printf("Error\n");
 		ft_printf("Sphere must have %d parameters.\n", valid_count + shift);
 		return (EXIT_FAILURE);
 	}
@@ -94,6 +95,7 @@ int	validate_plane(char **value_params)
 	if (str_array_length(value_params) != valid_count + shift
 		&& str_array_length(value_params) != valid_count + shift + 1)
 	{
+		ft_printf("Error\n");
 		ft_printf("Plane must have %d parameters.\n", valid_count + shift);
 		return (EXIT_FAILURE);
 	}
