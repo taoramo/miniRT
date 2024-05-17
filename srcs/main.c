@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:40:22 by toramo            #+#    #+#             */
-/*   Updated: 2024/05/17 14:24:40 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/17 20:40:21 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void	delete_sphere_plane_textures(t_master *m)
 			mlx_delete_texture(m->planes[i].texture.bump_map);
 		i++;
 	}
-	delete_cone_cylinder_textures(m);
 }
 
 int	main(int argc, char const *argv[])
