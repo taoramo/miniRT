@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:40:22 by toramo            #+#    #+#             */
-/*   Updated: 2024/05/15 16:40:23 by toramo           ###   ########.fr       */
+/*   Updated: 2024/05/17 14:24:40 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,35 +29,43 @@ void	delete_cone_cylinder_textures(t_master *m)
 	i = 0;
 	while (i < m->n_cones)
 	{
-		mlx_delete_texture(m->cones[i].texture.texture_obj);
-		mlx_delete_texture(m->cones[i].texture.bump_map);
+		if (m->cones[i].texture.texture_obj)
+			mlx_delete_texture(m->cones[i].texture.texture_obj);
+		if (m->cones[i].texture.bump_map)
+			mlx_delete_texture(m->cones[i].texture.bump_map);
 		i++;
 	}
 	i = 0;
 	while (i < m->n_cylinders)
 	{
-		mlx_delete_texture(m->cylinders[i].texture.texture_obj);
-		mlx_delete_texture(m->cylinders[i].texture.bump_map);
+		if (m->cylinders[i].texture.texture_obj)
+			mlx_delete_texture(m->cylinders[i].texture.texture_obj);
+		if (m->cylinders[i].texture.bump_map)
+			mlx_delete_texture(m->cylinders[i].texture.bump_map);
 		i++;
 	}
 }
 
-void	delete_textures(t_master *m)
+void	delete_sphere_plane_textures(t_master *m)
 {
 	unsigned int	i;
 
 	i = 0;
 	while (i < m->n_spheres)
 	{
-		mlx_delete_texture(m->spheres[i].texture.texture_obj);
-		mlx_delete_texture(m->spheres[i].texture.bump_map);
+		if (m->spheres[i].texture.texture_obj)
+			mlx_delete_texture(m->spheres[i].texture.texture_obj);
+		if (m->spheres[i].texture.bump_map)
+			mlx_delete_texture(m->spheres[i].texture.bump_map);
 		i++;
 	}
 	i = 0;
 	while (i < m->n_planes)
 	{
-		mlx_delete_texture(m->planes[i].texture.texture_obj);
-		mlx_delete_texture(m->planes[i].texture.bump_map);
+		if (m->planes[i].texture.texture_obj)
+			mlx_delete_texture(m->planes[i].texture.texture_obj);
+		if (m->planes[i].texture.bump_map)
+			mlx_delete_texture(m->planes[i].texture.bump_map);
 		i++;
 	}
 	delete_cone_cylinder_textures(m);
@@ -86,7 +94,8 @@ int	main(int argc, char const *argv[])
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
 	if (render(&m, mlx) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	delete_textures(&m);
+	delete_cone_cylinder_textures(&m);
+	delete_sphere_plane_textures(&m);
 	free_all(&m);
 	return (EXIT_SUCCESS);
 }
