@@ -62,7 +62,7 @@ int	allocate_object(int objects_count[], void **objects,
 {
 	if (objects_count[type])
 	{
-		*objects = malloc(size * objects_count[type]);
+		*objects = ft_calloc(size, objects_count[type]);
 		if (!(*objects))
 			return (EXIT_FAILURE);
 	}
