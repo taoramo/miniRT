@@ -22,6 +22,47 @@ void	handle_esc(mlx_key_data_t keydata, void *m)
 	}
 }
 
+void	delete_cone_cylinder_textures(t_master *m)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < m->n_cones)
+	{
+		mlx_delete_texture(m->cones[i].texture.texture_obj);
+		mlx_delete_texture(m->cones[i].texture.bump_map);
+		i++;
+	}
+	i = 0;
+	while (i < m->n_cylinders)
+	{
+		mlx_delete_texture(m->cylinders[i].texture.texture_obj);
+		mlx_delete_texture(m->cylinders[i].texture.bump_map);
+		i++;
+	}
+}
+
+void	delete_textures(t_master *m)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < m->n_spheres)
+	{
+		mlx_delete_texture(m->spheres[i].texture.texture_obj);
+		mlx_delete_texture(m->spheres[i].texture.bump_map);
+		i++;
+	}
+	i = 0;
+	while (i < m->n_planes)
+	{
+		mlx_delete_texture(m->planes[i].texture.texture_obj);
+		mlx_delete_texture(m->planes[i].texture.bump_map);
+		i++;
+	}
+	delete_cone_cylinder_textures(m);
+}
+
 int	main(int argc, char const *argv[])
 {
 	const char	*ids[N_OBJECT_TYPES] = {"A", "C", "l", "sp", "pl", "cy", "co"};
@@ -45,6 +86,7 @@ int	main(int argc, char const *argv[])
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
 	if (render(&m, mlx) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+	delete_textures(&m);
 	free_all(&m);
 	return (EXIT_SUCCESS);
 }
