@@ -52,7 +52,8 @@ SRCS = $(addprefix srcs/, \
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS = -g -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -o3 $(INCLUDES)
+CFLAGS = -g -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -O3 $(INCLUDES)
+LDFLAGS = -framework Cocoa -framework OpenGL -framework IOKit
 
 all: libmlx $(NAME)
 
@@ -62,7 +63,7 @@ libmlx:
 $(OBJS): $(SRCS)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(OBJS) $(LIBS) $(CFLAGS) -o $(NAME)
+	$(CC) $(OBJS) $(LIBS) $(CFLAGS) -o $(NAME) $(LDFLAGS)
 
 $(LIBFT):
 	make -C ./libft/
