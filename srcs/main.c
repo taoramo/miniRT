@@ -12,16 +12,6 @@
 
 #include "miniRT.h"
 
-void	handle_esc(mlx_key_data_t keydata, void *m)
-{
-	if (keydata.key == 256)
-	{
-		mlx_terminate(((t_master *)m)->mlx);
-		free_all(m);
-		exit(EXIT_SUCCESS);
-	}
-}
-
 void	delete_cone_cylinder_textures(t_master *m)
 {
 	unsigned int	i;
@@ -67,6 +57,18 @@ void	delete_sphere_plane_textures(t_master *m)
 		if (m->planes[i].texture.bump_map)
 			mlx_delete_texture(m->planes[i].texture.bump_map);
 		i++;
+	}
+}
+
+void	handle_esc(mlx_key_data_t keydata, void *m)
+{
+	if (keydata.key == 256)
+	{
+		mlx_terminate(((t_master *)m)->mlx);
+		delete_cone_cylinder_textures(m);
+		delete_sphere_plane_textures(m);
+		free_all(m);
+		exit(EXIT_SUCCESS);
 	}
 }
 
