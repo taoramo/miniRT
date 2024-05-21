@@ -6,7 +6,7 @@
 /*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:38:09 by toramo            #+#    #+#             */
-/*   Updated: 2024/05/15 17:55:05 by vshchuki         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:57:56 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include "libft.h"
-# include <stdio.h> // remove this
 # define WWIDTH 1280
 # define WHEIGHT 720
 # define N_MATERIALS 3
@@ -126,6 +125,7 @@ typedef struct s_cylinder
 	t_phong			phong;
 	double			m;
 	t_vec3			oc;
+	double			t;
 }	t_cylinder;
 
 typedef struct s_cone

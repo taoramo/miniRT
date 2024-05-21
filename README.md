@@ -153,6 +153,3 @@ Examples:
 ```
 cy 50.0,0.0,20.6 0,0,1.0 14.2 21.42 10,0,255 solid 0.1 0.6 0,0,0 bumps.png
 ```
-
-
-### Real scene example

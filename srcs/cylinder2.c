@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:41:39 by toramo            #+#    #+#             */
-/*   Updated: 2024/05/15 16:41:41 by toramo           ###   ########.fr       */
+/*   Updated: 2024/05/21 15:02:45 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ static void	set_cylinder_face_normal(t_hit_record *rec,
 	cylinder->oc = vec3_minus_vec3(ray->origin,
 			vec3_minus_vec3(cylinder->center,
 				vec3_times_d(cylinder->axisnormal, cylinder->height / 2)));
-	cylinder->m = dot(vec3_plus_vec3(rec->point, cylinder->oc),
-			cylinder->axisnormal);
+	cylinder->m = dot(ray->direction, cylinder->axisnormal)
+		* cylinder->t + dot(cylinder->oc, cylinder->axisnormal);
 	outward_normal = vec3_minus_vec3(rec->point,
 			vec3_minus_vec3(cylinder->center,
 				vec3_times_d(cylinder->axisnormal, cylinder->height / 2)));
@@ -89,6 +89,7 @@ void	set_cylinder_rec(t_hit_record *rec,
 	rec->emitted = cylinder->phong.emitted;
 	rec->k_s = cylinder->phong.k_s;
 	rec->k_d = cylinder->phong.k_d;
+	cylinder->t = t;
 	set_cylinder_face_normal(rec, ray, cylinder);
 	get_albedo(cylinder, rec);
 }
