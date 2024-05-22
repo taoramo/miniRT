@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: vshchuki <vshchuki@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:41:19 by toramo            #+#    #+#             */
-/*   Updated: 2024/05/15 16:41:20 by toramo           ###   ########.fr       */
+/*   Updated: 2024/05/22 16:25:03 by vshchuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
+
+void calculate_u(t_vec3	*w, t_vec3 *u)
+{
+	if (dot(*w, init_vec3(0,1,0)) == 1 || dot(*w, init_vec3(0,1,0)) == -1)
+		*u = unit_vector(cross(init_vec3(0, 0, 1), *w));
+	else
+		*u = unit_vector(cross(init_vec3(0, 1, 0), *w));
+}
 
 static void	calculate_camera(t_camera *c)
 {
@@ -24,7 +32,7 @@ static void	calculate_camera(t_camera *c)
 		* 2 * c->focal_length;
 	viewport_height = viewport_width * (WHEIGHT * 1.0) / (WWIDTH * 1.0);
 	w = unit_vector(vec3_minus_vec3(c->camera_center, c->look_at));
-	u = unit_vector(cross(init_vec3(0, 1, 0), w));
+	calculate_u(&w, &u);
 	c->viewport_u = vec3_times_d(u, viewport_width);
 	c->viewport_v = vec3_times_d(cross(w, u), viewport_height * -1.0);
 	c->pixel_delta_u = vec3_div_d(c->viewport_u, WWIDTH * 1.0);
