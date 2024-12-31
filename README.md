@@ -1,6 +1,6 @@
 # Raytracer written in C
 
-This raytracer has support for spheres, infinite planes, cylinders and cones. Lighting model is a hybrid of global illumination/physics based with diffuse and metal-like reflections and classic Blinn-Phong lighting model. Support for bump maps, textures and emissive objects. This raytracer is SLOW by design. Edit MAX_DEPTH and SAMPLES_PER_PIXEL in inc/miniRT.h to adjust quality and slowness levels.
+This raytracer has support for spheres, infinite planes, cylinders and cones. Lighting model is a hybrid of global illumination/physics based with diffuse and metal-like reflections and classic Blinn-Phong lighting model. Support for bump maps, checkered colors, textures and emissive objects. This raytracer is SLOW by design. Edit MAX_DEPTH and SAMPLES_PER_PIXEL in inc/miniRT.h to adjust quality and slowness levels.
 <img width="1392" alt="Screenshot_2024-04-10_at_13 46 26" src="https://github.com/user-attachments/assets/6e4c8d76-a5c5-4a7f-a065-de75b5acc3b7" />
 
 ## Syntax and format for scene file (.rt)
